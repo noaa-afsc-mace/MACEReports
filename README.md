@@ -4,10 +4,15 @@ Functions used in creating MACE Cruise Reports
 ## How to install the package
 
 1. First, install the Devtools package.
+
 `install.packages("devtools")`
+
 2. Load the Devtools package.
+
 `library(devtools)`
+
 3. Load MACEReports
+
 `devtools::install_github('mike-levine/MACEReports')`
 
 

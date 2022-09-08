@@ -2,3 +2,5 @@ docs
 .Rproj.user/
 .Rhistory
 
+*.pper
+.Rproj.user/C08CC8C9/persistent-state

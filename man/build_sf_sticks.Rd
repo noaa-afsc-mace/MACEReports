@@ -24,7 +24,7 @@ build_sf_sticks(
 \item{group_variable}{If specified, will specify the group for each stick; this can be used
 to identify sticks by group.}
 
-\item{rotation}{Rotation of the sticks in degrees from the vertical.
+\item{rotation}{Rotation of the sticks in degrees from the vertical. Default is 5 degrees.
 0 = no rotation; positive values rotate bars in a clockwise direction.}
 
 \item{bar_scale}{The relative size of sticks. Default is ~1/2 of total plot height.}

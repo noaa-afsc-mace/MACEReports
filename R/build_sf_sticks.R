@@ -9,7 +9,7 @@
 #' @param z Abundance value (the value that will be used to scale sticks)
 #' @param group_variable If specified, will specify the group for each stick; this can be used
 #' to identify sticks by group.
-#' @param rotation Rotation of the sticks in degrees from the vertical.
+#' @param rotation Rotation of the sticks in degrees from the vertical. Default is 5 degrees.
 #' 0 = no rotation; positive values rotate bars in a clockwise direction.
 #' @param bar_scale The relative size of sticks. Default is ~1/2 of total plot height.
 #' @param crs If specified, The coordinate reference system (CRS) into which sticks will be projected.
@@ -128,11 +128,11 @@ build_sf_sticks = function(x,y,z, group_variable = NULL, rotation = 5, bar_scale
     dplyr::select(-.data$pos_num)
 
   #assign crs as needed
-  if (! is.null(crs)){
+  if (!is.null(crs)){
     #set the crs on the bars for lat/long (i.e. WGS84)
     sf::st_crs(plot_lines) = sf::st_crs("EPSG:4326")
     #and deal with the transformation to Albers Alaska equal area
-    plot_lines =  sf::st_transform(plot_lines, crs = 3338)
+    plot_lines =  sf::st_transform(plot_lines, crs = crs)
   }
 
   #if the user requested a grouping variable, also add this back in

@@ -69,8 +69,8 @@ get_basemap_layers = function(plot_limits_data,
   crs = sf::st_crs(plot_limits_data)$input
 
   #check if we've already got a collection of shapefiles/rasters for the requested CRS
-  map_dir = paste0('inst/extdata/mapping_files/', stringr::str_remove(crs, ':'))
-
+  #map_dir = paste0('inst/extdata/', stringr::str_remove(crs, ':'))
+  map_dir = system.file("extdata/", stringr::str_remove(crs, ':'), package = "MACEReports")
 
   #if the directory exists- we just need to open up the requested files
   if (dir.exists(map_dir)){
@@ -110,11 +110,12 @@ get_basemap_layers = function(plot_limits_data,
     dir.create(map_dir)
 
     #open the shapefiles (from 3338- since these are included to start with)
-    ak_land = sf::st_read('inst/extdata/mapping_files/EPSG3338/alaska_land_EPSG3338.gpkg')
-    russia_land = sf::st_read('inst/extdata/mapping_files/EPSG3338/russia_land_EPSG3338.gpkg')
-    management_regions_layer = sf::st_read('inst/extdata/mapping_files/EPSG3338/alaska_NMFS_management_regions_EPSG3338.gpkg')
-    SSL_critical_habitat_layer = sf::st_read('inst/extdata/mapping_files/EPSG3338/SSL_critical_habitat_EPSG3338.gpkg')
-    alaska_3nmi_buffer_layer = sf::st_read('inst/extdata/mapping_files/EPSG3338//alaska_3nmi_buffer_EPSG3338.gpkg')
+    base_dir = system.file("extdata/EPSG3338/", package = "MACEReports")
+    ak_land = sf::st_read(paste0(base_dir, '/alaska_land_EPSG3338.gpkg'))
+    russia_land = sf::st_read(paste0(base_dir, '/russia_land_EPSG3338.gpkg'))
+    management_regions_layer = sf::st_read(paste0(base_dir, '/alaska_NMFS_management_regions_EPSG3338.gpkg'))
+    SSL_critical_habitat_layer = sf::st_read(paste0(base_dir,'/SSL_critical_habitat_EPSG3338.gpkg'))
+    alaska_3nmi_buffer_layer = sf::st_read(paste0(base_dir, '/alaska_3nmi_buffer_EPSG3338.gpkg'))
 
     #convert to the requested projection
     ak_land = sf::st_transform(ak_land, crs = crs)
@@ -138,7 +139,7 @@ get_basemap_layers = function(plot_limits_data,
     if (bathy == TRUE){
 
       #again, start with the 3338 layer
-      bathy_raster = terra::rast('inst/extdata/mapping_files/EPSG3338/alaska_bathy_raster_EPSG3338.tif')
+      bathy_raster = terra::rast(paste0(base_dir, '/alaska_bathy_raster_EPSG3338.tif'))
 
       #convert it
       bathy_raster = terra::project(bathy_raster, crs, method = "bilinear")

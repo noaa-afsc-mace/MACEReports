@@ -219,7 +219,7 @@ get_basemap_layers = function(plot_limits_data,
     bathy_colors = ggplot2::scale_fill_gradientn(values = scales::rescale(c(min(bathy_raster_df$z, na.rm = TRUE),
                                                                             -300, -50, .99,
                                                                           max(bathy_raster_df$z, na.rm = TRUE))),
-                                        colors = c("#525252", "#737373", "#969696",  "#f0f0f0"),
+                                        colors = c("#737373", "#969696", "#d9d9d9",  "#d9d9d9"),
                                         #if user wants a legend, present units as positive (depth)
                                         #instead of negative (altitude)
                                         labels = function(x){ abs(x) })

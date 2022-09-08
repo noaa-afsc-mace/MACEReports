@@ -20,3 +20,5 @@ docs
 .Rproj.user/C08CC8C9/sources/prop/6B6BC75E
 .Rproj.user/C08CC8C9/sources/prop/96B48E1C
 .Rproj.user/shared/notebooks/paths
+*.pper
+.Rproj.user/C08CC8C9/persistent-state

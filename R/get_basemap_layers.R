@@ -78,6 +78,7 @@ get_basemap_layers = function(plot_limits_data,
     #open up all the layers we need
     ak_land = sf::st_read(paste0(map_dir, '/alaska_land_', stringr::str_remove(crs, ':'), '.gpkg'))
     russia_land =  sf::st_read(paste0(map_dir, '/russia_land_', stringr::str_remove(crs, ':'), '.gpkg'))
+    canada_land = sf::st_read(paste0(map_dir, '/canada_land_', stringr::str_remove(crs, ':'), '.gpkg'))
 
     if (!is.null(management_regions)){
       management_regions_layer = sf::st_read(paste0(map_dir, '/alaska_NMFS_management_regions_',
@@ -100,19 +101,16 @@ get_basemap_layers = function(plot_limits_data,
 
   }
 
-
   #if we don't have anything for the requested crs, build it
   if (!dir.exists(map_dir)){
 
     message(paste0('Creating new basemap features for ', crs, '.'))
 
-    #create the folders we'll need to populate if they don't exist
-    dir.create(map_dir)
-
     #open the shapefiles (from 3338- since these are included to start with)
     base_dir = system.file("extdata/EPSG3338/", package = "MACEReports")
     ak_land = sf::st_read(paste0(base_dir, '/alaska_land_EPSG3338.gpkg'))
     russia_land = sf::st_read(paste0(base_dir, '/russia_land_EPSG3338.gpkg'))
+    canada_land = sf::st_read(paste0(base_dir, '/canada_land_EPSG3338.gpkg'))
     management_regions_layer = sf::st_read(paste0(base_dir, '/alaska_NMFS_management_regions_EPSG3338.gpkg'))
     SSL_critical_habitat_layer = sf::st_read(paste0(base_dir,'/SSL_critical_habitat_EPSG3338.gpkg'))
     alaska_3nmi_buffer_layer = sf::st_read(paste0(base_dir, '/alaska_3nmi_buffer_EPSG3338.gpkg'))
@@ -120,23 +118,12 @@ get_basemap_layers = function(plot_limits_data,
     #convert to the requested projection
     ak_land = sf::st_transform(ak_land, crs = crs)
     russia_land = sf::st_transform(russia_land, crs = crs)
+    canada_land = sf::st_transform(canada_land, crs = crs)
     management_regions_layer = sf::st_transform(management_regions_layer, crs = crs)
     SSL_critical_habitat_layer = sf::st_transform(SSL_critical_habitat_layer, crs = crs)
     alaska_3nmi_buffer_layer = sf::st_transform(alaska_3nmi_buffer_layer, crs = crs)
 
-    #save converted files
-    sf::st_write(ak_land, dsn = paste0(map_dir, '/alaska_land_', stringr::str_remove(crs, ':'), '.gpkg'),
-                 delete_dsn = TRUE)
-    sf::st_write(russia_land, dsn = paste0(map_dir, '/russia_land_', stringr::str_remove(crs, ':'), '.gpkg'),
-                 delete_dsn = TRUE)
-    sf::st_write(management_regions_layer, dsn = paste0(map_dir, '/alaska_NMFS_management_regions_',
-                                                        stringr::str_remove(crs, ':'), '.gpkg'), delete_dsn = TRUE)
-    sf::st_write(SSL_critical_habitat_layer, dsn = paste0(map_dir, '/SSL_critical_habitat_',
-                                                        stringr::str_remove(crs, ':'), '.gpkg'), delete_dsn = TRUE)
-    sf::st_write(alaska_3nmi_buffer_layer, dsn = paste0(map_dir, '/alaska_3nmi_buffer_',
-                                                          stringr::str_remove(crs, ':'), '.gpkg'), delete_dsn = TRUE)
-
-    if (bathy == TRUE){
+   if (bathy == TRUE){
 
       #again, start with the 3338 layer
       bathy_raster = terra::rast(paste0(base_dir, '/alaska_bathy_raster_EPSG3338.tif'))
@@ -146,10 +133,6 @@ get_basemap_layers = function(plot_limits_data,
 
       #up the resolution
       bathy_raster = terra::disagg(bathy_raster, fact = c(5, 5), method = 'near')
-
-      #and save it
-      terra::writeRaster(bathy_raster, filename = paste0(map_dir, '/alaska_bathy_raster_',
-                                                         stringr::str_remove(crs, ':'), '.tif'))
 
     }
 
@@ -183,6 +166,7 @@ get_basemap_layers = function(plot_limits_data,
   #crop the base layers
   ak_land =  sf::st_intersection(sf::st_geometry(ak_land), sf::st_geometry(region_zoom_box))
   russia_land =  sf::st_intersection(sf::st_geometry(russia_land), sf::st_geometry(region_zoom_box))
+  canada_land =  sf::st_intersection(sf::st_geometry(canada_land), sf::st_geometry(region_zoom_box))
 
   if (!is.null(management_regions)){
      management_regions_layer = sf::st_intersection(sf::st_make_valid(sf::st_geometry(management_regions_layer)),
@@ -235,6 +219,7 @@ get_basemap_layers = function(plot_limits_data,
     {if (!is.null(management_regions)) ggplot2::geom_sf(data = management_regions_layer, color = 'white', fill = 'transparent')}+
     ggplot2::geom_sf(data = ak_land, fill = land_fill_color, color = land_outline_color)+
     ggplot2::geom_sf(data = russia_land, fill = land_fill_color, color = land_outline_color)+
+    ggplot2::geom_sf(data = canada_land, fill = land_fill_color, color = land_outline_color)+
     ggplot2::guides(fill = 'none')+
     #set the basemap to standard MACE theme
     ggplot2::theme_bw()+

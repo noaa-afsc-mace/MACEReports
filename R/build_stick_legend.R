@@ -61,7 +61,7 @@ dist = sf::st_length(biggest_stick)
 dist = as.numeric(dist) * 0.5
 
 #set a small factor to 'bump' sticks up by (so there's room for text)
-bump = dist * .35
+bump = dist * .1
 
 
 #create a line from the x/y position to a height 1/2 the distance of the tallest bar

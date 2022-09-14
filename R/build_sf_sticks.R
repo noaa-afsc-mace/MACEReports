@@ -86,8 +86,18 @@ build_sf_sticks = function(x,y,z, group_variable = NULL, rotation = 5, bar_scale
   removed_rows = plot_pos_df[!(stats::complete.cases(plot_pos_df)),]
   if (nrow(removed_rows) > 0) warning(paste(nrow(removed_rows), 'row(s) removed due to NAs'))
 
-  #set a scaling factor - we want the tallest bar to be ~30% of the total plot height
-  total_plot_height = abs(max(plot_pos$start_y) - min(plot_pos$start_y))
+  #set a scaling factor
+
+  #if you only have 1 datapoint, set this plot height as the height of the bar, plus 25%
+  if (nrow(plot_pos) == 1){
+    total_plot_height = abs(plot_pos$start_y) * .01
+  }
+
+  #otherwise use the extent of the plot
+  if (nrow(plot_pos) > 1){
+    total_plot_height = abs(max(plot_pos$start_y) - min(plot_pos$start_y))
+  }
+
   max_bar_height = total_plot_height * bar_scale
   scaling_factor = max(plot_pos$z)/max_bar_height
 
@@ -122,7 +132,7 @@ build_sf_sticks = function(x,y,z, group_variable = NULL, rotation = 5, bar_scale
     #convert to sf points
     sf::st_as_sf(coords = c("LONG", "LAT")) %>%
     #connect the points as linestrings for each datapoint- in this case, each position
-    dplyr::group_by(.data$pos_num) %>%
+    dplyr::group_by(.data$pos_num, z) %>%
     dplyr::summarize() %>%
     sf::st_cast("LINESTRING")%>%
     dplyr::select(-.data$pos_num)

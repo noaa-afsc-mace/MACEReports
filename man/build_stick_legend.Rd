@@ -4,12 +4,21 @@
 \alias{build_stick_legend}
 \title{build_stick_legend}
 \usage{
-build_stick_legend(stick_data, legend_pos = "right")
+build_stick_legend(
+  stick_data,
+  legend_pos = "right",
+  legend_color = "white",
+  legend_label = NULL
+)
 }
 \arguments{
 \item{stick_data}{A 'stick' dataframe returned from \code{build_sf_sticks}.}
 
 \item{legend_pos}{One of 'right' or 'left'; legend bar will be placed at the corresponding corner.}
+
+\item{legend_color}{Default is white for standard MACE basemaps; specify alternates in standard \code{ggplot}-compatible formats}
+
+\item{legend_label}{Defaults to a label in standard MACE units (t/nmi^2); specify alternate if needed to reflect your units}
 }
 \description{
 Accepts a dataframe returned from the \code{build_sf_sticks} function and returns a nicely placed legend bar.
@@ -26,9 +35,9 @@ dat = data.frame('x' = c(-152.2, -150.3, -159.4),
 'z' = c(75000,400000, 280000),
 'species' = c('a', 'a', 'b'))
 sticks = build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = 15, crs = 3338)
-legend = build_stick_legend(stick_data = sticks, legend_pos = 'left')
+legend = build_stick_legend(stick_data = sticks, legend_pos = 'left', legend_color = 'black')
 ggplot()+
   geom_sf(data = sticks)+
-  geom_sf(data = legend, color = 'red')
+  legend
 
 }

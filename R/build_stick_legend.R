@@ -74,7 +74,7 @@ legend_line = sf::st_geometry(legend_line)
 sf::st_crs(legend_line) = crs
 
 #store the line as ggplot2 object
-legend_line = ggplot2::geom_sf(data = legend_line, color = legend_color)
+legend_line = ggplot2::geom_sf(data = legend_line, color = legend_color, size = 1.5)
 
 #add the value of the bar, with a prettier print format
 legend_value = format(round(biggest_stick$z * 0.5, digits = -2), digits = 1, nsmall = 0, scientific = FALSE, big.mark = ',')
@@ -85,7 +85,8 @@ if (!is.null(legend_label)){
   #add the value of the bar, with a prettier print format
   legend_value = format(round(biggest_stick$z * 0.5, digits = 0), digits = 1, nsmall = 0, scientific = FALSE, big.mark = ',')
 
-  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump), y = legend_y, label = paste(legend_value, legend_label))
+  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump), y = legend_y,
+                                        label = paste(legend_value, legend_label), color = legend_color)
 
   #add both the line and the legend to a ggplot2 object
   legend_line = list(legend_line, legend_annotation)
@@ -97,12 +98,13 @@ if (!is.null(legend_label)){
 if (is.null(legend_label)){
 
   #assume standard MACE units for stickplot!
-  legend_value = format(round((biggest_stick$z/1e3) * 0.5, digits = -1), digits = 1, nsmall = 0, scientific = FALSE, big.mark = ',')
+  legend_value = format(round((biggest_stick$z/1e3) * 0.5, digits = -1),
+                        digits = 1, nsmall = 0, scientific = FALSE, big.mark = ',')
 
   label_name = deparse(bquote(.(legend_value) * " t/nmi"^-2))
 
-  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump * 4), y = legend_y,
-                                        label = label_name, parse = TRUE)
+  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump * 3), y = legend_y,
+                                        label = label_name, parse = TRUE, color = legend_color)
 
   #add both the line and the legend to a ggplot2 object
   legend_line = list(legend_line, legend_annotation)

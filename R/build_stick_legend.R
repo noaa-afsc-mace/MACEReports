@@ -99,9 +99,9 @@ if (is.null(legend_label)){
   #assume standard MACE units for stickplot!
   legend_value = format(round((biggest_stick$z/1e3) * 0.5, digits = -1), digits = 1, nsmall = 0, scientific = FALSE, big.mark = ',')
 
-  label_name = deparse(bquote(.(legend_value) * " t/nmi"^2))
+  label_name = deparse(bquote(.(legend_value) * " t/nmi"^-2))
 
-  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump), y = legend_y,
+  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump * 4), y = legend_y,
                                         label = label_name, parse = TRUE)
 
   #add both the line and the legend to a ggplot2 object

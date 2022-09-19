@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_basemap_layers.R
 \name{get_basemap_layers}
 \alias{get_basemap_layers}
-\title{Create a MACE-themed basemap}
+\title{Create a MACE-themed basemap in the Bering Sea}
 \usage{
 get_basemap_layers(
   plot_limits_data,
@@ -11,7 +11,8 @@ get_basemap_layers(
   SSL_critical_habitat = NULL,
   alaska_3nmi_buffer = NULL,
   land_fill_color = "#616161",
-  land_outline_color = "black"
+  land_outline_color = "black",
+  region = NULL
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ is included in the basemap; If \code{FALSE}, bathymetric baselayer will not be i
 \item{land_fill_color}{If you'd like a different fill color on landmasses, specify as required by \code{ggplot2}.}
 
 \item{land_outline_color}{If you'd like a different outline color on landmasses, specify as required by \code{ggplot2}.}
+
+\item{region}{If you are working in the GOA- selecting 'goa' will give you a higher-resolution bathymetry layer.}
 }
 \value{
 A list of class \code{ggplot} containing information required for plotting a basemap.

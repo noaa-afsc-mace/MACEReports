@@ -1,4 +1,4 @@
-#' @title Create a MACE-themed basemap
+#' @title Create a MACE-themed basemap in the Bering Sea
 #' @description Returns a base map. This map is returned as a ggplot2 object that more complex maps can be built on top of.
 #' It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer regions,
 #' and Steller Sea Lion exclusions.
@@ -12,6 +12,7 @@
 #' @param alaska_3nmi_buffer If \code{TRUE}, will add the ADFG 3 nmi management buffer to basemap
 #' @param land_fill_color If you'd like a different fill color on landmasses, specify as required by \code{ggplot2}.
 #' @param land_outline_color If you'd like a different outline color on landmasses, specify as required by \code{ggplot2}.
+#' @param region If you are working in the GOA- selecting 'goa' will give you a higher-resolution bathymetry layer.
 #' @return A list of class \code{ggplot} containing information required for plotting a basemap.
 #'
 #' @author Mike Levine
@@ -58,7 +59,8 @@ get_basemap_layers = function(plot_limits_data,
                               SSL_critical_habitat = NULL,
                               alaska_3nmi_buffer = NULL,
                               land_fill_color = '#616161',
-                              land_outline_color = 'black'){
+                              land_outline_color = 'black',
+                              region = NULL){
 
   #checks: Make sure we have a sf dataframe WITH a defined CRS for the plot data; stop if not.
   if (!"sf" %in% class(plot_limits_data) | is.na(sf::st_crs(plot_limits_data)$input)){
@@ -70,7 +72,7 @@ get_basemap_layers = function(plot_limits_data,
 
   #check if we've already got a collection of shapefiles/rasters for the requested CRS
   #map_dir = paste0('inst/extdata/', stringr::str_remove(crs, ':'))
-  map_dir = system.file("extdata/", stringr::str_remove(crs, ':'), package = "MACEReports")
+  map_dir = system.file("extdata", stringr::str_remove(crs, ':'), package = "MACEReports")
 
   #if the directory exists- we just need to open up the requested files
   if (dir.exists(map_dir)){
@@ -96,7 +98,37 @@ get_basemap_layers = function(plot_limits_data,
     }
 
     if (bathy == TRUE){
-      bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
+
+        if (is.null(region)){
+
+          bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
+        }
+
+      if (!is.null(region)){
+
+        if(region == 'goa'){
+
+          load(file = paste0(map_dir, '/GOA_bathy_raster_EPSG3338.rdata'))
+
+          #note that terra raster has a bug where it can throw an error on first use... and then work fine.
+          #see: https://stackoverflow.com/questions/65556253/r-raster-selffinalize-error-causing-failure
+          #so, try first in a try statement, then try again. Also note chunk option is 'error_TRUE' so we can bypass bug
+          bathy_raster = tryCatch(terra::rast(bathy_raster, type = 'xyz'),
+                                  error = function(e)
+                                    terra::rast(bathy_raster, type = 'xyz'))
+
+
+
+          terra::crs(bathy_raster) = "EPSG:3338"
+
+        }
+
+        if(region != 'goa'){
+          bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
+        }
+
+      }
+
     }
 
   }
@@ -195,18 +227,40 @@ get_basemap_layers = function(plot_limits_data,
     bathy_raster_df = terra::crop(bathy_raster, clip, snap = 'near')
 
     #and use these dimensions to create a dataframe that we can plot with ggplot
-    bathy_raster_df = terra::as.data.frame(bathy_raster_df, xy = TRUE)%>%
-       dplyr::rename('z' = 'lyr.1')
+    if (is.null(region)){
 
-    #define a color scale- you can tweak this to give the right amount of weight to the deep vs shallow areas (right now),
-    #theres more weight given to 200 m and up
-    bathy_colors = ggplot2::scale_fill_gradientn(values = scales::rescale(c(min(bathy_raster_df$z, na.rm = TRUE),
-                                                                            -300, -50, .99,
-                                                                          max(bathy_raster_df$z, na.rm = TRUE))),
-                                        colors = c("#737373", "#969696", "#d9d9d9",  "#d9d9d9"),
-                                        #if user wants a legend, present units as positive (depth)
-                                        #instead of negative (altitude)
-                                        labels = function(x){ abs(x) })
+        bathy_raster_df = terra::as.data.frame(bathy_raster_df, xy = TRUE)%>%
+         dplyr::rename('z' = 'lyr.1')
+
+        #define a color scale- you can tweak this to give the right amount of weight to the deep vs shallow areas (right now),
+        #theres more weight given to 200 m and up
+        bathy_colors = ggplot2::scale_fill_gradientn(values = scales::rescale(c(min(bathy_raster_df$z, na.rm = TRUE),
+                                                                                -300, -50, .99,
+                                                                                max(bathy_raster_df$z, na.rm = TRUE))),
+                                                     colors = c("#737373", "#969696", "#d9d9d9",  "#d9d9d9"),
+                                                     #if user wants a legend, present units as positive (depth)
+                                                     #instead of negative (altitude)
+                                                     labels = function(x){ abs(x) })
+
+    }
+
+    if (!is.null(region)){
+
+      bathy_raster_df = terra::as.data.frame(bathy_raster_df, xy = TRUE)
+
+      #define a more appropriate colorscale for the goa
+      bathy_colors = ggplot2::scale_fill_gradientn(values = scales::rescale(c(min(bathy_raster_df$z, na.rm = TRUE),
+                                                                              -250,  0,
+                                                                     max(bathy_raster_df$z, na.rm = TRUE))),
+                                          colors = c("#737373", "#969696", "#d9d9d9",  "#d9d9d9"),
+                                          #if user wants a legend, present units as positive (depth)
+                                          #instead of negative (altitude)
+                                          labels = function(x){ abs(x) })
+
+    }
+
+
+
 
   }
 

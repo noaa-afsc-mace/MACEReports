@@ -192,7 +192,13 @@ build_sf_sticks = function(x,
       stop('Your must specify a data frame in return_df: see ?build_sf_sticks.')
     }
 
-    #join the other rows
+    #join the other rows- get rid of remnant 'geometry' column if present
+    if ('geometry' %in% colnames(return_df)){
+
+      return_df = return_df%>%
+        dplyr::select(-.data$geometry)
+
+    }
 
     #remove any NA rows from the index if needed
     if (nrow(removed_rows) > 0){

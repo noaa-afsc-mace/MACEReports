@@ -9,6 +9,8 @@
 #' @param z Abundance value (the value that will be used to scale sticks)
 #' @param group_variable If specified, will specify the group for each stick; this can be used
 #' to identify sticks by group.
+#' @param return_df If specified, will include all columns from the original dataframe in the returned object.
+#' Only one of 'group_variable' or 'return_df' should be specified.
 #' @param rotation Rotation of the sticks in degrees from the vertical. Default is 5 degrees.
 #' 0 = no rotation; positive values rotate bars in a clockwise direction.
 #' @param bar_scale The relative size of sticks. Default is ~1/2 of total plot height.
@@ -62,28 +64,44 @@
 #'  geom_sf(data = sticks2)
 #'
 #' @export
-build_sf_sticks = function(x,y,z, group_variable = NULL, rotation = 5, bar_scale = 0.5, crs = NULL){
+build_sf_sticks = function(x,
+                           y,
+                           z,
+                           group_variable = NULL,
+                           return_df = NULL,
+                           rotation = 5,
+                           bar_scale = 0.5,
+                           crs = NULL){
 
-  #verify inputs using stick_inputs function
-  stick_inputs(x, y ,z, group_variable)
+  #verify inputs
 
-  #make sure the crs, if provided, is in the list of available CRS
+  #x,y,z must be numeric
+  if (!is.numeric(c(x,y,z))) stop('x,y, and z must all be numeric')
 
-  #gather the vectors of start positions into a dataframe
-  if (is.null(group_variable)){
-    plot_pos_df = data.frame('start_x' = x, 'start_y' = y, 'z' = z)
-  }
-
+  #x, y,z, and, if provided, group_variable must have the same number of observations
   if (!is.null(group_variable)){
 
-    plot_pos_df = data.frame('start_x' = x, 'start_y' = y, 'z' = z, 'group_variable' = group_variable)
+    if (!all(sapply(list(length(x), length(y), length(z), length(group_variable)),
+                    FUN = identical, length(x))))
+      stop("x, y, z and group variable must be vectors of the same length.")
   }
+
+  if (is.null(group_variable)){
+
+    if (!all(sapply(list(length(x), length(y), length(z)),
+                    FUN = identical, length(x))))
+      stop("x, y, and z must be vectors of the same length.")
+  }
+
+  #gather the vectors of start positions into a dataframe
+  plot_pos_df = data.frame('start_x' = x, 'start_y' = y, 'z' = z)
 
   #remove any rows with NA's too
   plot_pos = plot_pos_df[stats::complete.cases(plot_pos_df),]
 
   #report any removed rows
   removed_rows = plot_pos_df[!(stats::complete.cases(plot_pos_df)),]
+  which_removed = which(rowSums(is.na(plot_pos_df)) > 0)
   if (nrow(removed_rows) > 0) warning(paste(nrow(removed_rows), 'row(s) removed due to NAs'))
 
   #set a scaling factor
@@ -146,7 +164,7 @@ build_sf_sticks = function(x,y,z, group_variable = NULL, rotation = 5, bar_scale
   }
 
   #if the user requested a grouping variable, also add this back in
-  if (!is.null(group_variable)){
+  if (!is.null(group_variable) & is.null(return_df)){
 
     colname = deparse(substitute(group_variable))
 
@@ -154,7 +172,41 @@ build_sf_sticks = function(x,y,z, group_variable = NULL, rotation = 5, bar_scale
       colname = stringr::str_split(colname, '\\$')[[1]][2]
     }
 
-    plot_lines[[colname]] = plot_pos$group_variable
+    #remove any NA rows from the index
+    if (nrow(removed_rows) > 0){
+      plot_lines[[colname]] = group_variable[-which_removed]
+    }
+
+    if (nrow(removed_rows) == 0){
+      plot_lines[[colname]] = group_variable
+    }
+
+  }
+
+  #if user requested the entire data frame, add this back- this will work as no rows have been re-sorted
+  #if the user requested all dataframe columns, return these
+  if (!is.null(return_df)){
+
+    #make sure we have a dataframe
+    if (!"data.frame" %in% class(return_df)){
+      stop('Your must specify a data frame in return_df: see ?build_sf_sticks.')
+    }
+
+    #join the other rows
+
+    #remove any NA rows from the index if needed
+    if (nrow(removed_rows) > 0){
+
+      return_df = return_df[-which_removed]
+
+      plot_lines = dplyr::bind_cols(plot_lines, return_df)
+
+    }
+
+    if (nrow(removed_rows) == 0){
+      plot_lines = dplyr::bind_cols(plot_lines, return_df)
+    }
+
   }
 
   #return this dataframe

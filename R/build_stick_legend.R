@@ -85,7 +85,7 @@ if (!is.null(legend_label)){
   #add the value of the bar, with a prettier print format
   legend_value = format(round(biggest_stick$z * 0.5, digits = 0), digits = 1, nsmall = 0, scientific = FALSE, big.mark = ',')
 
-  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump), y = legend_y, label = paste(legend_label, legend_value))
+  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump), y = legend_y, label = paste(legend_value, legend_label))
 
   #add both the line and the legend to a ggplot2 object
   legend_line = list(legend_line, legend_annotation)

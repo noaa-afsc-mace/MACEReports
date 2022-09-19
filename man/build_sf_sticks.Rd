@@ -9,6 +9,7 @@ build_sf_sticks(
   y,
   z,
   group_variable = NULL,
+  return_df = NULL,
   rotation = 5,
   bar_scale = 0.5,
   crs = NULL
@@ -23,6 +24,9 @@ build_sf_sticks(
 
 \item{group_variable}{If specified, will specify the group for each stick; this can be used
 to identify sticks by group.}
+
+\item{return_df}{If specified, will include all columns from the original dataframe in the returned object.
+Only one of 'group_variable' or 'return_df' should be specified.}
 
 \item{rotation}{Rotation of the sticks in degrees from the vertical. Default is 5 degrees.
 0 = no rotation; positive values rotate bars in a clockwise direction.}

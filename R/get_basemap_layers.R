@@ -7,6 +7,8 @@
 #' @param plot_limits_data A \code{sf} spatial dataframe; this is required and used to define the base map extent and projection.
 #' @param bathy By default, a bathymetric baselayer based on the GEBCO (https://www.gebco.net/) gridded bathymetric dataset
 #' is included in the basemap; If \code{FALSE}, bathymetric baselayer will not be included
+#' @param contours Provide contour lines at requested depths. Specify depths as positive numeric values,
+#' i.e. \code{c(200,100,50)}
 #' @param management_regions If \code{TRUE}, will add NMFS management regions to basemap
 #' @param SSL_critical_habitat If \code{TRUE}, will add Steller Sea Lion critical habitat buffers to basemap
 #' @param alaska_3nmi_buffer If \code{TRUE}, will add the ADFG 3 nmi management buffer to basemap
@@ -50,11 +52,15 @@
 #'
 #' mace_basemap = get_basemap_layers(plot_limits_data = dat, SSL_critical_habitat = TRUE)
 #' mace_basemap
+#'
+#' mace_basemap = get_basemap_layers(plot_limits_data = dat, bathy = FALSE, contours = c(200, 100, 50))
+#' mace_basemap
 #'}
 #'
 #' @export
 get_basemap_layers = function(plot_limits_data,
                               bathy = TRUE,
+                              contours = NULL,
                               management_regions = NULL,
                               SSL_critical_habitat = NULL,
                               alaska_3nmi_buffer = NULL,
@@ -117,8 +123,6 @@ get_basemap_layers = function(plot_limits_data,
                                   error = function(e)
                                     terra::rast(bathy_raster, type = 'xyz'))
 
-
-
           terra::crs(bathy_raster) = "EPSG:3338"
 
         }
@@ -128,6 +132,23 @@ get_basemap_layers = function(plot_limits_data,
         }
 
       }
+
+    }
+
+    #if user requests contours instead of full bathy, produce these
+    if (!is.null(contours)){
+
+      #check: make sure it is a numeric object
+      if (!is.numeric(contours)){
+        stop('You need to provide contour numbers as a series of positive numbers, as in : c(50,100).')
+      }
+
+      #if the contours are provided as positive values, set as negative
+      contours = ifelse(contours > 0, -contours, contours)
+
+      #build the contours
+      bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
+      bathy_contours = terra::as.contour(bathy_raster, levels = contours)
 
     }
 
@@ -166,9 +187,26 @@ get_basemap_layers = function(plot_limits_data,
       #up the resolution
       bathy_raster = terra::disagg(bathy_raster, fact = c(5, 5), method = 'near')
 
+   }
+
+  if (!is.null(contours)){
+
+    #check: make sure it is a numeric object
+    if (!is.numeric(contours)){
+      stop('You need to provide contour numbers as a series of positive numbers, as in : c(50,100).')
     }
 
+    #if the contours are provided as positive values, set as negative
+    contours = ifelse(contours > 0, -contours, contours)
+
+    #build the contours
+    base_dir = system.file("extdata/EPSG3338/", package = "MACEReports")
+    bathy_raster = terra::rast(paste0(base_dir, '/alaska_bathy_raster_EPSG3338.tif'))
+    bathy_contours = terra::as.contour(bathy_raster, levels = contours)
+
   }
+
+ }
 
   #clip the exent of background layers for plotting
 
@@ -258,9 +296,19 @@ get_basemap_layers = function(plot_limits_data,
                                           labels = function(x){ abs(x) })
 
     }
+  }
 
+  if(!is.null(contours)){
 
+    #set a box that can be used to clip raster to plot extent (much faster plotting!)
+    clip = terra::ext(sf::st_bbox(region_zoom_box)[[1]], sf::st_bbox(region_zoom_box)[[3]],
+                      sf::st_bbox(region_zoom_box)[[2]], sf::st_bbox(region_zoom_box)[[4]])
 
+    #crop to these dimensions
+    bathy_contours = terra::crop(bathy_contours, clip)
+
+    #set as an sf object- this will inherit the CRS from the terra raster
+    bathy_contours = sf::st_as_sf(bathy_contours)
 
   }
 
@@ -268,6 +316,7 @@ get_basemap_layers = function(plot_limits_data,
   basemap_layers = ggplot2::ggplot()+
     {if (bathy == TRUE) ggplot2::geom_raster(data = bathy_raster_df, ggplot2::aes(x=x,y=y,fill=z))} +
     {if (bathy == TRUE) bathy_colors}+
+    {if (!is.null(contours) & bathy != TRUE) ggplot2::geom_sf(data = bathy_contours, color = 'gray60')}+
     {if (!is.null(SSL_critical_habitat)) ggplot2::geom_sf(data = SSL_critical_habitat_layer, color = 'white', fill = 'transparent')}+
     {if (!is.null(alaska_3nmi_buffer)) ggplot2::geom_sf(data = alaska_3nmi_buffer_layer, color = 'white', fill = 'transparent')}+
     {if (!is.null(management_regions)) ggplot2::geom_sf(data = management_regions_layer, color = 'white', fill = 'transparent')}+

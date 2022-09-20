@@ -7,6 +7,7 @@
 get_basemap_layers(
   plot_limits_data,
   bathy = TRUE,
+  contours = NULL,
   management_regions = NULL,
   SSL_critical_habitat = NULL,
   alaska_3nmi_buffer = NULL,
@@ -20,6 +21,9 @@ get_basemap_layers(
 
 \item{bathy}{By default, a bathymetric baselayer based on the GEBCO (https://www.gebco.net/) gridded bathymetric dataset
 is included in the basemap; If \code{FALSE}, bathymetric baselayer will not be included}
+
+\item{contours}{Provide contour lines at requested depths. Specify depths as positive numeric values,
+i.e. \code{c(200,100,50)}}
 
 \item{management_regions}{If \code{TRUE}, will add NMFS management regions to basemap}
 
@@ -74,6 +78,9 @@ mace_basemap = get_basemap_layers(plot_limits_data = dat, alaska_3nmi_buffer = T
 mace_basemap
 
 mace_basemap = get_basemap_layers(plot_limits_data = dat, SSL_critical_habitat = TRUE)
+mace_basemap
+
+mace_basemap = get_basemap_layers(plot_limits_data = dat, bathy = FALSE, contours = c(200, 100, 50))
 mace_basemap
 }
 

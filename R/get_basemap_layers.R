@@ -1,7 +1,7 @@
-#' @title Create a MACE-themed basemap in the Bering Sea
+#' @title Create a MACE-themed basemap
 #' @description Returns a base map. This map is returned as a ggplot2 object that more complex maps can be built on top of.
 #' It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer regions,
-#' and Steller Sea Lion exclusions.
+#' and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
 #' This layer will be slightly larger than the extent of \code{plot_limits_data}; users should still use \code{ggplot2::coord_sf}
 #' to fine-tune the plot extent.
 #' @param plot_limits_data A \code{sf} spatial dataframe; this is required and used to define the base map extent and projection.

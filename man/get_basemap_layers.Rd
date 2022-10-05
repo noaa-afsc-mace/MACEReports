@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_basemap_layers.R
 \name{get_basemap_layers}
 \alias{get_basemap_layers}
-\title{Create a MACE-themed basemap in the Bering Sea}
+\title{Create a MACE-themed basemap}
 \usage{
 get_basemap_layers(
   plot_limits_data,
@@ -43,7 +43,7 @@ A list of class \code{ggplot} containing information required for plotting a bas
 \description{
 Returns a base map. This map is returned as a ggplot2 object that more complex maps can be built on top of.
 It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer regions,
-and Steller Sea Lion exclusions.
+and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
 This layer will be slightly larger than the extent of \code{plot_limits_data}; users should still use \code{ggplot2::coord_sf}
 to fine-tune the plot extent.
 }

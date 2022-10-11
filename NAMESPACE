@@ -2,6 +2,7 @@
 
 export(build_sf_sticks)
 export(build_stick_legend)
+export(build_ts_relationships_table)
 export(get_basemap_layers)
 export(stick_inputs)
 importFrom(magrittr,"%>%")

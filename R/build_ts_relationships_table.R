@@ -1,7 +1,7 @@
 #' @title Create the standard MACE target strength relationships table
-#' @description Produce a TS-length relationships table for use in standard cruise reports.
+#' @description Produce a TS-length relationships table for use in standard MACE cruise reports.
 #' This stores all of the commonly used TS-length relationships, but will need to be updated as we
-#' add more TS-length  relationships to analyses.
+#' add more TS-length relationships to analyses.
 #' Note that this is formatted for use with MS Word output, and references are formatted for use with a \code{.bib}
 #' bibliography file. Standard cruise reports include an appropriate \code{.bib} file.
 #' @param ts_relationships_used An optional character vector of relationships used in the survey.

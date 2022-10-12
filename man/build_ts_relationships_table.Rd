@@ -16,9 +16,9 @@ If used, this will attempt to limit the table to the values used in the survey. 
 A list with two items: item 1 is the Flextable table object, item 2 is the table caption.
 }
 \description{
-Produce a TS-length relationships table for use in standard cruise reports.
+Produce a TS-length relationships table for use in standard MACE cruise reports.
 This stores all of the commonly used TS-length relationships, but will need to be updated as we
-add more TS-length  relationships to analyses.
+add more TS-length relationships to analyses.
 Note that this is formatted for use with MS Word output, and references are formatted for use with a \code{.bib}
 bibliography file. Standard cruise reports include an appropriate \code{.bib} file.
 }

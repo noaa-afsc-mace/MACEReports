@@ -1,7 +1,7 @@
 #' template_df_haul_data
 #'
-#' A subset of standard MACE haul data, with colunms and formats required for creating the standard haul table
-#' Report ...
+#' A subset of standard MACE haul data, with columns and formats required for creating the standard haul table
+#' in cruise reports
 #'
 #' @format A data frame with 5 rows and 15 columns:
 #' \describe{

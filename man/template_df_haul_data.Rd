@@ -31,7 +31,7 @@ Template dateset was gathered using get_haul_table_data.R function in Summer 202
 template_df_haul_data
 }
 \description{
-A subset of standard MACE haul data, with colunms and formats required for creating the standard haul table
-Report ...
+A subset of standard MACE haul data, with columns and formats required for creating the standard haul table
+in cruise reports
 }
 \keyword{datasets}

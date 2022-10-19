@@ -19,7 +19,7 @@
 #'   \item{POLLOCK_WEIGHT}{Walleye pollock catch weight (kg; numeric)}
 #'   \item{POLLOCK_NUMBERS}{Walleye pollock catch numbers (individuals; numeric)}
 #'   \item{NON_POLLOCK_WEIGHT}{All other species catch weight (kg; numeric)}
-#'   \item{region}{Survey region name (character)}#'
+#'   \item{region}{Survey region name (character)}
 #' }
 #' @source Template dateset was gathered using get_haul_table_data.R function in Summer 2021 GOA Cruise Report
 "template_df_haul_data"

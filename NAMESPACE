@@ -3,6 +3,7 @@
 export(build_catch_table_summer_goa)
 export(build_haul_table)
 export(build_sf_sticks)
+export(build_specimen_table_summer_goa)
 export(build_stick_legend)
 export(build_ts_relationships_table)
 export(check_input_df)

@@ -10,7 +10,8 @@ build_ts_relationships_table(ts_relationships_used = NULL)
 \item{ts_relationships_used}{An optional character vector of relationships used in the survey.
 If used, this will attempt to limit the table to the values used in the survey. Current options are available at:
 \code{macebase2.ts_relationships}; the most straightforward way to specify is to use the
-\code{ts_relationships_data$TS_RELATIONSHIP} vector returned in report creation.}
+\code{ts_relationships_data$TS_RELATIONSHIP} vector returned from the get_ts_relationships function generated
+in the get_macebase_data step of report generation.}
 }
 \value{
 A list with two items: item 1 is the Flextable table object, item 2 is the table caption.

@@ -4,8 +4,8 @@
 #' used in the Gulf of Alaska summer reports. This differs from the winter version in that it creates tables
 #' for the entire survey, as opposed to by survey region. It also differs in the format of the input data.
 #'
-#' @param catch_data dataframe returned from the 'get_catch_table_data.R' function, summer GOA cruise reports
-#' @param specimen_data dataframe returned from the 'get_specimen_table_data.R' function, summer GOA cruise reports
+#' @param catch_data a dataframe returned from the 'get_catch_table_data.R' function, summer GOA cruise reports
+#' @param specimen_data a dataframe returned from the 'get_specimen_table_data.R' function, summer GOA cruise reports
 #' @param scaling_hauls_list an (optional) numeric vector of hauls that were used to scale backscatter in your analysis.
 #' These hauls are returned from the \code{scaling_hauls} dataframe in summer GOA cruise reports.
 #' If not specified, all hauls in the survey will be reported in tables.
@@ -17,7 +17,8 @@
 #' @examples
 #' \dontrun{
 #' #build the tables and captions
-#' catch_tables = build_catch_table_summer_goa(catch_data = raw_catch_data, specimen_data = specimen_measurements_data)
+#' catch_tables = build_catch_table_summer_goa(catch_data = raw_catch_data,
+#'                                             specimen_data = specimen_measurements_data)
 #'
 #' #unpack the tables and the captions
 #' table_1 = catch_tables[[1]][[1]]
@@ -30,6 +31,7 @@
 #' catch_tables = build_catch_table_summer_goa(catch_data = raw_catch_data,
 #'                                             specimen_data = specimen_measurements_data,
 #'                                             scaling_hauls_list = scaling_hauls$EVENT_ID)
+#'
 #'
 #' print the tables and the captions
 #' for (i in 1:length(catch_tables)){

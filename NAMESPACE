@@ -2,6 +2,7 @@
 
 export(build_catch_table_summer_goa)
 export(build_haul_table)
+export(build_numbers_at_length_table_summer_goa)
 export(build_sf_sticks)
 export(build_specimen_table_summer_goa)
 export(build_stick_legend)

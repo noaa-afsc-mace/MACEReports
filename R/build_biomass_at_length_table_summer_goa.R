@@ -8,11 +8,10 @@
 #' in the cruise report markdown process using the function \code{get_biomass_and_nums_data_function.R}; this provides all
 #' the data that is then used to create a 'current survey only/pollock only' dataframe named
 #' \code{current_survey_pollock_biomass_nums}. This dataframe is the easiest input to
-#'  \code{build_numbers_at_length_table_summer_goa} function
+#' \code{build_numbers_at_length_table_summer_goa} function#'
+#' @return A list with two items: item 1 is the Flextable table object, item 2 is the table caption.#'
 #'
-#'  @return A list with two items: item 1 is the Flextable table object, item 2 is the table caption.
-#'
-#'  @author Mike Levine
+#' @author Mike Levine
 #'
 #' @examples
 #' \dontrun{
@@ -55,9 +54,9 @@ build_biomass_at_length_table_summer_goa = function(biomass_nums_data){
   #######
   #step 1: sum biomass vertically by interval, length bin; report as biomass (t)
   biomass_summary = biomass_nums_data%>%
-    dplyr::group_by(.data$report_number, .data$region, .data$LENGTH)%>%
+    dplyr::group_by(.data$REPORT_NUMBER, .data$region, .data$LENGTH)%>%
     dplyr::summarize(biomass_t = sum(.data$BIOMASS)/1e3)%>%
-    dplyr::arrange(.data$report_number, .data$LENGTH)
+    dplyr::arrange(.data$REPORT_NUMBER, .data$LENGTH)
 
   #add a totals column as well
   table_totals = biomass_summary%>%
@@ -104,7 +103,7 @@ build_biomass_at_length_table_summer_goa = function(biomass_nums_data){
 
   #for presentation, we just want numbers (millions) for each length bin (10-70 cm and geographic area)
   biomass_for_presentation = biomass_summary%>%
-    #remove the report_number column- it was only needed to order things by report number
+    #remove the REPORT_NUMBER column- it was only needed to order things by report number
     dplyr::select(.data$LENGTH, .data$region, .data$biomass_t)%>%
     #also, go from 'long' format (where every region lives in it's own)
     tidyr::pivot_wider(id_cols = .data$LENGTH, names_from = .data$region, values_from = .data$biomass_t)

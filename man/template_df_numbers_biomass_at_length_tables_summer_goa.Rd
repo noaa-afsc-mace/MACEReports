@@ -10,7 +10,7 @@ A data frame with 5 rows and 8 columns:
 \describe{
   \item{SURVEY}{survey number (numeric)}
   \item{year}{survey year; (YYYY; numeric)}
-  \item{report_number}{the report number assigned by analysts when running Macebase Analysis (numeric)}
+  \item{REPORT_NUMBER}{the report number assigned by analysts when running Macebase Analysis (numeric)}
   \item{region}{Survey region name (character)}
   \item{SPECIES_CODE}{RACE species code (numeric)}
   \item{LENGTH}{length (cm; numeric)}

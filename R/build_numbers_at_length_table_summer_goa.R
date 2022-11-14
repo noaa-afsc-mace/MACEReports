@@ -56,9 +56,9 @@ build_numbers_at_length_table_summer_goa = function(biomass_nums_data){
   #######
   #step 1: sum nums vertically by interval, length bin; report as numbers (million)
   biomass_nums_summary = biomass_nums_data%>%
-    dplyr::group_by(.data$report_number, .data$region, .data$LENGTH)%>%
+    dplyr::group_by(.data$REPORT_NUMBER, .data$region, .data$LENGTH)%>%
     dplyr::summarize(num_million = sum(.data$NUMBERS)/1e6)%>%
-    dplyr::arrange(.data$report_number, .data$LENGTH)
+    dplyr::arrange(.data$REPORT_NUMBER, .data$LENGTH)
 
   #add a totals column as well
   table_totals = biomass_nums_summary%>%
@@ -104,7 +104,7 @@ build_numbers_at_length_table_summer_goa = function(biomass_nums_data){
 
   #for presentation, we just want numbers (millions) for each length bin (10-70 cm and geographic area)
   nums_for_presentation = biomass_nums_summary%>%
-    #remove the report_number column- it was only needed to order things by report number
+    #remove the REPORT_NUMBER column- it was only needed to order things by report number
     dplyr::select(.data$LENGTH, .data$region, .data$num_million)%>%
     #also, go from 'long' format (where every region lives in it's own)
     tidyr::pivot_wider(id_cols = .data$LENGTH, names_from = .data$region, values_from = .data$num_million)

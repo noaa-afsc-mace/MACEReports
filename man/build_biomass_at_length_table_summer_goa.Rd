@@ -4,18 +4,18 @@
 \alias{build_biomass_at_length_table_summer_goa}
 \title{build_biomass_at_length_table_summer_goa}
 \usage{
-build_biomass_at_length_table_summer_goa(biomass_nums_data)
+build_biomass_at_length_table_summer_goa(biomass_nums_length_data)
 }
 \arguments{
-\item{biomass_nums_data}{The name of the dataframe that contains all needed values; this dataframe is created
-in the cruise report markdown process using the function \code{get_biomass_and_nums_data_function.R}; this provides all
+\item{biomass_nums_length_data}{The name of the dataframe that contains the pollock
+biomass at length data; this dataframe is created in the cruise report markdown
+process using the function \code{get_biomass_and_nums_data_function.R}; this provides all
 the data that is then used to create a 'current survey only/pollock only' dataframe named
 \code{current_survey_pollock_biomass_nums}. This dataframe is the easiest input to
- \code{build_numbers_at_length_table_summer_goa} function
-
- @return A list with two items: item 1 is the Flextable table object, item 2 is the table caption.
-
- @author Mike Levine}
+\code{build_numbers_at_length_table_summer_goa} function}
+}
+\value{
+A list with two items: item 1 is the Flextable table object, item 2 is the table caption.
 }
 \description{
 Build the pollock biomass-at-length table used in summer GOA reports. This will report all lengths
@@ -27,10 +27,14 @@ to the nomimal 10 cm- 70 cm range.
 \dontrun{
 #build the table and caption
 biomass_table_list =
-build_biomass_at_length_table_summer_goa(biomass_nums_data = current_survey_pollock_biomass_nums)
+build_biomass_at_length_table_summer_goa
+(biomass_nums_length_data = current_survey_pollock_biomass_nums)
 
 #pull out table and caption from the list
 biomass_table =  biomass_table_list[[1]]
 biomass_caption = biomass_table_list[[2]]
 }
+}
+\author{
+Mike Levine
 }

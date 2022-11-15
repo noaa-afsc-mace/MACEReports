@@ -147,30 +147,23 @@ build_numbers_at_length_table_summer_goa = function(biomass_nums_data){
     flextable::align(align = 'center', part = 'all')%>%
     #add horizontal border on top and bottom of table
     flextable::hline_top(part="all", border = table_border)%>%
-    flextable::hline_bottom(part="all", border = table_border)
-
-
-  #create a function to format catch weights and percents and numbers percents conditionally:
-  #if values = NA, label as '-'
-  #If values are <=0.01, label as '<0.01';
-  #otherwise, format the value as having a single decimal point for display;
-  pretty_nums_function = function(x) ifelse(x > 0.01 | is.na(x),
-                                            ifelse(is.na(x), '-', formatC(x, format="f", digits = 2, big.mark=",")),
-                                            '<0.01')
-
-  #to format all the columns that could exist (i.e. different years will have different numbers of reporting columns),
-  #we need a named list of column names and the function to apply to said column;
-  #this needs to skip the first column too (no need to format 'Length')
-  funs_list =  stats::setNames(rep(list(pretty_nums_function),
-                                   length(names(nums_for_presentation))-1),
-                               names(nums_for_presentation)[-1])
-
-  #apply this function to the specfied table columns
-  nums_length_table = flextable::set_formatter(nums_length_table, values = funs_list)%>%
+    flextable::hline_bottom(part="all", border = table_border)%>%
     #set the font and font size
     flextable::font(fontname = 'times', part = 'all')%>%
     flextable::fontsize(size = 10, part = 'header')%>%
     flextable::fontsize(size = 10, part = 'body')
+
+  #conditionally format values for table using MACEReports::table_nums_format function:
+  #to format all the columns that could exist (i.e. different years will have different numbers of reporting columns),
+  #we need a named list of column names and the function to apply to said column;
+  #this needs to skip the first column too (no need to format 'Length')
+  funs_list =  stats::setNames(rep(list(MACEReports::table_nums_format),
+                                   length(names(nums_for_presentation))-1),
+                               names(nums_for_presentation)[-1])
+
+  #apply this function to the specfied table columns
+  nums_length_table = flextable::set_formatter(nums_length_table, values = funs_list)
+
 
   #build the caption
   cap_text = paste0('Pollock numbers-at-length estimates (millions of fish) by survey region during the ',

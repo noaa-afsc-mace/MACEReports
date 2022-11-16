@@ -7,7 +7,8 @@ Maintainer: Mike Levine <mike.levine@noaa.gov>
 Description: Functions used in creating MACE cruise reports 
     in R Markdown.
 Depends: R (>= 4.0.0)
-Imports: magrittr, dplyr, ggplot2, scales, sf, tidyr, stringr, rlang, terra, purrr, flextable, ftExtra, officer, knitr, lubridate
+Imports: magrittr, dplyr, ggplot2, scales, sf, tidyr, stringr, rlang, terra, purrr, flextable, ftExtra, officer, 
+    knitr, lubridate, data.table
 License: GPL-2
 Encoding: UTF-8
 LazyData: true

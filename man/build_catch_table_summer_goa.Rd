@@ -24,9 +24,8 @@ A list (or multiple lists, if there are multiple gear types)
 with two items: item 1 is the Flextable table object, item 2 is the table caption.
 }
 \description{
-build the catch by species and numbers by gear survey-wide; create a table that is in the format
-used in the Gulf of Alaska summer reports. This differs from the winter version in that it creates tables
-for the entire survey, as opposed to by survey region. It also differs in the format of the input data.
+build the catch by species and numbers by gear; create a table that is in the format
+used in the Gulf of Alaska summer reports. This differs from the winter version in the format of the input data.
 }
 \examples{
 \dontrun{

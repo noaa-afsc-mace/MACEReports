@@ -28,7 +28,7 @@ build_haul_table = function(haul_data){
   #check input dataframe against the template dataframe: this will make sure the input
   #data can actually be used to create a table, and will return errors if not
   check_data = template_df_haul_data
-  check_input_df(template_df = check_data, input_df = haul_data)
+  MACEReports::check_input_df(template_df = check_data, input_df = haul_data)
 
   #get the survey year
   survey_year = min(lubridate::year(haul_data$EQ_TIME))

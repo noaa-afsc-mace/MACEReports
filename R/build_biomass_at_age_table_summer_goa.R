@@ -32,7 +32,7 @@ build_biomass_at_age_table_summer_goa = function(biomass_nums_age_data){
   #check input dataframe against the template dataframe: this will make sure the input
   #data can actually be used to create a table, and will return errors if not
   check_data = template_df_numbers_biomass_at_age_tables_summer_goa
-  check_input_df(template_df = check_data, input_df = biomass_nums_age_data)
+  MACEReports::check_input_df(template_df = check_data, input_df = biomass_nums_age_data)
 
   #check- make sure there's only one species, warn if not pollock
   species_list = unique(biomass_nums_age_data$SPECIES_CODE)

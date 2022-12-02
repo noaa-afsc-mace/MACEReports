@@ -1,8 +1,7 @@
 #' @title build_catch_table_summer_goa
 #'
-#' @description build the catch by species and numbers by gear survey-wide; create a table that is in the format
-#' used in the Gulf of Alaska summer reports. This differs from the winter version in that it creates tables
-#' for the entire survey, as opposed to by survey region. It also differs in the format of the input data.
+#' @description build the catch by species and numbers by gear; create a table that is in the format
+#' used in the Gulf of Alaska summer reports. This differs from the winter version in the format of the input data.
 #'
 #' @param catch_data a dataframe returned from the 'get_catch_table_data.R' function, summer GOA cruise reports
 #' @param specimen_data a dataframe returned from the 'get_specimen_table_data.R' function, summer GOA cruise reports
@@ -49,10 +48,10 @@ build_catch_table_summer_goa = function(catch_data, specimen_data, scaling_hauls
   #check input dataframes against the template dataframes: this will make sure the input
   #data can actually be used to create a table, and will return errors if not
   check_catch_data = template_df_catch_data_summer_goa
-  check_input_df(template_df = check_catch_data, input_df = catch_data)
+  MACEReports::check_input_df(template_df = check_catch_data, input_df = catch_data)
 
   check_specimen_data = template_df_specimen_data_summer_goa
-  check_input_df(template_df = check_specimen_data, input_df = specimen_data)
+  MACEReports::check_input_df(template_df = check_specimen_data, input_df = specimen_data)
 
   #summarize the catch data for the table: by species, for all the requested hauls
 
@@ -198,7 +197,7 @@ build_catch_table_summer_goa = function(catch_data, specimen_data, scaling_hauls
                                 TOT_WEIGHT = function(x)
                                   ifelse(x > 0.1, formatC(x, format="f", digits = 1, big.mark=","), '<0.1'),
                                 TOT_NUMBER = function(x)
-                                  formatC(x, format="f", digits = 0, big.mark=","),
+                                  ifelse(x > 0.1, formatC(x, format="d", big.mark=","), '<0.1'),
                                 percent_wt = function(x)
                                   ifelse(x > 0.1, formatC(x, format="f", digits = 1, big.mark=","), '<0.1'),
                                 percent_num = function(x)

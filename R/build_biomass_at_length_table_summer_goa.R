@@ -33,7 +33,7 @@ build_biomass_at_length_table_summer_goa = function(biomass_nums_length_data){
   #check input dataframe against the template dataframe: this will make sure the input
   #data can actually be used to create a table, and will return errors if not
   check_data = template_df_numbers_biomass_at_length_tables_summer_goa
-  check_input_df(template_df = check_data, input_df = biomass_nums_length_data)
+  MACEReports::check_input_df(template_df = check_data, input_df = biomass_nums_length_data)
 
   #check- make sure there's only one species, warn if not pollock
   species_list = unique(biomass_nums_length_data$SPECIES_CODE)
@@ -128,7 +128,8 @@ build_biomass_at_length_table_summer_goa = function(biomass_nums_length_data){
   for (i in 2:ncol(biomass_for_presentation)){
 
     #get the column summed; format for table
-    col_sum_formatted = format(sum(biomass_for_presentation[,i], na.rm = TRUE), big.mark = ",",  na_str = '-', nsmall = 2, digits = 2, scientific = FALSE)
+    col_sum_formatted = format(sum(biomass_for_presentation[,i], na.rm = TRUE),
+                               big.mark = ",",  na_str = '-', nsmall = 2, digits = 2, scientific = FALSE)
 
     #add it to the collection of formatted sums
     col_sums = cbind(col_sums, col_sum_formatted)

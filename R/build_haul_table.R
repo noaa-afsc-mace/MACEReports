@@ -27,7 +27,7 @@ build_haul_table = function(haul_data){
 
   #check input dataframe against the template dataframe: this will make sure the input
   #data can actually be used to create a table, and will return errors if not
-  check_data = template_df_haul_data
+  check_data = MACEReports::template_df_haul_data
   MACEReports::check_input_df(template_df = check_data, input_df = haul_data)
 
   #get the survey year
@@ -77,32 +77,32 @@ build_haul_table = function(haul_data){
 
   #make into a flextable
   haul_table = flextable::flextable(haul_data)%>%
-  #set the header
-  flextable::set_header_df(mapping = header_keys, key = 'col_keys')%>%
-  #align text: center justify everything
-  flextable::align(align = 'center', part = 'all')%>%
-  #add horizontal border on top and bottom of table
-  flextable::hline_top(part="all", border = table_border)%>%
-  flextable::hline_bottom(part="all", border = table_border)%>%
-  #add a line under things in the first row too
-  flextable::hline(i = 1, j =c(7:8, 10:11, 13:14, 16:17,19), part = 'header', border = table_border)%>%
-  #get rid of padding around cells
-  flextable::padding(padding = 0, part = "all")%>%
-  #let everything  autosize to start at 10 in width, then modify some:
-  flextable::fit_to_width(max_width = 10)%>%
-  #set some column widths to get format close to right, 10" total width
-  #separators can be really thin, make smaller numbers narrow as well,
-  flextable::width(j = c('sep1', 'sep2', 'sep3', 'sep4'), width = 0.05)%>%
-  #these have to be a min width to fit caption
-  flextable::width(j = c('date', 'time'), width = 0.5)%>%
-  flextable::width(j = c('bot_depth', 'surface_temp','duration', 'gear_temp', 'gear_depth'), width = 0.6)%>%
-  #format numbers for nicer printing; no 1000's comma separator to save space; add '-' where no data exists
-  #one decimal point columns:
-  flextable::colformat_double(j = c('duration', 'gear_temp', 'surface_temp', 'pk_weight', 'non_pk_weight'),
-                              digits = 1, na_str = '-', big.mark = ",")%>%
-  #no decimal point columns
-  flextable::colformat_double(j = c('haul', 'gear_depth', 'bot_depth', 'pk_nums'),
-                              digits = 0, na_str = '-', big.mark = ",")
+    #set the header
+    flextable::set_header_df(mapping = header_keys, key = 'col_keys')%>%
+    #align text: center justify everything
+    flextable::align(align = 'center', part = 'all')%>%
+    #add horizontal border on top and bottom of table
+    flextable::hline_top(part="all", border = table_border)%>%
+    flextable::hline_bottom(part="all", border = table_border)%>%
+    #add a line under things in the first row too
+    flextable::hline(i = 1, j =c(7:8, 10:11, 13:14, 16:17,19), part = 'header', border = table_border)%>%
+    #get rid of padding around cells
+    flextable::padding(padding = 0, part = "all")%>%
+    #let everything  autosize to start at 10 in width, then modify some:
+    flextable::fit_to_width(max_width = 10)%>%
+    #set some column widths to get format close to right, 10" total width
+    #separators can be really thin, make smaller numbers narrow as well,
+    flextable::width(j = c('sep1', 'sep2', 'sep3', 'sep4'), width = 0.05)%>%
+    #these have to be a min width to fit caption
+    flextable::width(j = c('date', 'time'), width = 0.5)%>%
+    flextable::width(j = c('bot_depth', 'surface_temp','duration', 'gear_temp', 'gear_depth'), width = 0.6)%>%
+    #format numbers for nicer printing; no 1000's comma separator to save space; add '-' where no data exists
+    #one decimal point columns:
+    flextable::colformat_double(j = c('duration', 'gear_temp', 'surface_temp', 'pk_weight', 'non_pk_weight'),
+                                digits = 1, na_str = '-', big.mark = ",")%>%
+    #no decimal point columns
+    flextable::colformat_double(j = c('haul', 'gear_depth', 'bot_depth', 'pk_nums'),
+                                digits = 0, na_str = '-', big.mark = ",")
 
 
   #get footnote for each gear type- this function maps the common gear types to nicer names;
@@ -135,15 +135,15 @@ build_haul_table = function(haul_data){
                         ref_symbols = c('a','b','c'), part = 'header')
 
 
+  #set the font and font size after we make the footnotes
+  haul_table = flextable::font(haul_table, fontname = 'times', part = 'all')%>%
+    flextable::fontsize(size = 8, part = 'header')%>%
+    flextable::fontsize(size = 8, part = 'body')
+
   #get some caption text; use 'combine_words' to print the regions in the survey as 'a, b, and c'
-  cap_text = paste0('Trawl stations and catch data summary from the winter ', survey_year,
+  cap_text = paste0('Trawl stations and catch data summary from the ', survey_year,
                     ' acoustic-trawl survey of walleye pollock in the ',
                     knitr::combine_words(unique(as.character(haul_data$area))), ' regions.')
-
-  #set the font and font size
-  haul_table = flextable::font(haul_table, fontname = 'times', part = 'all')%>%
-  flextable::fontsize(size = 8, part = 'header')%>%
-  flextable::fontsize(size = 8, part = 'body')
 
   #return table and caption
   return(list(haul_table, cap_text))

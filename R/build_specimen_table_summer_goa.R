@@ -25,7 +25,7 @@ build_specimen_table_summer_goa = function(specimen_data, scaling_hauls_list = N
 
   #check input dataframes against the template dataframes: this will make sure the input
   #data can actually be used to create a table, and will return errors if not
-  check_specimen_data = template_df_specimen_table_summer_goa
+  check_specimen_data = MACEReports::template_df_specimen_table_summer_goa
   MACEReports::check_input_df(template_df = check_specimen_data, input_df = specimen_data)
 
   #if only the scaling hauls, limit table to scaling hauls

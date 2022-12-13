@@ -31,7 +31,7 @@ build_numbers_at_length_table_summer_goa = function(biomass_nums_data){
 
   #check input dataframe against the template dataframe: this will make sure the input
   #data can actually be used to create a table, and will return errors if not
-  check_data = template_df_numbers_biomass_at_length_tables_summer_goa
+  check_data = MACEReports::template_df_numbers_biomass_at_length_tables_summer_goa
   MACEReports::check_input_df(template_df = check_data, input_df = biomass_nums_data)
 
   #check- make sure there's only one species, warn if not pollock

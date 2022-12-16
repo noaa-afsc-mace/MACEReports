@@ -14,7 +14,6 @@
 #' @param alaska_3nmi_buffer If \code{TRUE}, will add the ADFG 3 nmi management buffer to basemap
 #' @param land_fill_color If you'd like a different fill color on landmasses, specify as required by \code{ggplot2}.
 #' @param land_outline_color If you'd like a different outline color on landmasses, specify as required by \code{ggplot2}.
-#' @param region If you are working in the GOA- selecting 'goa' will give you a higher-resolution bathymetry layer.
 #' @return A list of class \code{ggplot} containing information required for plotting a basemap.
 #'
 #' @author Mike Levine
@@ -65,8 +64,7 @@ get_basemap_layers = function(plot_limits_data,
                               SSL_critical_habitat = NULL,
                               alaska_3nmi_buffer = NULL,
                               land_fill_color = '#616161',
-                              land_outline_color = 'black',
-                              region = NULL){
+                              land_outline_color = 'black'){
 
   #checks: Make sure we have a sf dataframe WITH a defined CRS for the plot data; stop if not.
   if (!"sf" %in% class(plot_limits_data) | is.na(sf::st_crs(plot_limits_data)$input)){
@@ -105,34 +103,7 @@ get_basemap_layers = function(plot_limits_data,
 
     if (bathy == TRUE){
 
-        if (is.null(region)){
-
-          bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
-        }
-
-      if (!is.null(region)){
-
-        if(region == 'goa'){
-
-          load(file = paste0(map_dir, '/GOA_bathy_raster_EPSG3338.rdata'))
-
-          #note that terra raster has a bug where it can throw an error on first use... and then work fine.
-          #see: https://stackoverflow.com/questions/65556253/r-raster-selffinalize-error-causing-failure
-          #so, try first in a try statement, then try again. Also note chunk option is 'error_TRUE' so we can bypass bug
-          bathy_raster = tryCatch(terra::rast(bathy_raster, type = 'xyz'),
-                                  error = function(e)
-                                    terra::rast(bathy_raster, type = 'xyz'))
-
-          terra::crs(bathy_raster) = "EPSG:3338"
-
-        }
-
-        if(region != 'goa'){
-          bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
-        }
-
-      }
-
+        bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
     }
 
     #if user requests contours instead of full bathy, produce these
@@ -140,15 +111,18 @@ get_basemap_layers = function(plot_limits_data,
 
       #check: make sure it is a numeric object
       if (!is.numeric(contours)){
-        stop('You need to provide contour numbers as a series of positive numbers, as in : c(50,100).')
+        stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
       }
 
-      #if the contours are provided as positive values, set as negative
-      contours = ifelse(contours > 0, -contours, contours)
+      #if the contours are provided as negative values, set as positive
+      contours = ifelse(contours > 0, contours, -contours)
 
-      #build the contours
-      bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
-      bathy_contours = terra::as.contour(bathy_raster, levels = contours)
+      #open the contours file
+      bathy_contours = sf::st_read(paste0(map_dir, '/alaska_race_bathy_',
+                                          stringr::str_remove(crs, ':'), '.gpkg'))
+
+      #limit to the requested contour values
+      bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
 
     }
 
@@ -193,16 +167,20 @@ get_basemap_layers = function(plot_limits_data,
 
     #check: make sure it is a numeric object
     if (!is.numeric(contours)){
-      stop('You need to provide contour numbers as a series of positive numbers, as in : c(50,100).')
+      stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
     }
 
-    #if the contours are provided as positive values, set as negative
-    contours = ifelse(contours > 0, -contours, contours)
+    #if the contours are provided as negative values, set as positive
+    contours = ifelse(contours > 0, contours, -contours)
 
-    #build the contours
-    base_dir = system.file("extdata/EPSG3338/", package = "MACEReports")
-    bathy_raster = terra::rast(paste0(base_dir, '/alaska_bathy_raster_EPSG3338.tif'))
-    bathy_contours = terra::as.contour(bathy_raster, levels = contours)
+    #open up the contours
+    bathy_contours = sf::st_read(paste0(base_dir, '/alaska_race_bathy_EPSG3338.gpkg'))
+
+    #limit to the requested contour values
+    bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+
+    #convert to the requested projection
+    bathy_contours = sf::st_transform(bathy_contours, crs = crs)
 
   }
 
@@ -264,51 +242,26 @@ get_basemap_layers = function(plot_limits_data,
     #crop to these dimensions
     bathy_raster_df = terra::crop(bathy_raster, clip, snap = 'near')
 
-    #and use these dimensions to create a dataframe that we can plot with ggplot
-    if (is.null(region)){
 
-        bathy_raster_df = terra::as.data.frame(bathy_raster_df, xy = TRUE)%>%
-         dplyr::rename('z' = 'lyr.1')
+    bathy_raster_df = terra::as.data.frame(bathy_raster_df, xy = TRUE)%>%
+     dplyr::rename('z' = 'lyr.1')
 
-        #define a color scale- you can tweak this to give the right amount of weight to the deep vs shallow areas (right now),
-        #theres more weight given to 200 m and up
-        bathy_colors = ggplot2::scale_fill_gradientn(values = scales::rescale(c(min(bathy_raster_df$z, na.rm = TRUE),
-                                                                                -300, -50, .99,
-                                                                                max(bathy_raster_df$z, na.rm = TRUE))),
-                                                     colors = c("#737373", "#969696", "#d9d9d9",  "#d9d9d9"),
-                                                     #if user wants a legend, present units as positive (depth)
-                                                     #instead of negative (altitude)
-                                                     labels = function(x){ abs(x) })
-
-    }
-
-    if (!is.null(region)){
-
-      bathy_raster_df = terra::as.data.frame(bathy_raster_df, xy = TRUE)
-
-      #define a more appropriate colorscale for the goa
-      bathy_colors = ggplot2::scale_fill_gradientn(values = scales::rescale(c(min(bathy_raster_df$z, na.rm = TRUE),
-                                                                              -250,  0,
-                                                                     max(bathy_raster_df$z, na.rm = TRUE))),
-                                          colors = c("#737373", "#969696", "#d9d9d9",  "#d9d9d9"),
-                                          #if user wants a legend, present units as positive (depth)
-                                          #instead of negative (altitude)
-                                          labels = function(x){ abs(x) })
-
-    }
+    #define a color scale- you can tweak this to give the right amount of weight to the deep vs shallow areas (right now),
+    #theres more weight given to 200 m and up
+    bathy_colors = ggplot2::scale_fill_gradientn(values = scales::rescale(c(min(bathy_raster_df$z, na.rm = TRUE),
+                                                                            -300, -50, .99,
+                                                                            max(bathy_raster_df$z, na.rm = TRUE))),
+                                                 colors = c("#737373", "#969696", "#d9d9d9",  "#d9d9d9"),
+                                                 #if user wants a legend, present units as positive (depth)
+                                                 #instead of negative (altitude)
+                                                 labels = function(x){ abs(x) })
   }
 
   if(!is.null(contours)){
 
-    #set a box that can be used to clip raster to plot extent (much faster plotting!)
-    clip = terra::ext(sf::st_bbox(region_zoom_box)[[1]], sf::st_bbox(region_zoom_box)[[3]],
-                      sf::st_bbox(region_zoom_box)[[2]], sf::st_bbox(region_zoom_box)[[4]])
-
-    #crop to these dimensions
-    bathy_contours = terra::crop(bathy_contours, clip)
-
-    #set as an sf object- this will inherit the CRS from the terra raster
-    bathy_contours = sf::st_as_sf(bathy_contours)
+    #crop the contour layer
+    bathy_contours = sf::st_intersection(sf::st_make_valid(sf::st_geometry(bathy_contours)),
+                                                     sf::st_geometry(region_zoom_box))
 
   }
 

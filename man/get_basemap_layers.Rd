@@ -12,8 +12,7 @@ get_basemap_layers(
   SSL_critical_habitat = NULL,
   alaska_3nmi_buffer = NULL,
   land_fill_color = "#616161",
-  land_outline_color = "black",
-  region = NULL
+  land_outline_color = "black"
 )
 }
 \arguments{
@@ -34,8 +33,6 @@ i.e. \code{c(200,100,50)}}
 \item{land_fill_color}{If you'd like a different fill color on landmasses, specify as required by \code{ggplot2}.}
 
 \item{land_outline_color}{If you'd like a different outline color on landmasses, specify as required by \code{ggplot2}.}
-
-\item{region}{If you are working in the GOA- selecting 'goa' will give you a higher-resolution bathymetry layer.}
 }
 \value{
 A list of class \code{ggplot} containing information required for plotting a basemap.

@@ -276,7 +276,7 @@ get_basemap_layers = function(plot_limits_data,
     ggplot2::geom_sf(data = ak_land, fill = land_fill_color, color = land_outline_color)+
     ggplot2::geom_sf(data = russia_land, fill = land_fill_color, color = land_outline_color)+
     ggplot2::geom_sf(data = canada_land, fill = land_fill_color, color = land_outline_color)+
-    ggplot2::guides(fill = 'none')+
+    {if (bathy == TRUE) ggplot2::guides(fill = 'none')}+
     #set the basemap to standard MACE theme
     ggplot2::theme_bw()+
     ggplot2::theme(axis.text= ggplot2::element_text(size=12),

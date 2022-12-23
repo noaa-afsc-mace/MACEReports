@@ -27,17 +27,16 @@ get_interpolated_plot_vals(
 
 \item{out_crs}{The Coordinate Reference Setting for the returned interpolation points; default is "EPSG:3338"}
 
-\item{interp_type}{Interpolation formula to apply. Options are 'universal', 'simple', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Simple uses ordinary kridging, idw performs inverse-distance weighting interpolation. Universal kridging is recommended, but slow. IDW is very coarse, but very fast.}
+\item{interp_type}{Interpolation formula to apply. Options are 'universal', 'ordinary', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Ordinary ordinary kridging with a 'neighborhood' of 100 observations used for every estimation point, idw performs inverse-distance weighting interpolation. Universal kridging is comprehensive, but very slow. IDW is very coarse, but very fast.}
 }
 \value{
 a dataframe with 4 columns:
 x = Longitude (crs specified in out_crs; default default is "EPSG:3338")
 y = Latitude (crs specified in out_crs; default default is "EPSG:3338")
 z = abundance value. Note that these values are by default Log 10-transformed abundance, as these tend to highlight patterns in abundance and distribution in MACE datasets.
-plot_val = a factor specifying the level of the z-value; levels are determined using kmeans grouping and tend to highlight patterns in abundance and distribution well.
 }
 \description{
-Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The nmber of interpolated values returned depends on the chosen map resolution.
+Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The number of interpolated values returned depends on the chosen map resolution.
 These objects can be plotted using \code{ggplot2::geom_raster()} base \code{plot}, or converted to rasters.
 }
 \examples{

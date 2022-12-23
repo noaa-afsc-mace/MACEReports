@@ -1,6 +1,6 @@
 #' @title get_interpolated_plot_vals
 #'
-#' @description Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The nmber of interpolated values returned depends on the chosen map resolution.
+#' @description Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The number of interpolated values returned depends on the chosen map resolution.
 #' These objects can be plotted using \code{ggplot2::geom_raster()} base \code{plot}, or converted to rasters.
 #' @param x Longitude (decimal degrees)
 #' @param y Latitude (decimal degrees)
@@ -8,12 +8,11 @@
 #' @param resolution Distance (meters) for interpolation points. Recommended values are 1000 in the Shelikof, 2500 in summer surveys.
 #' @param region Region in which to make the interpolations. Currently, the only options are 'shelikof', 'summer_goa', 'core_ebs', and 'sca'.
 #' @param out_crs The Coordinate Reference Setting for the returned interpolation points; default is "EPSG:3338"
-#' @param interp_type Interpolation formula to apply. Options are 'universal', 'simple', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Simple uses ordinary kridging, idw performs inverse-distance weighting interpolation. Universal kridging is recommended, but slow. IDW is very coarse, but very fast.
+#' @param interp_type Interpolation formula to apply. Options are 'universal', 'ordinary', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Ordinary ordinary kridging with a 'neighborhood' of 100 observations used for every estimation point, idw performs inverse-distance weighting interpolation. Universal kridging is comprehensive, but very slow. IDW is very coarse, but very fast.
 #' @return a dataframe with 4 columns:
 #' x = Longitude (crs specified in out_crs; default default is "EPSG:3338")
 #' y = Latitude (crs specified in out_crs; default default is "EPSG:3338")
 #' z = abundance value. Note that these values are by default Log 10-transformed abundance, as these tend to highlight patterns in abundance and distribution in MACE datasets.
-#' plot_val = a factor specifying the level of the z-value; levels are determined using kmeans grouping and tend to highlight patterns in abundance and distribution well.
 #' @author Mike Levine
 #'
 #' @examples
@@ -44,8 +43,8 @@ get_interpolated_plot_vals = function(x,
   }
 
   #interp_type must be specifed as one of the available options
-  if (!(interp_type %in% c('universal', 'simple', 'idw'))){
-    stop(paste0('interp_type must be one of: universal, simple, idw, not ', interp_type))
+  if (!(interp_type %in% c('universal', 'ordinary', 'idw'))){
+    stop(paste0('interp_type must be one of: universal, ordinary, idw, not ', interp_type))
   }
 
   #####
@@ -161,7 +160,7 @@ get_interpolated_plot_vals = function(x,
 
   }
 
-  if (interp_type == 'simple'){
+  if (interp_type == 'ordinary'){
 
     #fit the variogram to the log10 transformed abundance value
     map_variogram = gstat::variogram(log10(z+1)~1, plot_pos)
@@ -169,16 +168,14 @@ get_interpolated_plot_vals = function(x,
     #fit the variogram
     map_fit = gstat::fit.variogram(map_variogram, model= gstat::vgm("Sph"))
 
-    print(paste0('Interpolating using simple kriging; this can be very slow! ',
+    print(paste0('Interpolating using ordinary kriging; this can be very slow! ',
                  'Consider a higher resolution value if this is taking forever (recommended resolution ',
                  'for summer surveys >= 2500; for winter >= 1000'))
 
     #fit the variogram to the log10 transformed abundance value
-    map_fit = gstat::gstat(formula = log10(z+1)~1, locations = plot_pos, model=map_fit)
-
-    #predict points on the extrapolation grid
-    map_points = stats::predict(map_fit, extrap_grid)
-
+    map_points = gstat::krige(formula = log10(z+1)~1,
+                           locations = plot_pos, model=map_fit, newdata = extrap_grid,
+                           nmax = 100)
   }
 
   ########
@@ -206,17 +203,6 @@ get_interpolated_plot_vals = function(x,
   #convert to a dataframe (to plot with ggplot2)
   preds_plot = terra::as.data.frame(preds_plot, xy = TRUE)%>%
     dplyr::rename('z' = 'lyr.1')
-
-  #define breaks for plotting- using kmeans because it is fast and does a reasonable job
-  #currently, set to make 9 breaks, use kmeans- add options to function if more flexibility needed
-
-  #for reproducibility
-  set.seed(129)
-  breaks_list = classInt::classIntervals(round(preds_plot$z, digits = 2), n = 9, style = 'kmeans', warnLargeN = FALSE)
-
-  #map the breaks onto the data
-  preds_plot$plot_val = cut(round(preds_plot$z, digits = 2),
-                            breaks = breaks_list$brks, include.lowest = TRUE, right = TRUE)
 
   ##TODO: return as sf, raster, or points? options?
   #return as a dataframe for now

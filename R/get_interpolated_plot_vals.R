@@ -1,7 +1,7 @@
 #' @title get_interpolated_plot_vals
 #'
 #' @description Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The number of interpolated values returned depends on the chosen map resolution.
-#' These objects can be plotted using \code{ggplot2::geom_raster()} base \code{plot}, or converted to rasters.
+#' These objects can be plotted using neighborhoodbase \code{plot}, or converted to rasters.
 #' @param x Longitude (decimal degrees)
 #' @param y Latitude (decimal degrees)
 #' @param z Abundance value
@@ -9,6 +9,7 @@
 #' @param region Region in which to make the interpolations. Currently, the only options are 'shelikof', 'summer_goa', 'core_ebs', and 'sca'.
 #' @param out_crs The Coordinate Reference Setting for the returned interpolation points; default is "EPSG:3338"
 #' @param interp_type Interpolation formula to apply. Options are 'universal', 'ordinary', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Ordinary ordinary kridging with a 'neighborhood' of 100 observations used for every estimation point, idw performs inverse-distance weighting interpolation. Universal kridging is comprehensive, but very slow. IDW is very coarse, but very fast.
+#' @param neighborhood (optional) number of nearest observations to use in universal or ordinary kridging calculations. The default is to use all observations; limiting calculations to a neighborhood can be used to speed up the interpolation. This argument passes the number of nearest arguments to use to  \code{Gstat::kridge}; see \code{Gstat::kridge nmax} argument for details.
 #' @return a dataframe with 4 columns:
 #' x = Longitude (crs specified in out_crs; default default is "EPSG:3338")
 #' y = Latitude (crs specified in out_crs; default default is "EPSG:3338")
@@ -28,7 +29,8 @@ get_interpolated_plot_vals = function(x,
                                       resolution,
                                       region,
                                       out_crs = "EPSG:3338",
-                                      interp_type){
+                                      interp_type,
+                                      neighborhood = NULL){
   #data checks
   #x,y,z must be numeric
   if (!is.numeric(c(x,y,z))) stop('x,y, and z must all be numeric')
@@ -45,6 +47,11 @@ get_interpolated_plot_vals = function(x,
   #interp_type must be specifed as one of the available options
   if (!(interp_type %in% c('universal', 'ordinary', 'idw'))){
     stop(paste0('interp_type must be one of: universal, ordinary, idw, not ', interp_type))
+  }
+
+  #if specified, the neighborhood argument must be numeric
+  if (!is.null(neighborhood) & !is.numeric(neighborhood)){
+    stop(paste0('neighborhood must a be a numeric value, not a ', class(neighborhood)))
   }
 
   #####
@@ -139,10 +146,34 @@ get_interpolated_plot_vals = function(x,
     print(paste0('Interpolating using universal kridging; this can be very slow! Consider a higher resolution value if ',
           'this is taking forever (recommended resolution for summer surveys >= 2500; for winter >= 1000'))
 
-    map_points = gstat::krige(log10(z+1)~Lon + Lat,
-                              locations = plot_pos, newdata = extrap_grid, model=map_fit,
-                              #to avoid printing status updates, etc into report, set debug.level = 0
-                              debug.level = 0)
+    #if no limit to the number of observations (neighborhood) is specified, use univeral kridging with all locations
+    if (is.null(neighborhood)){
+      #fit the variogram to the log10 transformed abundance value
+      map_points = gstat::krige(log10(z+1)~Lon + Lat,
+                                locations = plot_pos, newdata = extrap_grid, model=map_fit,
+                                #to avoid printing status updates, etc into report, set debug.level = 0
+                                debug.level = 0)
+    }
+
+    #if a limit to the number of observations (neighborhood) is specified, use univeral kridging with nmax = neighborhood
+    if (!is.null(neighborhood)){
+
+      #create a convex hull polygon around the sample points
+      sample_poly = plot_pos%>%
+        dplyr::summarize(geometry = sf::st_combine(.data$geometry))%>%
+        sf::st_convex_hull()
+
+      #get rid of extrapolation points outside of the sampled region
+      extrap_grid = extrap_grid[sample_poly,]
+
+      #fit the variogram to the log10 transformed abundance value
+      map_points = gstat::krige(log10(z+1)~Lon + Lat,
+                                locations = plot_pos, newdata = extrap_grid, model = map_fit,
+                                #to avoid printing status updates, etc into report, set debug.level = 0
+                                debug.level = 0,
+                                nmax = neighborhood)
+    }
+
   }
 
   #if user requests inverse distance weighting, use this
@@ -172,10 +203,32 @@ get_interpolated_plot_vals = function(x,
                  'Consider a higher resolution value if this is taking forever (recommended resolution ',
                  'for summer surveys >= 2500; for winter >= 1000'))
 
-    #fit the variogram to the log10 transformed abundance value
-    map_points = gstat::krige(formula = log10(z+1)~1,
-                           locations = plot_pos, model=map_fit, newdata = extrap_grid,
-                           nmax = 100)
+    #if no limit to the number of observations (neighborhood) is specified, use ordinary kridging with all locations
+    if (is.null(neighborhood)){
+      #fit the variogram to the log10 transformed abundance value
+      map_points = gstat::krige(formula = log10(z+1)~1,
+                                locations = plot_pos, model=map_fit, newdata = extrap_grid)
+    }
+
+    #if  limit to the number of observations (neighborhood) is specified, use univeral kridging nmax = neighborhood
+    if (!is.null(neighborhood)){
+
+      #we don't want to interpolate outside the actual samples in this case! There might be areas with no data,
+      #so we don't want to interpolate from 'no data -> no data'
+
+      #create a convex hull polygon around the sample points
+      sample_poly = plot_pos%>%
+        dplyr::summarize(geometry = sf::st_combine(.data$geometry))%>%
+        sf::st_convex_hull()
+
+      #get rid of extrapolation points outside of the sampled region
+      extrap_grid = extrap_grid[sample_poly,]
+
+      #fit the variogram to the log10 transformed abundance value
+      map_points = gstat::krige(formula = log10(z+1)~1,
+                             locations = plot_pos, model=map_fit, newdata = extrap_grid,
+                             nmax = neighborhood)
+      }
   }
 
   ########

@@ -11,7 +11,8 @@ get_interpolated_plot_vals(
   resolution,
   region,
   out_crs = "EPSG:3338",
-  interp_type
+  interp_type,
+  neighborhood = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ get_interpolated_plot_vals(
 \item{out_crs}{The Coordinate Reference Setting for the returned interpolation points; default is "EPSG:3338"}
 
 \item{interp_type}{Interpolation formula to apply. Options are 'universal', 'ordinary', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Ordinary ordinary kridging with a 'neighborhood' of 100 observations used for every estimation point, idw performs inverse-distance weighting interpolation. Universal kridging is comprehensive, but very slow. IDW is very coarse, but very fast.}
+
+\item{neighborhood}{(optional) number of nearest observations to use in universal or ordinary kridging calculations. The default is to use all observations; limiting calculations to a neighborhood can be used to speed up the interpolation. This argument passes the number of nearest arguments to use to  \code{Gstat::kridge}; see \code{Gstat::kridge nmax} argument for details.}
 }
 \value{
 a dataframe with 4 columns:
@@ -37,7 +40,7 @@ z = abundance value. Note that these values are by default Log 10-transformed ab
 }
 \description{
 Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The number of interpolated values returned depends on the chosen map resolution.
-These objects can be plotted using \code{ggplot2::geom_raster()} base \code{plot}, or converted to rasters.
+These objects can be plotted using neighborhoodbase \code{plot}, or converted to rasters.
 }
 \examples{
 \dontrun{

@@ -11,7 +11,7 @@
 #'
 #' prediction_values = rnorm(100, mean = 1e5, sd = 1e4)
 #'
-#' #bin data using default values
+#' #bin data using default values (only z is required)
 #' prediction_bins = get_interpolated_color_bins(z = prediction_values)
 #'
 #' #or experiment with other bins

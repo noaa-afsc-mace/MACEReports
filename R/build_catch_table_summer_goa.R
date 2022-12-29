@@ -39,10 +39,8 @@
 #'   print(catch_tables[[i]][[1]])
 #'   #get caption
 #'   print(catch_tables[[i]][[2]])
-#'
 #' }
-#' }
-#' @export
+#' #' @export
 build_catch_table_summer_goa = function(catch_data, specimen_data, scaling_hauls_list = NULL){
 
   #check input dataframes against the template dataframes: this will make sure the input

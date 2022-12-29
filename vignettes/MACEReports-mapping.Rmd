@@ -1,8 +1,8 @@
 ---
-title: "MACEReports-mapping"
+title: "Mapping with MACEReports"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{MACEReports-mapping}
+  %\VignetteIndexEntry{Mapping with MACEReports}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,19 +16,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, echo=FALSE, message = FALSE, warning=FALSE}
-
-#Load some packages
-library(ggplot2)
-library(dplyr)
-library(MACEReports)
-library(sf)
-
-#and an example dataset
-data(shelikof_biomass, package = 'MACEReports')
-
-```
-
 MACEReports provides a bunch of functions intended to handle mapping for cruise reports and presentations. These include:
 
 - Creating stickplots
@@ -36,6 +23,16 @@ MACEReports provides a bunch of functions intended to handle mapping for cruise 
 - Creating basemaps that use high-resolution bathymetry or simple contour lines
 
 In general, each function is intended to use data that we can readily query out of the database, and not require a ton of work to prepare and map it. You should only need to gather Latitude/Longitude (decimal degrees) and an abundance value (biomass, numbers, etc) in most cases. A dataframe like that provided here as an example:
+
+```{r setup, echo=TRUE, message = FALSE, warning=FALSE}
+#Load some packages
+library(ggplot2)
+library(dplyr)
+library(MACEReports)
+library(sf)
+
+```
+
 
 ```{r example_df, echo = TRUE, message = FALSE, warning=FALSE} 
 #get a simple dataset to work from: biomass_nmi2 from a single survey
@@ -240,4 +237,48 @@ basemap+
 
 By default, this returns log10-sized bins; this can be modified using the `style` argument to `get_interpolated_color_bins`. See `?get_interpolated_color_bins` for options, but `kmeans` tends to work well.
 
-##TODO: multiple years example, make scale even (i.e. 10000-50000).
+If you want to interpolate and compare over multiple years, here's one approach:
+```{r compare_multiple_years, echo=TRUE, message = FALSE, warning=FALSE}
+#summarize example data: biomass per interval, per year
+shelikof_by_year = shelikof_biomass%>%
+  group_by(year, INTERVAL, START_LATITUDE, START_LONGITUDE)%>%
+  summarize(BIOMASS = sum(BIOMASS))
+
+#loop through each year to return each year's values:
+interp_by_year =c()
+for (i in unique(shelikof_by_year$year)){
+  
+  #limit your dataset to one year
+  tmp_data = shelikof_by_year[shelikof_by_year$year == i,]
+  
+  #get the interpolations for this year
+  interp_vals = get_interpolated_plot_vals(x = tmp_data$START_LONGITUDE, y = tmp_data$START_LATITUDE, z = tmp_data$BIOMASS, resolution = 1000, region = 'shelikof', interp_type = 'universal', neighborhood = 200)
+  
+  #add a year index
+  interp_vals$year = i
+  
+  #and compile
+  interp_by_year = rbind(interp_by_year, interp_vals)
+  
+}
+
+#create an sf object we can use to define the basemap extent
+extent = st_as_sf(interp_by_year, coords = c('x', 'y'), crs = 'EPSG:3338')
+
+#use this to return the basemap; return a simple basemap with contours as the bathymetery seems too busy with interpolated maps
+basemap = get_basemap_layers(plot_limits_data = extent, bathy = FALSE, contours = c(100,200,1000))
+
+#bin colors to highlight patterns
+interp_by_year$plot_col = get_interpolated_color_bins(z = interp_by_year$z)
+
+#use ggplot to plot, facet plots by year
+basemap+
+  geom_raster(data = interp_by_year, aes(x = x, y = y, fill = plot_col))+
+  scale_fill_viridis_d(option = 'magma')+
+  facet_wrap(~year, ncol = 2)+
+  labs(fill = 'Biomass (kg)')+
+  theme(legend.position = 'bottom')
+
+
+
+```

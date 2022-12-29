@@ -440,8 +440,14 @@ the <code>style</code> argument to
 <code>get_interpolated_color_bins</code>. See
 <code><a href="../reference/get_interpolated_color_bins.html">?get_interpolated_color_bins</a></code> for options, but
 <code>kmeans</code> tends to work well.</p>
-<p>If you want to interpolate and compare over multiple years, here’s
-one approach:</p>
+<p>If you want to interpolate and compare over multiple years, things
+get a bit more complex. The approach outlined above- which uses a local
+neighborhood to speed up plotting- isn’t as great when comparing across
+years. This is because we constrain the extrapolations to areas with
+nearby samples when using a local neighborhood. If your sample grid
+changes between years, the area of your extrapolation will also change.
+This can be avoided by not using a local neighborhood. It slows things
+down, but makes datasets more easily comparable.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#summarize example data: biomass per interval, per year</span></span>
 <span><span class="va">shelikof_by_year</span> <span class="op">=</span> <span class="va">shelikof_biomass</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -455,8 +461,8 @@ one approach:</p>
 <span>  <span class="co">#limit your dataset to one year</span></span>
 <span>  <span class="va">tmp_data</span> <span class="op">=</span> <span class="va">shelikof_by_year</span><span class="op">[</span><span class="va">shelikof_by_year</span><span class="op">$</span><span class="va">year</span> <span class="op">==</span> <span class="va">i</span>,<span class="op">]</span></span>
 <span>  </span>
-<span>  <span class="co">#get the interpolations for this year</span></span>
-<span>  <span class="va">interp_vals</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_interpolated_plot_vals.html">get_interpolated_plot_vals</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tmp_data</span><span class="op">$</span><span class="va">START_LONGITUDE</span>, y <span class="op">=</span> <span class="va">tmp_data</span><span class="op">$</span><span class="va">START_LATITUDE</span>, z <span class="op">=</span> <span class="va">tmp_data</span><span class="op">$</span><span class="va">BIOMASS</span>, resolution <span class="op">=</span> <span class="fl">1000</span>, region <span class="op">=</span> <span class="st">'shelikof'</span>, interp_type <span class="op">=</span> <span class="st">'universal'</span>, neighborhood <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span>  <span class="co">#get the interpolations for this year: note that no neighborhood is applied</span></span>
+<span>  <span class="va">interp_vals</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_interpolated_plot_vals.html">get_interpolated_plot_vals</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tmp_data</span><span class="op">$</span><span class="va">START_LONGITUDE</span>, y <span class="op">=</span> <span class="va">tmp_data</span><span class="op">$</span><span class="va">START_LATITUDE</span>, z <span class="op">=</span> <span class="va">tmp_data</span><span class="op">$</span><span class="va">BIOMASS</span>, resolution <span class="op">=</span> <span class="fl">1000</span>, region <span class="op">=</span> <span class="st">'shelikof'</span>, interp_type <span class="op">=</span> <span class="st">'universal'</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="co">#add a year index</span></span>
 <span>  <span class="va">interp_vals</span><span class="op">$</span><span class="va">year</span> <span class="op">=</span> <span class="va">i</span></span>

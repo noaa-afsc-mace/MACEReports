@@ -91,7 +91,7 @@ get_interpolated_plot_vals = function(x,
   #add a lat/lon as variables for interpolation
   extrap_grid = extrap_grid%>%
     dplyr::mutate(Lon = unlist(purrr::map(extrap_grid$x,1)),
-           Lat = unlist(purrr::map(extrap_grid$x,2)))
+                  Lat = unlist(purrr::map(extrap_grid$x,2)))
 
   ######
   #step 2: get the point data
@@ -144,7 +144,7 @@ get_interpolated_plot_vals = function(x,
     # Krige the data according to the variogram: estimate at the sample grid points:
     #alert user as it is slow
     print(paste0('Interpolating using universal kridging; this can be very slow! Consider a higher resolution value if ',
-          'this is taking forever (recommended resolution for summer surveys >= 2500; for winter >= 1000'))
+                 'this is taking forever (recommended resolution for summer surveys >= 2500; for winter >= 1000'))
 
     #if no limit to the number of observations (neighborhood) is specified, use univeral kridging with all locations
     if (is.null(neighborhood)){
@@ -180,8 +180,8 @@ get_interpolated_plot_vals = function(x,
   if (interp_type == 'idw'){
 
     print(paste0('Interpolating using inverse distance weighting; this can be very slow! ',
-    'Consider a higher resolution value if this is taking forever (recommended resolution ',
-    'for summer surveys >= 2500; for winter >= 1000'))
+                 'Consider a higher resolution value if this is taking forever (recommended resolution ',
+                 'for summer surveys >= 2500; for winter >= 1000'))
 
     #fit the variogram to the log10 transformed abundance value
     map_fit = gstat::gstat(formula = log10(z+1)~1, locations = plot_pos)
@@ -226,9 +226,9 @@ get_interpolated_plot_vals = function(x,
 
       #fit the variogram to the log10 transformed abundance value
       map_points = gstat::krige(formula = log10(z+1)~1,
-                             locations = plot_pos, model=map_fit, newdata = extrap_grid,
-                             nmax = neighborhood)
-      }
+                                locations = plot_pos, model=map_fit, newdata = extrap_grid,
+                                nmax = neighborhood)
+    }
   }
 
   ########
@@ -240,8 +240,8 @@ get_interpolated_plot_vals = function(x,
   #turn the prediction values into a matrix to map to the raster
   vals_rast = map_points%>%
     dplyr::mutate(x = unlist(purrr::map(map_points$geometry,1)),
-           y = unlist(purrr::map(map_points$geometry,2)),
-           z = map_points$var1.pred)%>%
+                  y = unlist(purrr::map(map_points$geometry,2)),
+                  z = map_points$var1.pred)%>%
     sf::st_drop_geometry()%>%
     dplyr::select(.data$x, .data$y, .data$z)
 

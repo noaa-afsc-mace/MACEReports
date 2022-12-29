@@ -237,7 +237,8 @@ basemap+
 
 By default, this returns log10-sized bins; this can be modified using the `style` argument to `get_interpolated_color_bins`. See `?get_interpolated_color_bins` for options, but `kmeans` tends to work well.
 
-If you want to interpolate and compare over multiple years, here's one approach:
+If you want to interpolate and compare over multiple years, things get a bit more complex. The approach outlined above- which uses a local neighborhood to speed up plotting- isn't as great when comparing across years. This is because we constrain the extrapolations to areas with nearby samples when using a local neighborhood. If your sample grid changes between years, the area of your extrapolation will also change. This can be avoided by not using a local neighborhood. It slows things down, but makes datasets more easily comparable.
+
 ```{r compare_multiple_years, echo=TRUE, message = FALSE, warning=FALSE}
 #summarize example data: biomass per interval, per year
 shelikof_by_year = shelikof_biomass%>%
@@ -251,8 +252,8 @@ for (i in unique(shelikof_by_year$year)){
   #limit your dataset to one year
   tmp_data = shelikof_by_year[shelikof_by_year$year == i,]
   
-  #get the interpolations for this year
-  interp_vals = get_interpolated_plot_vals(x = tmp_data$START_LONGITUDE, y = tmp_data$START_LATITUDE, z = tmp_data$BIOMASS, resolution = 1000, region = 'shelikof', interp_type = 'universal', neighborhood = 200)
+  #get the interpolations for this year: note that no neighborhood is applied
+  interp_vals = get_interpolated_plot_vals(x = tmp_data$START_LONGITUDE, y = tmp_data$START_LATITUDE, z = tmp_data$BIOMASS, resolution = 1000, region = 'shelikof', interp_type = 'universal')
   
   #add a year index
   interp_vals$year = i

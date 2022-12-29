@@ -12,7 +12,7 @@ build_sf_sticks(
   return_df = NULL,
   rotation = 5,
   bar_scale = 0.5,
-  crs = NULL
+  crs = "EPSG:3338"
 )
 }
 \arguments{

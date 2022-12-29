@@ -1,7 +1,6 @@
 #' @title Create a MACE-themed basemap
 #' @description Returns a base map. This map is returned as a ggplot2 object that more complex maps can be built on top of.
-#' It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer regions,
-#' and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
+#' It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer regions,and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
 #' This layer will be slightly larger than the extent of \code{plot_limits_data}; users should still use \code{ggplot2::coord_sf}
 #' to fine-tune the plot extent.
 #' @param plot_limits_data A \code{sf} spatial dataframe; this is required and used to define the base map extent and projection.
@@ -82,23 +81,23 @@ get_basemap_layers = function(plot_limits_data,
   if (dir.exists(map_dir)){
 
     #open up all the layers we need
-    ak_land = sf::st_read(paste0(map_dir, '/alaska_land_', stringr::str_remove(crs, ':'), '.gpkg'))
-    russia_land =  sf::st_read(paste0(map_dir, '/russia_land_', stringr::str_remove(crs, ':'), '.gpkg'))
-    canada_land = sf::st_read(paste0(map_dir, '/canada_land_', stringr::str_remove(crs, ':'), '.gpkg'))
+    ak_land = sf::st_read(paste0(map_dir, '/alaska_land_', stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+    russia_land =  sf::st_read(paste0(map_dir, '/russia_land_', stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+    canada_land = sf::st_read(paste0(map_dir, '/canada_land_', stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
 
     if (!is.null(management_regions)){
       management_regions_layer = sf::st_read(paste0(map_dir, '/alaska_NMFS_management_regions_',
-                                                      stringr::str_remove(crs, ':'), '.gpkg'))
+                                                      stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
     }
 
     if (!is.null(SSL_critical_habitat)){
       SSL_critical_habitat_layer = sf::st_read(paste0(map_dir, '/SSL_critical_habitat_',
-                                                stringr::str_remove(crs, ':'), '.gpkg'))
+                                                stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
     }
 
     if (!is.null(alaska_3nmi_buffer)){
       alaska_3nmi_buffer_layer = sf::st_read(paste0(map_dir, '/alaska_3nmi_buffer_',
-                                                      stringr::str_remove(crs, ':'), '.gpkg'))
+                                                      stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
     }
 
     if (bathy == TRUE){
@@ -119,7 +118,7 @@ get_basemap_layers = function(plot_limits_data,
 
       #open the contours file
       bathy_contours = sf::st_read(paste0(map_dir, '/alaska_race_bathy_',
-                                          stringr::str_remove(crs, ':'), '.gpkg'))
+                                          stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
 
       #limit to the requested contour values
       bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
@@ -135,12 +134,12 @@ get_basemap_layers = function(plot_limits_data,
 
     #open the shapefiles (from 3338- since these are included to start with)
     base_dir = system.file("extdata/EPSG3338/", package = "MACEReports")
-    ak_land = sf::st_read(paste0(base_dir, '/alaska_land_EPSG3338.gpkg'))
-    russia_land = sf::st_read(paste0(base_dir, '/russia_land_EPSG3338.gpkg'))
-    canada_land = sf::st_read(paste0(base_dir, '/canada_land_EPSG3338.gpkg'))
-    management_regions_layer = sf::st_read(paste0(base_dir, '/alaska_NMFS_management_regions_EPSG3338.gpkg'))
-    SSL_critical_habitat_layer = sf::st_read(paste0(base_dir,'/SSL_critical_habitat_EPSG3338.gpkg'))
-    alaska_3nmi_buffer_layer = sf::st_read(paste0(base_dir, '/alaska_3nmi_buffer_EPSG3338.gpkg'))
+    ak_land = sf::st_read(paste0(base_dir, '/alaska_land_EPSG3338.gpkg'), quiet = TRUE)
+    russia_land = sf::st_read(paste0(base_dir, '/russia_land_EPSG3338.gpkg'), quiet = TRUE)
+    canada_land = sf::st_read(paste0(base_dir, '/canada_land_EPSG3338.gpkg'), quiet = TRUE)
+    management_regions_layer = sf::st_read(paste0(base_dir, '/alaska_NMFS_management_regions_EPSG3338.gpkg'), quiet = TRUE)
+    SSL_critical_habitat_layer = sf::st_read(paste0(base_dir,'/SSL_critical_habitat_EPSG3338.gpkg'), quiet = TRUE)
+    alaska_3nmi_buffer_layer = sf::st_read(paste0(base_dir, '/alaska_3nmi_buffer_EPSG3338.gpkg'), quiet = TRUE)
 
     #convert to the requested projection
     ak_land = sf::st_transform(ak_land, crs = crs)
@@ -174,7 +173,7 @@ get_basemap_layers = function(plot_limits_data,
     contours = ifelse(contours > 0, contours, -contours)
 
     #open up the contours
-    bathy_contours = sf::st_read(paste0(base_dir, '/alaska_race_bathy_EPSG3338.gpkg'))
+    bathy_contours = sf::st_read(paste0(base_dir, '/alaska_race_bathy_EPSG3338.gpkg'), quiet = TRUE)
 
     #limit to the requested contour values
     bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
@@ -265,14 +264,17 @@ get_basemap_layers = function(plot_limits_data,
 
   }
 
+  #define a color for the added layers (management regions, etc): white if bathy, black if contours
+  layer_col = ifelse(bathy == TRUE, 'white', 'black')
+
   #define the basemap ggplot object
   basemap_layers = ggplot2::ggplot()+
     {if (bathy == TRUE) ggplot2::geom_raster(data = bathy_raster_df, ggplot2::aes(x=x,y=y,fill=z))} +
     {if (bathy == TRUE) bathy_colors}+
     {if (!is.null(contours) & bathy != TRUE) ggplot2::geom_sf(data = bathy_contours, color = 'gray60')}+
-    {if (!is.null(SSL_critical_habitat)) ggplot2::geom_sf(data = SSL_critical_habitat_layer, color = 'white', fill = 'transparent')}+
-    {if (!is.null(alaska_3nmi_buffer)) ggplot2::geom_sf(data = alaska_3nmi_buffer_layer, color = 'white', fill = 'transparent')}+
-    {if (!is.null(management_regions)) ggplot2::geom_sf(data = management_regions_layer, color = 'white', fill = 'transparent')}+
+    {if (!is.null(SSL_critical_habitat)) ggplot2::geom_sf(data = SSL_critical_habitat_layer, color = layer_col, fill = 'transparent')}+
+    {if (!is.null(alaska_3nmi_buffer)) ggplot2::geom_sf(data = alaska_3nmi_buffer_layer, color = layer_col, fill = 'transparent')}+
+    {if (!is.null(management_regions)) ggplot2::geom_sf(data = management_regions_layer, color = layer_col, fill = 'transparent')}+
     ggplot2::geom_sf(data = ak_land, fill = land_fill_color, color = land_outline_color)+
     ggplot2::geom_sf(data = russia_land, fill = land_fill_color, color = land_outline_color)+
     ggplot2::geom_sf(data = canada_land, fill = land_fill_color, color = land_outline_color)+

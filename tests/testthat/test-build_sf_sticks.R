@@ -17,11 +17,11 @@ testthat::test_that("errors", {
 
 })
 
-testthat::test_that("warnings", {
-
-  testthat::expect_warning(
-    build_sf_sticks(x = c(1,NA,3), y = c(2,3,4), z =c(8,9,10), group_variable = c('a', 'a', 'b')),
-    'removed due to NAs'
-  )
-
-})
+# testthat::test_that("warnings", {
+#
+#   testthat::expect_warning(
+#     build_sf_sticks(x = c(1,NA,3), y = c(2,3,4), z =c(8,9,10), group_variable = c('a', 'a', 'b')),
+#     'removed due to NAs'
+#   )
+#
+# })

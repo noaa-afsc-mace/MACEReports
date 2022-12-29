@@ -14,3 +14,4 @@ testing.Rmd
 .Rproj.user/C08CC8C9/sources/prop/INDEX
 .Rproj.user/shared/notebooks/paths
 R/testing.R
+inst/doc

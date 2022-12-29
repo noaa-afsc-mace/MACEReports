@@ -25,7 +25,10 @@
 #'   legend
 #'
 #' @export
-build_stick_legend = function(stick_data, legend_pos = 'right', legend_color = 'white', legend_label = NULL){
+build_stick_legend = function(stick_data,
+                              legend_pos = 'right',
+                              legend_color = 'white',
+                              legend_label = NULL){
 
 #checks: Make sure we have a sf dataframe WITH a defined CRS for the plot data; stop if not.
 if (!"sf" %in% class(stick_data) | is.na(sf::st_crs(stick_data)$input)){

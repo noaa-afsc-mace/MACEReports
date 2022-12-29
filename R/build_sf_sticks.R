@@ -71,7 +71,7 @@ build_sf_sticks = function(x,
                            return_df = NULL,
                            rotation = 5,
                            bar_scale = 0.5,
-                           crs = NULL){
+                           crs = 'EPSG:3338'){
 
   #verify inputs
 
@@ -100,11 +100,17 @@ build_sf_sticks = function(x,
   plot_pos = plot_pos_df[stats::complete.cases(plot_pos_df),]
 
   #if any z- values are zero, these can't be plotted (can't divide by zero); remove these
-  plot_pos = plot_pos[plot_pos$z != 0,]
+  #plot_pos = plot_pos[plot_pos$z != 0,]
+
+  #if any z- values are zero, these can't be plotted (can't divide by zero); add a meaninglessly small
+  #constant so the zero position is plotted, by the bar height is visually zero
+  plot_pos$z = ifelse(plot_pos$z > 0, plot_pos$z, 0.1e-5)
 
   #report any removed rows
-  removed_rows = plot_pos_df[!(stats::complete.cases(plot_pos_df)) | plot_pos_df$z == 0,]
-  which_removed = which(rowSums(is.na(plot_pos_df)) > 0 | plot_pos_df$z == 0)
+  # removed_rows = plot_pos_df[!(stats::complete.cases(plot_pos_df)) | plot_pos_df$z == 0,]
+  # which_removed = which(rowSums(is.na(plot_pos_df)) > 0 | plot_pos_df$z == 0)
+  removed_rows = plot_pos[!(stats::complete.cases(plot_pos)) | plot_pos$z == 0,]
+  which_removed = which(rowSums(is.na(plot_pos)) > 0 | plot_pos$z == 0)
   if (nrow(removed_rows) > 0) warning(paste(nrow(removed_rows), 'row(s) removed due to NAs or z values = 0'))
 
   # removed_rows = rbind(removed_rows, plot_pos_df[!is.na(plot_pos_df$z) & plot_pos_df$z == 0,])

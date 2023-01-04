@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_catch_table_summer_goa.R
 \name{build_catch_table_summer_goa}
 \alias{build_catch_table_summer_goa}
-\title{build_catch_table_summer_goa}
+\title{Create trawl catch table for MACE summer GOA cruise reports}
 \usage{
 build_catch_table_summer_goa(
   catch_data,

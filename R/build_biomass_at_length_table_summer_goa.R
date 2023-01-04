@@ -1,5 +1,4 @@
-#' @title build_biomass_at_length_table_summer_goa
-#'
+#' @title Create biomass at length table for MACE summer GOA cruise reports
 #' @description Build the pollock biomass-at-length table used in summer GOA reports. This will report all lengths
 #' from 10-70 cm, and will do so for each Report Number (i.e. survey region) that was defined for the analysis.
 #' If you have an especially small (<10 cm) or large (>70 cm) length class, the table will report these sizes as opposed

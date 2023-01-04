@@ -1,5 +1,4 @@
-#' @title build_sf_sticks
-#'
+#' @title Build stick objects from xyz (lat/long/abundance) data for use in stickplots
 #' @description Accepts xyz data (for example, longitude/latitude/abundance) and returns a vertical 'stick'
 #' at each position. Sticks are returned as \code{sf LINESTRING} objects.
 #' These objects can be plotted using \code{ggplot2::geom_sf()} or base \code{plot}.

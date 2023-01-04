@@ -1,8 +1,6 @@
-#' @title build_specimen_table_summer_goa
+#' @title Create biological specimen table for MACE summer GOA cruise reports
 #'
-#' @description Produce the specimen table for use in standard MACE GOA summer reports. This differs from the specimen
-#' table in other MACE reports by including the GOA reporting species- currently pollock, capelin, and POP.
-#'
+#' @description Produce the specimen table for use in standard MACE GOA summer reports. This differs from the specimen table in other MACE reports by including the GOA reporting species- currently pollock, capelin, and POP.
 #' @param specimen_data a dataframe returned from the 'get_specimen_table_data.R' function, summer GOA cruise reports
 #' @param scaling_hauls_list  an (optional) numeric vector of hauls that were used to scale backscatter in your analysis.
 #' These hauls are returned from the \code{scaling_hauls} dataframe in summer GOA cruise reports.

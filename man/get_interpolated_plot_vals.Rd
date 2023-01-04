@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_interpolated_plot_vals.R
 \name{get_interpolated_plot_vals}
 \alias{get_interpolated_plot_vals}
-\title{get_interpolated_plot_vals}
+\title{Return predicted biomass values that can be plotted in interpolated abundance and distribution maps}
 \usage{
 get_interpolated_plot_vals(
   x,
@@ -39,8 +39,7 @@ y = Latitude (crs specified in out_crs; default default is "EPSG:3338")
 z = abundance value. Note that these values are by default Log 10-transformed abundance, as these tend to highlight patterns in abundance and distribution in MACE datasets.
 }
 \description{
-Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The number of interpolated values returned depends on the chosen map resolution.
-These objects can be plotted using neighborhoodbase \code{plot}, or converted to rasters.
+Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The number of interpolated values returned depends on the chosen map resolution.These objects can be plotted using  \code{gpplot2 geom_raster()}, base \code{plot}, or converted to rasters.
 }
 \examples{
 \dontrun{

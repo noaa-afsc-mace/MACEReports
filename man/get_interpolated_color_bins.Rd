@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_interpolated_color_bins.R
 \name{get_interpolated_color_bins}
 \alias{get_interpolated_color_bins}
-\title{get_interpolated_color_bins}
+\title{Return logical breaks that can be used to plot abundance values}
 \usage{
 get_interpolated_color_bins(z, n_bins = 9, style = "log10", nice_labels = TRUE)
 }

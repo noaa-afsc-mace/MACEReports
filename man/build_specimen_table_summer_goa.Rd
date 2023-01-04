@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_specimen_table_summer_goa.R
 \name{build_specimen_table_summer_goa}
 \alias{build_specimen_table_summer_goa}
-\title{build_specimen_table_summer_goa}
+\title{Create biological specimen table for MACE summer GOA cruise reports}
 \usage{
 build_specimen_table_summer_goa(specimen_data, scaling_hauls_list = NULL)
 }
@@ -17,8 +17,7 @@ If not specified, all hauls in the survey will be reported in the table.#'}
 A list with two items: item 1 is the Flextable table object, item 2 is the table caption.
 }
 \description{
-Produce the specimen table for use in standard MACE GOA summer reports. This differs from the specimen
-table in other MACE reports by including the GOA reporting species- currently pollock, capelin, and POP.
+Produce the specimen table for use in standard MACE GOA summer reports. This differs from the specimen table in other MACE reports by including the GOA reporting species- currently pollock, capelin, and POP.
 }
 \examples{
 \dontrun{

@@ -1,4 +1,4 @@
-#' @title get_interpolated_color_bins
+#' @title Return logical breaks that can be used to plot abundance values
 #'
 #' @description Return binned abundance data for plotting interpolated values with greater contrast. This is a wrapper around
 #' the \link[classInt:classIntervals]{classInt::classIntervals} function to make it easier to return binned color values.

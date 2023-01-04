@@ -3,8 +3,8 @@
 #' A subset of specimen data that is formatted for the standard summer GOA number of specimens/biological samples table.
 #' This table reports all the current reporting species- walleye pollock, pacific capelin, and pacific ocean perch-
 #' as well as an 'all other species' count
-#'
-#' #' @format A data frame with 5 rows and 14 columns:
+#' @keywords internal
+#' @format A data frame with 5 rows and 14 columns:
 #' \describe{
 #'   \item{HAUL}{haul number; this is the same as EVENT_ID used elsewhere (numeric)}
 #'   \item{POLLOCK_CATCH_LENGTHS}{number of pollock lengths per haul (numeric)}

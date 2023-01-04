@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_biomass_at_length_table_summer_goa.R
 \name{build_biomass_at_length_table_summer_goa}
 \alias{build_biomass_at_length_table_summer_goa}
-\title{build_biomass_at_length_table_summer_goa}
+\title{Create biomass at length table for MACE summer GOA cruise reports}
 \usage{
 build_biomass_at_length_table_summer_goa(biomass_nums_length_data)
 }

@@ -5,18 +5,7 @@
 \alias{template_df_specimen_table_summer_goa}
 \title{template_df_specimen_table_summer_goa}
 \format{
-An object of class \code{data.frame} with 5 rows and 14 columns.
-}
-\usage{
-template_df_specimen_table_summer_goa
-}
-\description{
-A subset of specimen data that is formatted for the standard summer GOA number of specimens/biological samples table.
-This table reports all the current reporting species- walleye pollock, pacific capelin, and pacific ocean perch-
-as well as an 'all other species' count
-}
-\details{
-#' @format A data frame with 5 rows and 14 columns:
+A data frame with 5 rows and 14 columns:
 \describe{
   \item{HAUL}{haul number; this is the same as EVENT_ID used elsewhere (numeric)}
   \item{POLLOCK_CATCH_LENGTHS}{number of pollock lengths per haul (numeric)}
@@ -35,4 +24,12 @@ as well as an 'all other species' count
 }
 #' @source Template dateset was gathered using get_specimen_table_data.R function in Summer 2021 GOA Cruise Report
 }
-\keyword{datasets}
+\usage{
+template_df_specimen_table_summer_goa
+}
+\description{
+A subset of specimen data that is formatted for the standard summer GOA number of specimens/biological samples table.
+This table reports all the current reporting species- walleye pollock, pacific capelin, and pacific ocean perch-
+as well as an 'all other species' count
+}
+\keyword{internal}

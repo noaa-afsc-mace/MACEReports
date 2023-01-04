@@ -5,4 +5,5 @@
 #' available, the data is available within MACEReports package: see \code{shelikof_historic_biomass_by_length_1981_to_2007}.
 #'
 #' @source Dataset initially compiled from historic cruise report tables
+#' @keywords internal
 "shelikof_historic_biomass_by_length_1981_to_2007"

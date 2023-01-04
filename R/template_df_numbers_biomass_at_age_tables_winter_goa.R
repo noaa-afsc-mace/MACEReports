@@ -3,7 +3,7 @@
 #' A subset of abundance data, with columns and formats required for creating the standard biomass- and numbers-
 #' by age tables used in winter Gulf of Alaska cruise reports. An imput dataframe can have more columns than this,
 #' but it must contain these columns!
-#'
+#' @keywords internal
 #' @format A data frame with 5 rows and 6 columns:
 #' \describe{
 #'   \item{SURVEY}{Survey number (numeric)}

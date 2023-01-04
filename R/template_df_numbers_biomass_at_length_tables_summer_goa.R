@@ -3,7 +3,7 @@
 #' A subset of biomass-and-numbers at length data, with columns and formats required for creating the standard catch tables
 #' used in Summer Gulf of Alaska cruise reports. Note that the dataframe used to match this template can have MORE columns,
 #' but it must at least have the below columns.
-#'
+#' @keywords internal
 #' @format A data frame with 5 rows and 8 columns:
 #' \describe{
 #'   \item{SURVEY}{survey number (numeric)}

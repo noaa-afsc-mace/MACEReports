@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_stick_legend.R
 \name{build_stick_legend}
 \alias{build_stick_legend}
-\title{build_stick_legend}
+\title{Return a legend that can be added to stickplots}
 \usage{
 build_stick_legend(
   stick_data,
@@ -21,9 +21,7 @@ build_stick_legend(
 \item{legend_label}{Defaults to a label in standard MACE units (t/nmi^2); specify alternate if needed to reflect your units}
 }
 \description{
-Accepts a dataframe returned from the \code{build_sf_sticks} function and returns a nicely placed legend bar.
-This legend is half the height of the tallest value in the dataframe.
-This object can be plotted using \code{ggplot2::geom_sf()} or base \code{plot}.
+Accepts a dataframe returned from the \code{build_sf_sticks} function and returns a nicely placed legend bar.This legend is half the height of the tallest value in the dataframe. This object can be plotted using \code{ggplot2::geom_sf()} or base \code{plot}.
 }
 \examples{
 

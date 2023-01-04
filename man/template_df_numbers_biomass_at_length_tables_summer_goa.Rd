@@ -27,4 +27,4 @@ A subset of biomass-and-numbers at length data, with columns and formats require
 used in Summer Gulf of Alaska cruise reports. Note that the dataframe used to match this template can have MORE columns,
 but it must at least have the below columns.
 }
-\keyword{datasets}
+\keyword{internal}

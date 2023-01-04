@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_biomass_at_age_table_winter_goa.R
 \name{build_biomass_at_age_table_winter_goa}
 \alias{build_biomass_at_age_table_winter_goa}
-\title{build_biomass_at_age_table_winter_goa}
+\title{Create biomass at age table for MACE winter cruise reports}
 \usage{
 build_biomass_at_age_table_winter_goa(biomass_nums_age_data, region_name)
 }

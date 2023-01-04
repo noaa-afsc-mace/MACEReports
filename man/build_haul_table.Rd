@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_haul_table.R
 \name{build_haul_table}
 \alias{build_haul_table}
-\title{build_haul_table}
+\title{Create trawl haul effort table for MACE cruise reports}
 \usage{
 build_haul_table(haul_data)
 }

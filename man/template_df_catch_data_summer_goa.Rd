@@ -27,4 +27,4 @@ template_df_catch_data_summer_goa
 A subset of catch data, with columns and formats required for creating the standard catch tables
 used in Summer Gulf of Alaska cruise reports
 }
-\keyword{datasets}
+\keyword{internal}

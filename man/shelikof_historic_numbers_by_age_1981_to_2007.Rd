@@ -18,4 +18,4 @@ values are stored as static, formatted 'canned' values gleaned from historic cru
 If you want to change the static dataframe (for example, removing years as more selectivity-corrected values become
 available, the data is available within MACEReports package: see \code{shelikof_historic_numbers_by_age_1981_to_2007}.
 }
-\keyword{datasets}
+\keyword{internal}

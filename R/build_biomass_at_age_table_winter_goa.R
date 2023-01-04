@@ -1,4 +1,4 @@
-#' @title build_biomass_at_age_table_winter_goa
+#' @title Create biomass at age table for MACE winter cruise reports
 #'
 #' @description Build the pollock biomass-at-age table used in winter GOA reports. The data used here is usually
 #' limited to the 'selectivity-corrected era' within Shelikof Strait (i.e. 2008-current). This function will report all

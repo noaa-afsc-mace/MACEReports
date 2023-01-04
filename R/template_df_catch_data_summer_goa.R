@@ -2,7 +2,7 @@
 #'
 #' A subset of catch data, with columns and formats required for creating the standard catch tables
 #' used in Summer Gulf of Alaska cruise reports
-#'
+#' @keywords internal
 #' @format A data frame with 5 rows and 8 columns:
 #' \describe{
 #'   \item{EVENT_ID}{Event number (numeric)}

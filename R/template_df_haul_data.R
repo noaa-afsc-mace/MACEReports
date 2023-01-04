@@ -2,7 +2,7 @@
 #'
 #' A subset of standard MACE haul data, with columns and formats required for creating the standard haul table
 #' in cruise reports
-#'
+#' @keywords internal
 #' @format A data frame with 5 rows and 15 columns:
 #' \describe{
 #'   \item{EVENT_ID}{Event number (numeric)}

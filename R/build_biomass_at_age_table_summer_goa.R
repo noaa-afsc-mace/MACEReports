@@ -1,5 +1,4 @@
-#' @title build_biomass_at_age_table_summer_goa
-#'
+#' @title Create biomass at age table for MACE summer GOA cruise reports
 #' @description Build the pollock biomass-at-age table used in summer GOA reports. This will report biomass at
 #' age for ages from 1- maximum reported age in the survey, and will do so for each report number (i.e. survey region)
 #' that was defined for the analysis.

@@ -1,5 +1,6 @@
 #' @name globals
 #' @title globals definitions
+#' @keywords internal
 #' define the 'undefined' variables in the package to silence the devtools::check() warning
 #' no visible binding for global variable'...
 utils::globalVariables(c("template_df_catch_data_summer_goa",

@@ -1,7 +1,6 @@
-#' @title build_nmfs_area_totals_table
-#'
+#' @title Create pollock biomass and numbers per NMFS management area table for MACE GOA summer cruise reports
 #' @description Build the pollock biomass (metric tons) and numbers (millions)- per NMFS management area and survey
-#' region. This table has been used in the GOA sumemer report.
+#' region. This table has been used in the GOA summer report.
 #' @param biomass_nums_length_data The name of the dataframe that contains the pollock
 #' biomass at length data; this dataframe is created in the cruise report markdown
 #' process using the function \code{get_biomass_and_nums_data_function.R}; this provides all

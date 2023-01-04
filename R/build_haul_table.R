@@ -1,4 +1,4 @@
-#' @title build_haul_table
+#' @title Create trawl haul effort table for MACE cruise reports
 #'
 #' @description Produce a haul table for use in standard MACE cruise reports.
 #' @param haul_data The name of the dataframe that contains all needed values; this dataframe is created

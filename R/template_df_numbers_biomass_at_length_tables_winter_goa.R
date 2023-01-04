@@ -2,7 +2,7 @@
 #'
 #' A subset of abundance data, with columns and formats required for creating the standard biomass- and numbers-
 #' by length tables used in winter Gulf of Alaska cruise reports.
-#'
+#' @keywords internal
 #' @format A data frame with 5 rows and 7 columns:
 #' \describe{
 #'   \item{SURVEY}{Survey number (numeric)}

@@ -1,8 +1,5 @@
-#' shelikof_biomass
-#'
-#' An example dataset consisting of pollock biomass and biomass/nmi^2 values at length on a per-interval basis.
-#'
-#' #' @format A data frame with 126647 rows and 6 columns:
+#' @title An example dataset consisting of pollock biomass values at length on a per-interval basis.
+#' @format A data frame with 126647 rows and 6 columns:
 #' \describe{
 #'   \item{INTERVAL}{A unique identifier for each 0.5 nmi acoustic interval (numeric)}
 #'   \item{LENGTH}{pollock length (cm; numeric)}

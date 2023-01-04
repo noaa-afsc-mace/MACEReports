@@ -2,11 +2,24 @@
 % Please edit documentation in R/globals.R
 \name{globals}
 \alias{globals}
-\title{globals definitions
-define the 'undefined' variables in the package to silence the devtools::check() warning
-no visible binding for global variable'...}
+\title{globals definitions}
 \description{
 globals definitions
-define the 'undefined' variables in the package to silence the devtools::check() warning
-no visible binding for global variable'...
 }
+\keyword{'undefined'}
+\keyword{binding}
+\keyword{define}
+\keyword{devtools::check()}
+\keyword{for}
+\keyword{global}
+\keyword{in}
+\keyword{internal}
+\keyword{no}
+\keyword{package}
+\keyword{silence}
+\keyword{the}
+\keyword{to}
+\keyword{variable'...}
+\keyword{variables}
+\keyword{visible}
+\keyword{warning}

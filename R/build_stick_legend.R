@@ -1,8 +1,5 @@
-#' @title build_stick_legend
-#'
-#' @description Accepts a dataframe returned from the \code{build_sf_sticks} function and returns a nicely placed legend bar.
-#' This legend is half the height of the tallest value in the dataframe.
-#' This object can be plotted using \code{ggplot2::geom_sf()} or base \code{plot}.
+#' @title Return a legend that can be added to stickplots
+#' @description Accepts a dataframe returned from the \code{build_sf_sticks} function and returns a nicely placed legend bar.This legend is half the height of the tallest value in the dataframe. This object can be plotted using \code{ggplot2::geom_sf()} or base \code{plot}.
 #' @param stick_data A 'stick' dataframe returned from \code{build_sf_sticks}.
 #' @param legend_pos One of 'right' or 'left'; legend bar will be placed at the corresponding corner.
 #' @param legend_color Default is white for standard MACE basemaps; specify alternates in standard \code{ggplot}-compatible formats

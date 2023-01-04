@@ -1,4 +1,4 @@
-#' @title build_catch_table_summer_goa
+#' @title Create trawl catch table for MACE summer GOA cruise reports
 #'
 #' @description build the catch by species and numbers by gear; create a table that is in the format
 #' used in the Gulf of Alaska summer reports. This differs from the winter version in the format of the input data.
@@ -40,7 +40,7 @@
 #'   #get caption
 #'   print(catch_tables[[i]][[2]])
 #' }
-#' #' @export
+#' @export
 build_catch_table_summer_goa = function(catch_data, specimen_data, scaling_hauls_list = NULL){
 
   #check input dataframes against the template dataframes: this will make sure the input

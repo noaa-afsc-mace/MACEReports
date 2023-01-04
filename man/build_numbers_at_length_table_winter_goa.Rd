@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_numbers_at_length_table_winter_goa.R
 \name{build_numbers_at_length_table_winter_goa}
 \alias{build_numbers_at_length_table_winter_goa}
-\title{build_numbers_at_length_table_winter_goa}
+\title{Create numbers at length table for MACE winter cruise reports}
 \usage{
 build_numbers_at_length_table_winter_goa(biomass_nums_length_data, region_name)
 }

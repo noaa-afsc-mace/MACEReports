@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_sf_sticks.R
 \name{build_sf_sticks}
 \alias{build_sf_sticks}
-\title{build_sf_sticks}
+\title{Build stick objects from xyz (lat/long/abundance) data for use in stickplots}
 \usage{
 build_sf_sticks(
   x,

@@ -1,5 +1,4 @@
-#' @title build_biomass_at_length_table_winter_goa
-#'
+#' @title Create biomass at length table for MACE winter GOA cruise reports
 #' @description Build the pollock biomass-at-length table used in winter GOA reports. The data used here is usually
 #' limited to the 'selectivity-corrected era' within Shelikof Strait (i.e. 2008-current). This function will report all
 #' lengths from 5-76 cm, and will do so for any region that was defined for the analysis.

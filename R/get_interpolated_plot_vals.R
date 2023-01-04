@@ -1,7 +1,5 @@
-#' @title get_interpolated_plot_vals
-#'
-#' @description Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The number of interpolated values returned depends on the chosen map resolution.
-#' These objects can be plotted using neighborhoodbase \code{plot}, or converted to rasters.
+#' @title Return predicted biomass values that can be plotted in interpolated abundance and distribution maps
+#' @description Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The number of interpolated values returned depends on the chosen map resolution.These objects can be plotted using  \code{gpplot2 geom_raster()}, base \code{plot}, or converted to rasters.
 #' @param x Longitude (decimal degrees)
 #' @param y Latitude (decimal degrees)
 #' @param z Abundance value

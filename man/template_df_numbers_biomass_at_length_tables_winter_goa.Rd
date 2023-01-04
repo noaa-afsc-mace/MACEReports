@@ -27,4 +27,4 @@ template_df_numbers_biomass_at_length_tables_winter_goa
 A subset of abundance data, with columns and formats required for creating the standard biomass- and numbers-
 by length tables used in winter Gulf of Alaska cruise reports.
 }
-\keyword{datasets}
+\keyword{internal}

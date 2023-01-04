@@ -27,4 +27,4 @@ A subset of abundance data, with columns and formats required for creating the s
 by age tables used in winter Gulf of Alaska cruise reports. An imput dataframe can have more columns than this,
 but it must contain these columns!
 }
-\keyword{datasets}
+\keyword{internal}

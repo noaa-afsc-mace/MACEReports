@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_nmfs_area_totals_table.R
 \name{build_nmfs_area_totals_table}
 \alias{build_nmfs_area_totals_table}
-\title{build_nmfs_area_totals_table}
+\title{Create pollock biomass and numbers per NMFS management area table for MACE GOA summer cruise reports}
 \usage{
 build_nmfs_area_totals_table(biomass_nums_length_data)
 }
@@ -18,7 +18,7 @@ A list with two items: item 1 is the Flextable table object, item 2 is the table
 }
 \description{
 Build the pollock biomass (metric tons) and numbers (millions)- per NMFS management area and survey
-region. This table has been used in the GOA sumemer report.
+region. This table has been used in the GOA summer report.
 }
 \examples{
 \dontrun{

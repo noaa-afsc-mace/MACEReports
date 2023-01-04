@@ -34,4 +34,4 @@ template_df_haul_data
 A subset of standard MACE haul data, with columns and formats required for creating the standard haul table
 in cruise reports
 }
-\keyword{datasets}
+\keyword{internal}

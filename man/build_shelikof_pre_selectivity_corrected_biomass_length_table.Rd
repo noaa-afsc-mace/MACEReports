@@ -3,7 +3,7 @@
 %   R/build_shelikof_pre_selectivity_corrected_biomass_length_table.R
 \name{build_shelikof_pre_selectivity_corrected_biomass_length_table}
 \alias{build_shelikof_pre_selectivity_corrected_biomass_length_table}
-\title{build_shelikof_pre_selectivity_corrected_biomass_length_table}
+\title{Create the old 'pre-selectivity era' biomass at length table for winter MACE cruise reports}
 \usage{
 build_shelikof_pre_selectivity_corrected_biomass_length_table()
 }
@@ -11,10 +11,7 @@ build_shelikof_pre_selectivity_corrected_biomass_length_table()
 A list with two items: item 1 is the Flextable table object, item 2 is the table caption.
 }
 \description{
-Build the historic pre-selectivity corrected era table for the Shelikof Strait survey. This currently presents
-values from 1981-2007; these values are stored as static, formatted 'canned' values gleaned from historic cruise reports.
-If you want to change the static dataframe (for example, removing years as more selectivity-corrected values become
-available, the data is available within MACEReports package: see \code{shelikof_historic_biomass_by_length_1981_to_2007}.
+Build the historic pre-selectivity corrected era table for the Shelikof Strait survey. This currently presents values from 1981-2007; these values are stored as static, formatted 'canned' values gleaned from historic cruise reports. If you want to change the static dataframe (for example, removing years as more selectivity-corrected values become available, the data is available within MACEReports package: see \code{shelikof_historic_biomass_by_length_1981_to_2007}.
 }
 \examples{
 \dontrun{

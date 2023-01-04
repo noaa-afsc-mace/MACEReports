@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_numbers_at_age_table_summer_goa.R
 \name{build_numbers_at_age_table_summer_goa}
 \alias{build_numbers_at_age_table_summer_goa}
-\title{build_numbers_at_age_table_summer_goa}
+\title{Create numbers at age table for MACE summer GOA cruise reports}
 \usage{
 build_numbers_at_age_table_summer_goa(biomass_nums_age_data)
 }

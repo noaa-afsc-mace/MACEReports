@@ -3,18 +3,9 @@
 \docType{data}
 \name{shelikof_biomass}
 \alias{shelikof_biomass}
-\title{shelikof_biomass}
+\title{An example dataset consisting of pollock biomass values at length on a per-interval basis.}
 \format{
-An object of class \code{grouped_df} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 126647 rows and 7 columns.
-}
-\usage{
-shelikof_biomass
-}
-\description{
-An example dataset consisting of pollock biomass and biomass/nmi^2 values at length on a per-interval basis.
-}
-\details{
-#' @format A data frame with 126647 rows and 6 columns:
+A data frame with 126647 rows and 6 columns:
 \describe{
   \item{INTERVAL}{A unique identifier for each 0.5 nmi acoustic interval (numeric)}
   \item{LENGTH}{pollock length (cm; numeric)}
@@ -25,5 +16,11 @@ An example dataset consisting of pollock biomass and biomass/nmi^2 values at len
   \item{year}{survey year (numeric)}
 }
 #' @source Historic MACE reported values
+}
+\usage{
+shelikof_biomass
+}
+\description{
+An example dataset consisting of pollock biomass values at length on a per-interval basis.
 }
 \keyword{datasets}

@@ -26,8 +26,8 @@ build_shelikof_pre_selectivity_corrected_biomass_length_table = function(){
 
   #make this into a flextable
   biomass_length_table = flextable::flextable(shelikof_historic_biomass_by_length_1981_to_2007)%>%
-    #set the width of the table as 10" for landscape format
-    flextable::fit_to_width(max_width = 10)%>%
+    #set the width of the table as 9" for landscape format
+    flextable::fit_to_width(max_width = 9)%>%
     #align text: center justify everything
     flextable::align(align = 'center', part = 'all')%>%
     #get rid of padding around the cells

@@ -88,14 +88,14 @@ build_haul_table = function(haul_data){
     flextable::hline(i = 1, j =c(7:8, 10:11, 13:14, 16:17,19), part = 'header', border = table_border)%>%
     #get rid of padding around cells
     flextable::padding(padding = 0, part = "all")%>%
-    #let everything  autosize to start at 10 in width, then modify some:
-    flextable::fit_to_width(max_width = 10)%>%
+    #let everything  autosize to start at 9 in width, then modify some:
+    flextable::fit_to_width(max_width = 9)%>%
     #set some column widths to get format close to right, 10" total width
     #separators can be really thin, make smaller numbers narrow as well,
-    flextable::width(j = c('sep1', 'sep2', 'sep3', 'sep4'), width = 0.05)%>%
+    flextable::width(j = c('sep1', 'sep2', 'sep3', 'sep4'), width = 0.04)%>%
     #these have to be a min width to fit caption
     flextable::width(j = c('date', 'time'), width = 0.5)%>%
-    flextable::width(j = c('bot_depth', 'surface_temp','duration', 'gear_temp', 'gear_depth'), width = 0.6)%>%
+    flextable::width(j = c('bot_depth', 'surface_temp','duration', 'gear_temp', 'gear_depth'), width = 0.5)%>%
     #format numbers for nicer printing; no 1000's comma separator to save space; add '-' where no data exists
     #one decimal point columns:
     flextable::colformat_double(j = c('duration', 'gear_temp', 'surface_temp', 'pk_weight', 'non_pk_weight'),

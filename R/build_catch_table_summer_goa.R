@@ -185,8 +185,8 @@ build_catch_table_summer_goa = function(catch_data, specimen_data, scaling_hauls
       flextable::width(j = c('sep'), width = 0.05)%>%
       #separators need to be bigger for some columns to fit caption
       flextable::width(j = c('percent_wt', 'TOT_NUMBER', 'percent_num', 'L', 'W'), width = 0.5)%>%
-      flextable::width(j = c('COMMON_NAME', 'SCIENTIFIC_NAME'), width = 1.75)%>%
-      flextable::width(j = c('TOT_WEIGHT'), width = 0.75)
+      flextable::width(j = c('COMMON_NAME', 'SCIENTIFIC_NAME'), width = 1.65)%>%
+      flextable::width(j = c('TOT_WEIGHT'), width = 0.65)
 
     #format catch weights and percents and numbers percents conditionally: If values are <=0.1,
     #label as '<0.1'

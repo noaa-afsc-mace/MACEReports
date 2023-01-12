@@ -152,7 +152,10 @@ build_biomass_at_length_table_summer_goa = function(biomass_nums_length_data){
     #set the font and font size
     flextable::font(fontname = 'times', part = 'all')%>%
     flextable::fontsize(size = 10, part = 'header')%>%
-    flextable::fontsize(size = 10, part = 'body')
+    flextable::fontsize(size = 10, part = 'body')%>%
+    #if we have lots of columns/reporting regions, we might need to shrink the total table width to fit
+    #9" margins. Set this as the maximum width
+    flextable::fit_to_width(max_width = 9, unit = 'in')
 
 
   #conditionally format values for table using MACEReports::table_nums_format function:

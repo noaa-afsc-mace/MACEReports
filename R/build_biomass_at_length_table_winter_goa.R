@@ -115,8 +115,8 @@ build_biomass_at_length_table_winter_goa = function(biomass_nums_length_data, re
     #add the footer row
     flextable::add_footer_row(top = FALSE, values = totals_footer_row,
                               colwidths = rep(1,length(totals_footer_row)))%>%
-    #set the width of the table as 10" for landscape format
-    flextable::width(width = 10/ncol(biomass_by_length_selectivity_corrected))%>%
+    #set the width of the table as 9" for landscape format
+    flextable::width(width = 9/ncol(biomass_by_length_selectivity_corrected))%>%
     #align text: center justify everything
     flextable::align(align = 'center', part = 'all')%>%
     flextable::padding(padding = 0, part = "all")%>%

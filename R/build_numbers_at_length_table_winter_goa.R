@@ -113,8 +113,8 @@ build_numbers_at_length_table_winter_goa = function(biomass_nums_length_data, re
   nums_length_table = flextable::flextable(nums_by_length_wide)%>%
     #add the footer row
     flextable::add_footer_row(top = FALSE, values = totals_footer_row, colwidths = rep(1,length(totals_footer_row)))%>%
-    #set the width of the table as 10" for landscape format
-    flextable::width(width = 10/ncol(nums_by_length_wide))%>%
+    #set the width of the table as 9" for landscape format
+    flextable::width(width = 9/ncol(nums_by_length_wide))%>%
     #align text: center justify everything
     flextable::align(align = 'center', part = 'all')%>%
     #get rid of padding around the cells

@@ -37,12 +37,7 @@ build_ts_relationships_table = function(ts_relationships_used = NULL){
   #format is: 'Group'/'TS (dB re 1 m$^2$)'/ 'Length type'/ 'TS derived for which species'/  'Reference'/ 'ts_relationship'
 
   #define any footnotes first, to append to dataframe below
-  krill_footnote= paste0('A = -930.429983; B = 3.21027896; C = 1.74003785; D = 1.36133896 x $10^{-8}$; ',
-                         'E = -2.26958555 x $10^{-6}$; F=1.50291244 x $10^{-4}$; G = -4.86306872 x $10^{-3}$; H = 0.0738748423. ',
-                         'I = -0.408004891; J = -73.9078690; and $L_0$ = 0.03835',
-                         '\\\nIf L < 15 mm, TS = -105 dB; and if L > 65 mm, TS = -73 dB.',
-                         '\\\nk = 2','\u03c0', 'fc, where f = 38,000 (frequency in Hz) and c = 1470 (sound speed in m/s). ')
-
+  krill_footnote= flextable::as_paragraph('A = -930.429983; B = 3.21027896; C = 1.74003785; D = 1.36133896 x 10', flextable::as_sup('-8'),'; E = -2.26958555 x 10', flextable::as_sup('-6'),'\nF= 1.50291244 x 10', flextable::as_sup('-4'), '; G = -4.86306872 x 10', flextable::as_sup('-3'),'; H = 0.0738748423; I = -0.408004891; J = -73.9078690; and ', flextable::as_i('L'), flextable::as_sub('0'), ' = 0.03835 \nIf L < 15 mm, TS = -105 dB; and if L > 65 mm, TS = -73 dB. \nk = 2\u03c0fc, where f = 38,000 (frequency in Hz) and c = 1470 (sound speed in m/s).')
 
   #build the equations dataframe
   ts_df = data.frame(c('Walleye pollock',
@@ -53,7 +48,8 @@ build_ts_relationships_table = function(ts_relationships_used = NULL){
                        'Jellyfish',
                        'Squid',
                        'Eulachon',
-                       paste('Pelagic crustaceans^[', krill_footnote,']')),
+                       #paste0('Pelagic crustaceans^[', krill_footnote,']')),
+                       'Pelagic crustaceans'),
                      c("TS = 20 log$_{10}$ *L*-66",
                        "TS = 20 log$_{10}$ *L*-70.3",
                        'TS = 20 log$_10$ *L*-2.3 log$_10$(1 + *depth*/10) - 65.4',
@@ -153,23 +149,39 @@ build_ts_relationships_table = function(ts_relationships_used = NULL){
 
   #create the basic table + convert markdown to word text
   ts_table = flextable::flextable(ts_df) %>%
-    ftExtra::colformat_md( part = 'all')%>%
+    #convert to markdown flavor
+    ftExtra::colformat_md( part = 'all')
+
+    #add the footnotes as needed
+    if ('Pelagic crustaceans' %in% ts_df$Group){
+      ts_table = flextable::footnote(x = ts_table,
+                          i = which(ts_df$Group == 'Pelagic crustaceans'),
+                          j = 1,
+                          ref_symbols = c('1'),
+                          value = krill_footnote,
+                          part = 'body')
+    }
+
+    #format the table
+    ts_table =
     #align  text: center justify everything
-    flextable::align(align = 'center', part = 'header')%>%
+    flextable::align(x = ts_table, align = 'center', part = 'header')%>%
     flextable::align(align = 'center', part = 'body')%>%
     flextable::align(align = 'left', part = 'footer')%>%
     #add horizontal border on top and bottom of table
     flextable::hline_top(part="all", border = table_border)%>%
     flextable::hline_bottom(part="body", border = table_border)%>%
-    #fit to maximize table width to 7.5 in
+    #fit to maximize table width to 9 in
     flextable::width(j = 'Group', width = 1.5)%>%
-    flextable::width(j = 'TS (dB re 1 m$^2$)', width = 2)%>%
-    flextable::width(j = c('Length type', 'TS derived for which species', 'Reference'), width = 1.33)%>%
+    flextable::width(j = 'TS (dB re 1 m$^2$)', width = 3)%>%
+    flextable::width(j = c('Length type', 'TS derived for which species', 'Reference'), width = 1.5)%>%
     #set the font and font size
     flextable::font(fontname = 'times', part = 'all')%>%
     flextable::fontsize(size = 10, part = 'header')%>%
     flextable::fontsize(size = 10, part = 'body')%>%
-    flextable::fontsize(size = 10, part = 'footer')
+    flextable::fontsize(size = 10, part = 'footer')%>%
+    flextable::line_spacing(part = 'all', space = 1)
+
 
     #add some caption text
     cap_text = paste0('Target strength (TS) to size relationships from the literature used to allocate 38 kHz acoustic backscatter ',

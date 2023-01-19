@@ -279,9 +279,12 @@ get_basemap_layers = function(plot_limits_data,
     ggplot2::geom_sf(data = russia_land, fill = land_fill_color, color = land_outline_color)+
     ggplot2::geom_sf(data = canada_land, fill = land_fill_color, color = land_outline_color)+
     {if (bathy == TRUE) ggplot2::guides(fill = 'none')}+
+    ggplot2::scale_x_continuous(expand = c(0,0))+
+    ggplot2::scale_y_continuous(expand = c(0,0))+
     #set the basemap to standard MACE theme
     ggplot2::theme_bw()+
-    ggplot2::theme(axis.text= ggplot2::element_text(size=12),
+    ggplot2::theme(
+             axis.text= ggplot2::element_text(size=12),
              axis.title = ggplot2::element_text(size = 12),
              legend.box.background =  ggplot2::element_rect(fill = scales::alpha("white", 0.55), color = 'transparent'),
              legend.key = ggplot2::element_rect(fill = "transparent"),
@@ -289,11 +292,7 @@ get_basemap_layers = function(plot_limits_data,
              panel.grid.major = ggplot2::element_blank(),
              panel.grid.minor = ggplot2::element_blank(),
              legend.background = ggplot2::element_blank(),
-             axis.ticks.x = ggplot2::element_blank(),
-             axis.text.x = ggplot2::element_blank(),
              axis.title.x = ggplot2::element_blank(),
-             axis.ticks.y = ggplot2::element_blank(),
-             axis.text.y = ggplot2::element_blank(),
              axis.title.y = ggplot2::element_blank())
 
   return(basemap_layers)

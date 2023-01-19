@@ -63,10 +63,10 @@ dist = sf::st_length(biggest_stick)
 dist = as.numeric(dist) * 0.5
 
 #set a small factor to 'bump' sticks up by (so there's room for text)
-bump = dist * .1
+bump = dist * .05
 
 #create a line from the x/y position to a height 1/2 the distance of the tallest bar
-legend_line = sf::st_linestring(matrix(c(legend_x, (bump + legend_y), legend_x, (bump + legend_y + dist)),
+legend_line = sf::st_linestring(matrix(c(legend_x, legend_y, legend_x, (legend_y + dist)),
                                                       nrow = 2, ncol = 2, byrow = TRUE))
 legend_line = sf::st_geometry(legend_line)
 
@@ -85,7 +85,7 @@ if (!is.null(legend_label)){
   #add the value of the bar, with a prettier print format
   legend_value = format(round(biggest_stick$z * 0.5, digits = 0), digits = 1, nsmall = 0, scientific = FALSE, big.mark = ',')
 
-  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump), y = legend_y,
+  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump), y = (legend_y - bump),
                                         label = paste(legend_value, legend_label), color = legend_color)
 
   #add both the line and the legend to a ggplot2 object
@@ -103,7 +103,7 @@ if (is.null(legend_label)){
 
   label_name = deparse(bquote(.(legend_value) * " t/nmi"^-2))
 
-  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump * 3), y = legend_y,
+  legend_annotation = ggplot2::annotate(geom = 'text', x = (legend_x - bump * 3), y = (legend_y - bump),
                                         label = label_name, parse = TRUE, color = legend_color)
 
   #add both the line and the legend to a ggplot2 object

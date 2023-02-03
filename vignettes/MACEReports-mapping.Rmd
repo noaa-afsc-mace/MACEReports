@@ -283,3 +283,28 @@ basemap+
 
 
 ```
+**Water temperatures and interpolations**
+
+If you want to interpolate water temperature values instead of fish abundance values, there are some modifications to make a more logical interpolation. Namely, you'll probably want to interpolate values in the linear domain (as opposed to the default interpolations which work with log10-transformed values). Linear interpolations are possible using simple kriging and inverse-distance weighting in MACEReports. In this example, sea surface temperatures collected during a Shelikof winter survey are used to create an interpolated map using simple kriging:
+
+```{r temp_interpolations, echo=TRUE, message = FALSE, warning=FALSE}
+#get interpolated sea surface temperatures using simple kriging of linear values:
+interp_temps = get_interpolated_plot_vals(x = shelikof_sst$LONGITUDE, y = shelikof_sst$LATITUDE, z = shelikof_sst$MEASUREMENT_VALUE, resolution = 1000, region = 'shelikof', interp_type = 'simple', interp_scale = 'linear', neighborhood = 200)
+
+#create an sf object we can use to define the basemap extent
+extent = st_as_sf(interp_temps, coords = c('x', 'y'), crs = 'EPSG:3338')
+
+#use this to return the basemap; return a simple basemap with contours as the bathymetery seems too busy with interpolated maps
+basemap = get_basemap_layers(plot_limits_data = extent, bathy = FALSE, contours = c(100,200,1000))
+
+#use ggplot to plot
+basemap+
+  geom_raster(data = interp_temps, aes(x = x, y = y, fill = z))+
+  scale_fill_distiller(palette = 'RdYlBu', direction = -1)+
+  labs(fill = 'Temperature (C)')
+
+
+```
+
+
+

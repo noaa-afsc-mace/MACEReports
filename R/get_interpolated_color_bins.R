@@ -62,6 +62,9 @@ get_interpolated_color_bins = function(z,
     #sort the breaks
     log10_breaks = sort(log10_breaks)
 
+    #to be safe: check for any duplicated breaks
+    log10_breaks = log10_breaks[!duplicated(log10_breaks)]
+
     #and use them to divide bins
     breaks_list = classInt::classIntervals(z, style = 'fixed', fixedBreaks = log10_breaks)
 
@@ -99,9 +102,7 @@ get_interpolated_color_bins = function(z,
     plot_val = cut(round(z, digits = 2),
                    breaks = breaks_list$brks, include.lowest = TRUE, right = TRUE, labels = lims$label)
 
-  }
-
-  if (is.null(nice_labels)){
+  } else {
 
   #map the breaks onto the data
   plot_val = cut(round(z, digits = 2),

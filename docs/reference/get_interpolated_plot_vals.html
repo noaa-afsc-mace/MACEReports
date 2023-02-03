@@ -56,6 +56,7 @@
 <span>  <span class="va">region</span>,</span>
 <span>  out_crs <span class="op">=</span> <span class="st">"EPSG:3338"</span>,</span>
 <span>  <span class="va">interp_type</span>,</span>
+<span>  interp_scale <span class="op">=</span> <span class="st">"log10"</span>,</span>
 <span>  neighborhood <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -71,7 +72,7 @@
 
 
 <dt>z</dt>
-<dd><p>Abundance value</p></dd>
+<dd><p>Quantity (abundance, biomass, temperature, etc)</p></dd>
 
 
 <dt>resolution</dt>
@@ -87,7 +88,11 @@
 
 
 <dt>interp_type</dt>
-<dd><p>Interpolation formula to apply. Options are 'universal', 'ordinary', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Ordinary ordinary kridging with a 'neighborhood' of 100 observations used for every estimation point, idw performs inverse-distance weighting interpolation. Universal kridging is comprehensive, but very slow. IDW is very coarse, but very fast.</p></dd>
+<dd><p>Interpolation formula to apply. Options are 'universal', 'ordinary', 'simple', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Ordinary uses ordinary kridging, simple uses simple kriging with the mean set as mean(z), idw performs inverse-distance weighting interpolation. Universal kridging is comprehensive, but very slow. IDW is very coarse, but very fast.</p></dd>
+
+
+<dt>interp_scale</dt>
+<dd><p>by default, all interpolation is done on log10-transformed quantities (this works well for abundance and biomass). However, you can also interpolate in the linear domain (this works well for temperature values). Options are 'log10' (default) and 'linear'. If you use linear, we recommend only using <code>interp_type = 'idw'</code> or <code>interp_type = 'simple'</code>.</p></dd>
 
 
 <dt>neighborhood</dt>
@@ -101,7 +106,7 @@
 <p>a dataframe with 4 columns:
 x = Longitude (crs specified in out_crs; default default is "EPSG:3338")
 y = Latitude (crs specified in out_crs; default default is "EPSG:3338")
-z = abundance value. Note that these values are by default Log 10-transformed abundance, as these tend to highlight patterns in abundance and distribution in MACE datasets.</p>
+z = abundance value. Note that these values are by default Log 10-transformed abundance, as these tend to highlight patterns in abundance and distribution in MACE datasets. Set <code>interp_scale = 'linear'</code> if you'd like to return values in the linear domain.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

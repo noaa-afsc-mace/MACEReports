@@ -12,6 +12,7 @@ get_interpolated_plot_vals(
   region,
   out_crs = "EPSG:3338",
   interp_type,
+  interp_scale = "log10",
   neighborhood = NULL
 )
 }
@@ -20,7 +21,7 @@ get_interpolated_plot_vals(
 
 \item{y}{Latitude (decimal degrees)}
 
-\item{z}{Abundance value}
+\item{z}{Quantity (abundance, biomass, temperature, etc)}
 
 \item{resolution}{Distance (meters) for interpolation points. Recommended values are 1000 in the Shelikof, 2500 in summer surveys.}
 
@@ -28,7 +29,9 @@ get_interpolated_plot_vals(
 
 \item{out_crs}{The Coordinate Reference Setting for the returned interpolation points; default is "EPSG:3338"}
 
-\item{interp_type}{Interpolation formula to apply. Options are 'universal', 'ordinary', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Ordinary ordinary kridging with a 'neighborhood' of 100 observations used for every estimation point, idw performs inverse-distance weighting interpolation. Universal kridging is comprehensive, but very slow. IDW is very coarse, but very fast.}
+\item{interp_type}{Interpolation formula to apply. Options are 'universal', 'ordinary', 'simple', 'idw'. Universal uses universal kridging with Latitude and Longitude as variables; Ordinary uses ordinary kridging, simple uses simple kriging with the mean set as mean(z), idw performs inverse-distance weighting interpolation. Universal kridging is comprehensive, but very slow. IDW is very coarse, but very fast.}
+
+\item{interp_scale}{by default, all interpolation is done on log10-transformed quantities (this works well for abundance and biomass). However, you can also interpolate in the linear domain (this works well for temperature values). Options are 'log10' (default) and 'linear'. If you use linear, we recommend only using \code{interp_type = 'idw'} or \code{interp_type = 'simple'}.}
 
 \item{neighborhood}{(optional) number of nearest observations to use in universal or ordinary kridging calculations. The default is to use all observations; limiting calculations to a neighborhood can be used to speed up the interpolation. This argument passes the number of nearest arguments to use to  \code{Gstat::kridge}; see \code{Gstat::kridge nmax} argument for details.}
 }
@@ -36,7 +39,7 @@ get_interpolated_plot_vals(
 a dataframe with 4 columns:
 x = Longitude (crs specified in out_crs; default default is "EPSG:3338")
 y = Latitude (crs specified in out_crs; default default is "EPSG:3338")
-z = abundance value. Note that these values are by default Log 10-transformed abundance, as these tend to highlight patterns in abundance and distribution in MACE datasets.
+z = abundance value. Note that these values are by default Log 10-transformed abundance, as these tend to highlight patterns in abundance and distribution in MACE datasets. Set \code{interp_scale = 'linear'} if you'd like to return values in the linear domain.
 }
 \description{
 Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataframe with interpolated values. The number of interpolated values returned depends on the chosen map resolution.These objects can be plotted using  \code{gpplot2 geom_raster()}, base \code{plot}, or converted to rasters.

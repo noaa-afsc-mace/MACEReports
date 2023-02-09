@@ -130,7 +130,7 @@ build_haul_table = function(haul_data){
   #add footnotes
   haul_table = flextable::footnote(haul_table, i = 2, j = c('gear', 'gear_depth','surface_temp'),
                         value = flextable::as_paragraph(c(gear_footnote,
-                                               'Headrope depth obtained from SBE temperature logger. In hauls without SBE temperature logger records, footrope depth was obtained from scientist notes when possible.',
+                                               'Headrope depth obtained from SBE temperature logger. In hauls without SBE temperature logger records, depth was obtained from scientist notes when possible.',
                                                "Average temperature measured from an SBE temperature logger")),
                         ref_symbols = c('a','b','c'), part = 'header')
 

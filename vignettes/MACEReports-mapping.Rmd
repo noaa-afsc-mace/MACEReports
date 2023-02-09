@@ -89,7 +89,7 @@ Of course, what we have so far isn't a great way to look at your data! We need a
 If you just want a basic map, you can simply feed the sticks dataframe you just created to the function `get_basemap_layers`. 
 
 ```{r basic_basemap, echo = TRUE, message = FALSE, warning=FALSE}
-basemap = MACEReports::get_basemap_layers(plot_limits_data = sticks)
+basemap = get_basemap_layers(plot_limits_data = sticks)
 
 ```
 
@@ -123,7 +123,7 @@ shelikof_by_size = shelikof_biomass%>%
 sticks_by_size = build_sf_sticks(x = shelikof_by_size$START_LONGITUDE, y = shelikof_by_size$START_LATITUDE, z = shelikof_by_size$BIOMASS_NM2, group_variable = shelikof_by_size$size_class)
 
 #plot everything again:
-basemap = MACEReports::get_basemap_layers(plot_limits_data = sticks_by_size)
+basemap = get_basemap_layers(plot_limits_data = sticks_by_size)
 stick_legend = build_stick_legend(stick_data = sticks_by_size)
 
 basemap+
@@ -138,7 +138,7 @@ basemap+
 The bathymetry layer is nice for some plots, but inappropriate in others. Want to keep it simple? Specify what contours you'd like to draw. Your options are: 50, 100, 200, 300, 500, 700, 1000 (values are in M).
 
 ```{r basemap_options_1, echo=TRUE, message = FALSE, warning=FALSE}
-basemap = MACEReports::get_basemap_layers(plot_limits_data = sticks_by_size, bathy = FALSE, contours = c(100,200, 1000))
+basemap = get_basemap_layers(plot_limits_data = sticks_by_size, bathy = FALSE, contours = c(100,200, 1000))
 
 #view the plot
 basemap
@@ -148,7 +148,7 @@ basemap
 You might also want to include a commonly used layer, such as the NMFS management area or the 3nmi buffer around land areas. Great. See `?get_basemap_layers` for all the current options, but here's how you'd add those ones:
 
 ```{r basemap_options_2, echo=TRUE, message = FALSE, warning=FALSE}
-basemap = MACEReports::get_basemap_layers(plot_limits_data = sticks_by_size, management_regions = TRUE, alaska_3nmi_buffer = TRUE)
+basemap = get_basemap_layers(plot_limits_data = sticks_by_size, management_regions = TRUE, alaska_3nmi_buffer = TRUE)
 
 #view the plot
 basemap
@@ -164,6 +164,48 @@ basemap+
 
 ```
 
+
+## Area labels
+
+We often present an overview figure that identifies all the areas you speak about in some text. MACEReports provides a list of 900 + Alaska area labels, sourced from the [NOAA Office of Coast Survey](https://encdirect.noaa.gov/). Want more? Request them! You can view them all alphabetically:
+
+```{r all_labels, echo=TRUE, message = FALSE, warning=FALSE}
+all_labels = available_labels()
+
+#look at the first few
+knitr::kable(head(all_labels))
+
+```
+
+Of course, you probably don't want 900 labels on your plot. `get_area_labels` can be used to return a subset of area labels appropriate to your plot. Like the basemaps generated with `get_basemap_layers`, you'll need an existing `sf` spatial dataframe to specify the limits of your plot. `get_area_labels` will then return labels within this extent.
+
+```{r limited_labels_1, echo=TRUE, message = FALSE, warning=FALSE}
+#generate an sf object for limits- here, we'll use the sticks object for convenience
+sticks = build_sf_sticks(x = shelikof_xyz$START_LONGITUDE, y = shelikof_xyz$START_LATITUDE, z = shelikof_xyz$BIOMASS_NM2)
+
+#use this to return all the labels in this extent
+all_labels_in_extent = get_area_labels(plot_limits_data = sticks)
+
+```
+
+In this case, you'd still have 135 labels on your plot. It is more practical to only label the places you talk about in the text. So, go get all those lined up and add them to a list. We can use this list in combination with `get_area_labels` to return only the labels you care about. You can then plot these labels using `ggplot2::geom_sf_label`, `ggplot2::geom_sf_text`, or your choice of other `sf` plotting methods. 
+
+```{r limited_labels_2, echo=TRUE, message = FALSE, warning=FALSE}
+#get a list of labels you refer to in the text
+goa_labels_to_get = c('Shumagin Islands', 'Alaska Peninsula', 'Shelikof Strait',
+                      'Kodiak Island', 'Korovin Island',
+                      'Cape Igvak')
+
+#use this to return only the labels that are both on the list AND within the plot extent
+plot_labels = get_area_labels(plot_limits_data = sticks, area_labels_list = goa_labels_to_get)
+
+#add these to a basemap
+basemap = get_basemap_layers(plot_limits_data = sticks, bathy = FALSE, contours = c(100, 200, 1000))
+
+basemap+
+  geom_sf_label(data = plot_labels, aes(label = OBJNAM), alpha = 0.8)
+
+```
 
 ## Interpolations
 

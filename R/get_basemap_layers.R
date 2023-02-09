@@ -87,22 +87,22 @@ get_basemap_layers = function(plot_limits_data,
 
     if (!is.null(management_regions)){
       management_regions_layer = sf::st_read(paste0(map_dir, '/alaska_NMFS_management_regions_',
-                                                      stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+                                                    stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
     }
 
     if (!is.null(SSL_critical_habitat)){
       SSL_critical_habitat_layer = sf::st_read(paste0(map_dir, '/SSL_critical_habitat_',
-                                                stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+                                                      stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
     }
 
     if (!is.null(alaska_3nmi_buffer)){
       alaska_3nmi_buffer_layer = sf::st_read(paste0(map_dir, '/alaska_3nmi_buffer_',
-                                                      stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+                                                    stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
     }
 
     if (bathy == TRUE){
 
-        bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
+      bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
     }
 
     #if user requests contours instead of full bathy, produce these
@@ -149,7 +149,7 @@ get_basemap_layers = function(plot_limits_data,
     SSL_critical_habitat_layer = sf::st_transform(SSL_critical_habitat_layer, crs = crs)
     alaska_3nmi_buffer_layer = sf::st_transform(alaska_3nmi_buffer_layer, crs = crs)
 
-   if (bathy == TRUE){
+    if (bathy == TRUE){
 
       #again, start with the 3338 layer
       bathy_raster = terra::rast(paste0(base_dir, '/alaska_bathy_raster_EPSG3338.tif'))
@@ -160,30 +160,30 @@ get_basemap_layers = function(plot_limits_data,
       #up the resolution
       bathy_raster = terra::disagg(bathy_raster, fact = c(5, 5), method = 'near')
 
-   }
-
-  if (!is.null(contours)){
-
-    #check: make sure it is a numeric object
-    if (!is.numeric(contours)){
-      stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
     }
 
-    #if the contours are provided as negative values, set as positive
-    contours = ifelse(contours > 0, contours, -contours)
+    if (!is.null(contours)){
 
-    #open up the contours
-    bathy_contours = sf::st_read(paste0(base_dir, '/alaska_race_bathy_EPSG3338.gpkg'), quiet = TRUE)
+      #check: make sure it is a numeric object
+      if (!is.numeric(contours)){
+        stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
+      }
 
-    #limit to the requested contour values
-    bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+      #if the contours are provided as negative values, set as positive
+      contours = ifelse(contours > 0, contours, -contours)
 
-    #convert to the requested projection
-    bathy_contours = sf::st_transform(bathy_contours, crs = crs)
+      #open up the contours
+      bathy_contours = sf::st_read(paste0(base_dir, '/alaska_race_bathy_EPSG3338.gpkg'), quiet = TRUE)
+
+      #limit to the requested contour values
+      bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+
+      #convert to the requested projection
+      bathy_contours = sf::st_transform(bathy_contours, crs = crs)
+
+    }
 
   }
-
- }
 
   #clip the exent of background layers for plotting
 
@@ -200,14 +200,14 @@ get_basemap_layers = function(plot_limits_data,
   #if you are working in a geographic coordinate system, add this buffer directly to your coordinates
   #(this is a workaround, as geographic buffers are problematic- not needed if you are in a projected system)
   if (sf::st_is_longlat(region_zoom_box)){
-     sf::sf_use_s2(FALSE)
-     region_zoom_box =  sf::st_buffer(region_zoom_box, dist = dist_buffer, joinStyle = 'MITRE', mitreLimit = 2)
-     sf::sf_use_s2(TRUE)
+    sf::sf_use_s2(FALSE)
+    region_zoom_box =  sf::st_buffer(region_zoom_box, dist = dist_buffer, joinStyle = 'MITRE', mitreLimit = 2)
+    sf::sf_use_s2(TRUE)
   }
 
   # #in projected coordinate systems, simply apply the buffer
   if (!sf::st_is_longlat(region_zoom_box)){
-     region_zoom_box =  sf::st_buffer(region_zoom_box, dist = dist_buffer, joinStyle = 'MITRE', mitreLimit = 2)
+    region_zoom_box =  sf::st_buffer(region_zoom_box, dist = dist_buffer, joinStyle = 'MITRE', mitreLimit = 2)
   }
 
   #crop the base layers
@@ -216,8 +216,8 @@ get_basemap_layers = function(plot_limits_data,
   canada_land =  sf::st_intersection(sf::st_geometry(canada_land), sf::st_geometry(region_zoom_box))
 
   if (!is.null(management_regions)){
-     management_regions_layer = sf::st_intersection(sf::st_make_valid(sf::st_geometry(management_regions_layer)),
-                                                    sf::st_geometry(region_zoom_box))
+    management_regions_layer = sf::st_intersection(sf::st_make_valid(sf::st_geometry(management_regions_layer)),
+                                                   sf::st_geometry(region_zoom_box))
   }
 
   if (!is.null(SSL_critical_habitat)){
@@ -234,16 +234,16 @@ get_basemap_layers = function(plot_limits_data,
   #and return it as a dataframe to plot with ggplot
   if (bathy == TRUE){
 
-     #set a box that can be used to clip raster to plot extent (much faster plotting!)
-     clip = terra::ext(sf::st_bbox(region_zoom_box)[[1]], sf::st_bbox(region_zoom_box)[[3]],
-                       sf::st_bbox(region_zoom_box)[[2]], sf::st_bbox(region_zoom_box)[[4]])
+    #set a box that can be used to clip raster to plot extent (much faster plotting!)
+    clip = terra::ext(sf::st_bbox(region_zoom_box)[[1]], sf::st_bbox(region_zoom_box)[[3]],
+                      sf::st_bbox(region_zoom_box)[[2]], sf::st_bbox(region_zoom_box)[[4]])
 
     #crop to these dimensions
     bathy_raster_df = terra::crop(bathy_raster, clip, snap = 'near')
 
 
     bathy_raster_df = terra::as.data.frame(bathy_raster_df, xy = TRUE)%>%
-     dplyr::rename('z' = 'lyr.1')
+      dplyr::rename('z' = 'lyr.1')
 
     #define a color scale- you can tweak this to give the right amount of weight to the deep vs shallow areas (right now),
     #theres more weight given to 200 m and up
@@ -260,7 +260,7 @@ get_basemap_layers = function(plot_limits_data,
 
     #crop the contour layer
     bathy_contours = sf::st_intersection(sf::st_make_valid(sf::st_geometry(bathy_contours)),
-                                                     sf::st_geometry(region_zoom_box))
+                                         sf::st_geometry(region_zoom_box))
 
   }
 
@@ -284,20 +284,19 @@ get_basemap_layers = function(plot_limits_data,
     #set the basemap to standard MACE theme
     ggplot2::theme_bw()+
     ggplot2::theme(
-             axis.text= ggplot2::element_text(size=12),
-             axis.title = ggplot2::element_text(size = 12),
-             legend.box.background =  ggplot2::element_rect(fill = scales::alpha("white", 0.55), color = 'transparent'),
-             legend.key = ggplot2::element_rect(fill = "transparent"),
-             legend.text= ggplot2::element_text(color = 'black', size = 12),
-             panel.grid.major = ggplot2::element_blank(),
-             panel.grid.minor = ggplot2::element_blank(),
-             legend.background = ggplot2::element_blank(),
-             axis.title.x = ggplot2::element_blank(),
-             axis.title.y = ggplot2::element_blank())
+      axis.text= ggplot2::element_text(size=12),
+      axis.title = ggplot2::element_text(size = 12),
+      legend.box.background =  ggplot2::element_rect(fill = scales::alpha("white", 0.55), color = 'transparent'),
+      legend.key = ggplot2::element_rect(fill = "transparent"),
+      legend.text= ggplot2::element_text(color = 'black', size = 12),
+      panel.grid.major = ggplot2::element_blank(),
+      panel.grid.minor = ggplot2::element_blank(),
+      legend.background = ggplot2::element_blank(),
+      axis.title.x = ggplot2::element_blank(),
+      axis.title.y = ggplot2::element_blank())
 
   return(basemap_layers)
 
 }
-
 
 

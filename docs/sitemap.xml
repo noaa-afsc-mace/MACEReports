@@ -19,6 +19,9 @@
     <loc>/LICENSE-text.html</loc>
   </url>
   <url>
+    <loc>/reference/available_labels.html</loc>
+  </url>
+  <url>
     <loc>/reference/break_position.html</loc>
   </url>
   <url>
@@ -80,6 +83,9 @@
   </url>
   <url>
     <loc>/reference/check_input_df.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_area_labels.html</loc>
   </url>
   <url>
     <loc>/reference/get_basemap_layers.html</loc>

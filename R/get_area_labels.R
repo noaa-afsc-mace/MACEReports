@@ -28,7 +28,7 @@
 #' area_labels = get_area_labels(plot_limits_data = sticks, area_labels_list = goa_labels_to_get)
 #' }
 #' @export
-get_area_labels = function(plot_limits_data,
+get_area_labels = function(plot_limits_data = NULL,
                            area_labels_list = NULL){
 
   #checks: Make sure we have a sf dataframe WITH a defined CRS for the plot data; stop if not.
@@ -50,7 +50,7 @@ get_area_labels = function(plot_limits_data,
     if (!is.null(area_labels_list)){
 
       #if there's a list of area labels provided, limit to these
-      alaska_area_labels = alaska_area_labels[alaska_area_labels$OBJNAM %in% c(area_labels_list),]
+      alaska_area_labels = alaska_area_labels[alaska_area_labels$area_name %in% c(area_labels_list),]
     }
 
   }
@@ -63,7 +63,7 @@ get_area_labels = function(plot_limits_data,
     if (!is.null(area_labels_list)){
 
       #if there's a list of area labels provided, limit to these
-      alaska_area_labels = alaska_area_labels[alaska_area_labels$OBJNAM %in% c(area_labels_list),]
+      alaska_area_labels = alaska_area_labels[alaska_area_labels$area_name %in% c(area_labels_list),]
     }
 
   }
@@ -77,7 +77,7 @@ get_area_labels = function(plot_limits_data,
   p_min = sf::st_point(c(min(sf::st_coordinates(region_zoom_box)[,1]), min(sf::st_coordinates(region_zoom_box)[,2])))
   p_max = sf::st_point(c(max(sf::st_coordinates(region_zoom_box)[,1]), max(sf::st_coordinates(region_zoom_box)[,2])))
 
-  #compute the maximum distance across plot; add a buffer to the plot as 5% of this distance
+  #compute the maximum distance across plot; add a buffer to the plot as 25% of this distance to get labels at edges
   dist_buffer = sf::st_distance(p_min, p_max)[[1]] * 0.1
 
   #if you are working in a geographic coordinate system, add this buffer directly to your coordinates

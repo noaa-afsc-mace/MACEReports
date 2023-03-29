@@ -1,7 +1,7 @@
 #' @title Create a MACE-themed basemap
 #' @description Returns a base map. This map is returned as a ggplot2 object that more complex maps can be built on top of.
-#' It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer regions,and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
-#' This layer will be slightly larger than the extent of \code{plot_limits_data}; users should still use \code{ggplot2::coord_sf}
+#' It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer #' regions,and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
+#' This layer will be slightly larger than the extent of \code{plot_limits_data}; users can still use \code{ggplot2::coord_sf}
 #' to fine-tune the plot extent.
 #' @param plot_limits_data A \code{sf} spatial dataframe; this is required and used to define the base map extent and projection.
 #' @param bathy By default, a bathymetric baselayer based on the GEBCO (https://www.gebco.net/) gridded bathymetric dataset
@@ -13,6 +13,8 @@
 #' @param alaska_3nmi_buffer If \code{TRUE}, will add the ADFG 3 nmi management buffer to basemap
 #' @param land_fill_color If you'd like a different fill color on landmasses, specify as required by \code{ggplot2}.
 #' @param land_outline_color If you'd like a different outline color on landmasses, specify as required by \code{ggplot2}.
+#' @param plot_expansion This controls the amount of buffer around the basemap (default is 5\% (0.05) around the extent of the data; set from 0-1).
+#'
 #' @return A list of class \code{ggplot} containing information required for plotting a basemap.
 #'
 #' @author Mike Levine
@@ -63,7 +65,8 @@ get_basemap_layers = function(plot_limits_data,
                               SSL_critical_habitat = NULL,
                               alaska_3nmi_buffer = NULL,
                               land_fill_color = '#616161',
-                              land_outline_color = 'black'){
+                              land_outline_color = 'black',
+                              plot_expansion = 0.05){
 
   #checks: Make sure we have a sf dataframe WITH a defined CRS for the plot data; stop if not.
   if (!"sf" %in% class(plot_limits_data) | is.na(sf::st_crs(plot_limits_data)$input)){
@@ -108,20 +111,38 @@ get_basemap_layers = function(plot_limits_data,
     #if user requests contours instead of full bathy, produce these
     if (!is.null(contours)){
 
+      # #check: make sure it is a numeric object
+      # if (!is.numeric(contours)){
+      #   stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
+      # }
+      #
+      # #if the contours are provided as negative values, set as positive
+      # contours = ifelse(contours > 0, contours, -contours)
+      #
+      # #open the contours file
+      # bathy_contours = sf::st_read(paste0(map_dir, '/alaska_race_bathy_',
+      #                                     stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+      #
+      # #limit to the requested contour values
+      # bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+
+      #create contours from the bathy raster
+
       #check: make sure it is a numeric object
       if (!is.numeric(contours)){
-        stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
+        stop('Enter the contours you want, as in c(200,300).')
       }
 
-      #if the contours are provided as negative values, set as positive
-      contours = ifelse(contours > 0, contours, -contours)
+      #if the contours are provided as positive values, set as negative
+      contours = ifelse(contours < 0, contours, -contours)
 
-      #open the contours file
-      bathy_contours = sf::st_read(paste0(map_dir, '/alaska_race_bathy_',
-                                          stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+      #open the raster and build the contours
+      bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
 
-      #limit to the requested contour values
-      bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+      bathy_contours = terra::as.contour(bathy_raster, levels = c(contours))
+
+      #convert to an sf object
+      bathy_contours = sf::st_as_sf(bathy_contours)
 
     }
 
@@ -164,19 +185,37 @@ get_basemap_layers = function(plot_limits_data,
 
     if (!is.null(contours)){
 
-      #check: make sure it is a numeric object
+      # #check: make sure it is a numeric object
+      # if (!is.numeric(contours)){
+      #   stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
+      # }
+      #
+      # #if the contours are provided as negative values, set as positive
+      # contours = ifelse(contours > 0, contours, -contours)
+      #
+      # #open up the contours
+      # bathy_contours = sf::st_read(paste0(base_dir, '/alaska_race_bathy_EPSG3338.gpkg'), quiet = TRUE)
+      #
+      # #limit to the requested contour values
+      # bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+      #
+      # #convert to the requested projection
+      # bathy_contours = sf::st_transform(bathy_contours, crs = crs)
+
       if (!is.numeric(contours)){
-        stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
+        stop('Enter the contours you want, as in c(200,300).')
       }
 
-      #if the contours are provided as negative values, set as positive
-      contours = ifelse(contours > 0, contours, -contours)
+      #if the contours are provided as positive values, set as negative
+      contours = ifelse(contours < 0, contours, -contours)
 
-      #open up the contours
-      bathy_contours = sf::st_read(paste0(base_dir, '/alaska_race_bathy_EPSG3338.gpkg'), quiet = TRUE)
+      #open the raster and build the contours
+      bathy_raster = terra::rast(paste0(map_dir, '/alaska_bathy_raster_', stringr::str_remove(crs, ':'), '.tif'))
 
-      #limit to the requested contour values
-      bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+      bathy_contours = terra::as.contour(bathy_raster, levels = c(contours))
+
+      #convert to an sf object
+      bathy_contours = sf::st_as_sf(bathy_contours)
 
       #convert to the requested projection
       bathy_contours = sf::st_transform(bathy_contours, crs = crs)
@@ -195,7 +234,7 @@ get_basemap_layers = function(plot_limits_data,
   p_max = sf::st_point(c(max(sf::st_coordinates(region_zoom_box)[,1]), max(sf::st_coordinates(region_zoom_box)[,2])))
 
   #compute the maximum distance across plot; add a buffer to the plot as 5% of this distance
-  dist_buffer = sf::st_distance(p_min, p_max)[[1]] * 0.1
+  dist_buffer = sf::st_distance(p_min, p_max)[[1]] * plot_expansion
 
   #if you are working in a geographic coordinate system, add this buffer directly to your coordinates
   #(this is a workaround, as geographic buffers are problematic- not needed if you are in a projected system)
@@ -214,6 +253,10 @@ get_basemap_layers = function(plot_limits_data,
   ak_land =  sf::st_intersection(sf::st_geometry(ak_land), sf::st_geometry(region_zoom_box))
   russia_land =  sf::st_intersection(sf::st_geometry(russia_land), sf::st_geometry(region_zoom_box))
   canada_land =  sf::st_intersection(sf::st_geometry(canada_land), sf::st_geometry(region_zoom_box))
+
+  #get the automatically-generated graticule for the biggest shapefile (ak_land)- we will use this to force more longitude ticks on the basemap if there are an insufficient (<3) number of ticks.
+  grats = sf::st_graticule(ak_land)
+
 
   if (!is.null(management_regions)){
     management_regions_layer = sf::st_intersection(sf::st_make_valid(sf::st_geometry(management_regions_layer)),
@@ -279,7 +322,9 @@ get_basemap_layers = function(plot_limits_data,
     ggplot2::geom_sf(data = russia_land, fill = land_fill_color, color = land_outline_color)+
     ggplot2::geom_sf(data = canada_land, fill = land_fill_color, color = land_outline_color)+
     {if (bathy == TRUE) ggplot2::guides(fill = 'none')}+
-    ggplot2::scale_x_continuous(expand = c(0,0))+
+    #adjust x-axis labels- either add a few (if there are <3), or accept defaults (if >3)
+    {if (length(grats$type[grats$type == 'E']) < 3) ggplot2::scale_x_continuous(breaks = seq(-180,180,5), expand = c(0,0))}+
+    {if (length(grats$type[grats$type == 'E']) >= 3) ggplot2::scale_x_continuous(expand = c(0,0))}+
     ggplot2::scale_y_continuous(expand = c(0,0))+
     #set the basemap to standard MACE theme
     ggplot2::theme_bw()+

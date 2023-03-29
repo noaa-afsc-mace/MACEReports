@@ -203,7 +203,7 @@ plot_labels = get_area_labels(plot_limits_data = sticks, area_labels_list = goa_
 basemap = get_basemap_layers(plot_limits_data = sticks, bathy = FALSE, contours = c(100, 200, 1000))
 
 basemap+
-  geom_sf_label(data = plot_labels, aes(label = OBJNAM), alpha = 0.8)
+  geom_sf_label(data = plot_labels, aes(label = area_name), alpha = 0.8)
 
 ```
 
@@ -223,6 +223,7 @@ Creating interpolations requires you to make a few more choices as compared to c
 - Inverse Distance Weighting
 - Ordinary Kriging (with or without a local neighborhood for estimation, see below)
 - Universal kriging (with or without a local neighborhood)
+- Simple kriging (with or without a local neighborhood)
 
 Using a local neighborhood (i.e. the number of nearest observations to use in estimation) speeds things up GREATLY and seems to capture the same trends as estimating without this limitation. Testing suggests that the best compromise between speed and a helpful presentation of abundance and distribution is to use universal kriging with a local neighborhood of 200 observations:
 
@@ -234,9 +235,9 @@ knitr::kable(head(interp_vals_2021), row.names = FALSE)
 
 ```
 
-Note that this function simply returns a dataframe with the columns 'x', 'y', and 'z'. x and y correspond to the positions of your interpolated values; z corresponds to the estimated value. By default, x and y are coordinates in Albers Equal Area projection (but this can be changed with the `out_crs` argument to `get_interpolated_plot_vals`), while z is the log10-transformed abundance value (right now, this can't be changed as log10-transformed values seem to highlight abundance and distribution well in our data; this could change in future versions if folks dislike the chosen transformation).
+Note that this function simply returns a dataframe with the columns 'x', 'y', and 'z'. x and y correspond to the positions of your interpolated values; z corresponds to the estimated value. By default, x and y are coordinates in Albers Equal Area projection (but this can be changed with the `out_crs` argument to `get_interpolated_plot_vals`), while z is the estimated abundance value (the default is in log10-transformed units, as these highlight abundance and distribution well in our data; linear values are also an option and using this is demonstrated with water temperature data below).
 
-The x and y points form a grid; therefore, each represents a box of equal size and should be plotted as a raster.
+The x and y points form a grid; therefore, each represents a box of equal size and can be plotted as a raster.
 
 ```{r interpolations_2, echo=TRUE, message = FALSE, warning=FALSE}
 

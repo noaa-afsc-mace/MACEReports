@@ -4,7 +4,7 @@
 \alias{get_area_labels}
 \title{Return Alaska area labels for plotting}
 \usage{
-get_area_labels(plot_limits_data, area_labels_list = NULL)
+get_area_labels(plot_limits_data = NULL, area_labels_list = NULL)
 }
 \arguments{
 \item{plot_limits_data}{A \code{sf} spatial dataframe; this is required and used to define the base map extent and projection.}

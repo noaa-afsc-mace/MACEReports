@@ -41,7 +41,6 @@ If not specified, no CRS will provided.}
 Accepts xyz data (for example, longitude/latitude/abundance) and returns a vertical 'stick'
 at each position. Sticks are returned as \code{sf LINESTRING} objects.
 These objects can be plotted using \code{ggplot2::geom_sf()} or base \code{plot}.
-#'
 }
 \examples{
 dat = data.frame('x' = c(-152.2, -150.3, -159.4),

@@ -307,7 +307,7 @@ all alphabetically:</p>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">all_labels</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th align="left">OBJNAM</th>
+<th align="left">area_name</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -363,7 +363,7 @@ or your choice of other <code>sf</code> plotting methods.</p>
 <span><span class="va">basemap</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_basemap_layers.html">get_basemap_layers</a></span><span class="op">(</span>plot_limits_data <span class="op">=</span> <span class="va">sticks</span>, bathy <span class="op">=</span> <span class="cn">FALSE</span>, contours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">basemap</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf_label</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">plot_labels</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">OBJNAM</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf_label</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">plot_labels</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">area_name</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
 <p><img src="MACEReports-mapping_files/figure-html/limited_labels_2-1.png" width="768"></p>
 </div>
 <div class="section level2">
@@ -410,6 +410,7 @@ time. We’ve got options for:</p></li>
 <li><p>Ordinary Kriging (with or without a local neighborhood for
 estimation, see below)</p></li>
 <li><p>Universal kriging (with or without a local neighborhood)</p></li>
+<li><p>Simple kriging (with or without a local neighborhood)</p></li>
 </ul>
 <p>Using a local neighborhood (i.e. the number of nearest observations
 to use in estimation) speeds things up GREATLY and seems to capture the
@@ -467,13 +468,13 @@ neighborhood of 200 observations:</p>
 interpolated values; z corresponds to the estimated value. By default, x
 and y are coordinates in Albers Equal Area projection (but this can be
 changed with the <code>out_crs</code> argument to
-<code>get_interpolated_plot_vals</code>), while z is the
-log10-transformed abundance value (right now, this can’t be changed as
-log10-transformed values seem to highlight abundance and distribution
-well in our data; this could change in future versions if folks dislike
-the chosen transformation).</p>
+<code>get_interpolated_plot_vals</code>), while z is the estimated
+abundance value (the default is in log10-transformed units, as these
+highlight abundance and distribution well in our data; linear values are
+also an option and using this is demonstrated with water temperature
+data below).</p>
 <p>The x and y points form a grid; therefore, each represents a box of
-equal size and should be plotted as a raster.</p>
+equal size and can be plotted as a raster.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>

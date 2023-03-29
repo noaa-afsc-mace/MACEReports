@@ -12,7 +12,8 @@ get_basemap_layers(
   SSL_critical_habitat = NULL,
   alaska_3nmi_buffer = NULL,
   land_fill_color = "#616161",
-  land_outline_color = "black"
+  land_outline_color = "black",
+  plot_expansion = 0.05
 )
 }
 \arguments{
@@ -33,14 +34,16 @@ i.e. \code{c(200,100,50)}}
 \item{land_fill_color}{If you'd like a different fill color on landmasses, specify as required by \code{ggplot2}.}
 
 \item{land_outline_color}{If you'd like a different outline color on landmasses, specify as required by \code{ggplot2}.}
+
+\item{plot_expansion}{This controls the amount of buffer around the basemap (default is 5\% (0.05) around the extent of the data; set from 0-1).}
 }
 \value{
 A list of class \code{ggplot} containing information required for plotting a basemap.
 }
 \description{
 Returns a base map. This map is returned as a ggplot2 object that more complex maps can be built on top of.
-It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer regions,and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
-This layer will be slightly larger than the extent of \code{plot_limits_data}; users should still use \code{ggplot2::coord_sf}
+It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer #' regions,and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
+This layer will be slightly larger than the extent of \code{plot_limits_data}; users can still use \code{ggplot2::coord_sf}
 to fine-tune the plot extent.
 }
 \examples{

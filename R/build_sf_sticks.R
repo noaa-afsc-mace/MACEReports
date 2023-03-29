@@ -2,7 +2,7 @@
 #' @description Accepts xyz data (for example, longitude/latitude/abundance) and returns a vertical 'stick'
 #' at each position. Sticks are returned as \code{sf LINESTRING} objects.
 #' These objects can be plotted using \code{ggplot2::geom_sf()} or base \code{plot}.
-#'#'
+#'
 #' @param x x- position
 #' @param y Y- position
 #' @param z Abundance value (the value that will be used to scale sticks)

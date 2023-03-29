@@ -11,7 +11,7 @@ available_labels = function(){
   #return them all in alphabetical order
   labels = alaska_area_labels%>%
     sf::st_drop_geometry()%>%
-    dplyr::arrange(OBJNAM)
+    dplyr::arrange(area_name)
 
   return(labels)
 }

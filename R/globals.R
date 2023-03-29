@@ -13,4 +13,9 @@ utils::globalVariables(c("template_df_catch_data_summer_goa",
                          'shelikof_historic_numbers_by_length_1981_to_2007',
                          'shelikof_historic_numbers_by_age_1981_to_2007',
                          'shelikof_historic_biomass_by_age_1981_to_2007',
-                         'shelikof_historic_biomass_by_length_1981_to_2007'))
+                         'shelikof_historic_biomass_by_length_1981_to_2007',
+                         'area_name',
+                         'base_dir',
+                         'x',
+                         'y',
+                         'z'))

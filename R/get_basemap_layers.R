@@ -233,7 +233,7 @@ get_basemap_layers = function(plot_limits_data,
   p_min = sf::st_point(c(min(sf::st_coordinates(region_zoom_box)[,1]), min(sf::st_coordinates(region_zoom_box)[,2])))
   p_max = sf::st_point(c(max(sf::st_coordinates(region_zoom_box)[,1]), max(sf::st_coordinates(region_zoom_box)[,2])))
 
-  #compute the maximum distance across plot; add a buffer to the plot as 5% of this distance
+  #compute the maximum distance across plot; add a buffer to the plot as n% of this distance
   dist_buffer = sf::st_distance(p_min, p_max)[[1]] * plot_expansion
 
   #if you are working in a geographic coordinate system, add this buffer directly to your coordinates
@@ -256,7 +256,6 @@ get_basemap_layers = function(plot_limits_data,
 
   #get the automatically-generated graticule for the biggest shapefile (ak_land)- we will use this to force more longitude ticks on the basemap if there are an insufficient (<3) number of ticks.
   grats = sf::st_graticule(ak_land)
-
 
   if (!is.null(management_regions)){
     management_regions_layer = sf::st_intersection(sf::st_make_valid(sf::st_geometry(management_regions_layer)),

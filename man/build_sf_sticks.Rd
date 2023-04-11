@@ -33,9 +33,7 @@ Only one of 'group_variable' or 'return_df' should be specified.}
 
 \item{bar_scale}{The relative size of sticks. Default is ~1/2 of total plot height.}
 
-\item{crs}{If specified, The coordinate reference system (CRS) into which sticks will be projected.
-This relies on the \link[sf:st_crs]{sf::st_crs} function- make sure you are using a valid CRS argument.
-If not specified, no CRS will provided.}
+\item{crs}{The coordinate reference system (CRS) into which sticks will be projected. By default, objects will be returned using the default CRS (Albers Equal Area Alaska, EPSG 3338). Any other valid projection can be specified. Note that this relies on the \link[sf:st_crs]{sf::st_crs} function- make sure you are using a valid CRS argument.}
 }
 \description{
 Accepts xyz data (for example, longitude/latitude/abundance) and returns a vertical 'stick'

@@ -13,9 +13,7 @@
 #' @param rotation Rotation of the sticks in degrees from the vertical. Default is 5 degrees.
 #' 0 = no rotation; positive values rotate bars in a clockwise direction.
 #' @param bar_scale The relative size of sticks. Default is ~1/2 of total plot height.
-#' @param crs If specified, The coordinate reference system (CRS) into which sticks will be projected.
-#' This relies on the \link[sf:st_crs]{sf::st_crs} function- make sure you are using a valid CRS argument.
-#' If not specified, no CRS will provided.
+#' @param crs The coordinate reference system (CRS) into which sticks will be projected. By default, objects will be returned using the default CRS (Albers Equal Area Alaska, EPSG 3338). Any other valid projection can be specified. Note that this relies on the \link[sf:st_crs]{sf::st_crs} function- make sure you are using a valid CRS argument.
 #'
 #' @examples
 #' dat = data.frame('x' = c(-152.2, -150.3, -159.4),

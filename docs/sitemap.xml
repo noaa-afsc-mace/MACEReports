@@ -25,6 +25,9 @@
     <loc>/reference/available_labels.html</loc>
   </url>
   <url>
+    <loc>/reference/available_shapefiles.html</loc>
+  </url>
+  <url>
     <loc>/reference/break_position.html</loc>
   </url>
   <url>
@@ -98,6 +101,9 @@
   </url>
   <url>
     <loc>/reference/get_interpolated_plot_vals.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_shapefile.html</loc>
   </url>
   <url>
     <loc>/reference/globals.html</loc>

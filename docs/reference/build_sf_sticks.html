@@ -100,9 +100,7 @@ Only one of 'group_variable' or 'return_df' should be specified.</p></dd>
 
 
 <dt>crs</dt>
-<dd><p>If specified, The coordinate reference system (CRS) into which sticks will be projected.
-This relies on the <a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs</a> function- make sure you are using a valid CRS argument.
-If not specified, no CRS will provided.</p></dd>
+<dd><p>The coordinate reference system (CRS) into which sticks will be projected. By default, objects will be returned using the default CRS (Albers Equal Area Alaska, EPSG 3338). Any other valid projection can be specified. Note that this relies on the <a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs</a> function- make sure you are using a valid CRS argument.</p></dd>
 
 </dl></div>
 

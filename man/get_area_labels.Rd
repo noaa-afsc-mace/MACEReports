@@ -19,25 +19,31 @@ Return a \code{sf} spatial dataframe of area labels within a given plot extent.
 }
 \examples{
 \dontrun{
-#get a simple dataset to work from: biomass_nmi2 from a single survey
-shelikof_xyz = shelikof_biomass\%>\%
-  dplyr::filter(year == 2021)\%>\%
-  dplyr::group_by(INTERVAL, START_LATITUDE, START_LONGITUDE)\%>\%
-  dplyr::summarize(BIOMASS = sum(BIOMASS),
-            BIOMASS_NM2 = sum(BIOMASS_NM2))
+# get a simple dataset to work from: biomass_nmi2 from a single survey
+shelikof_xyz <- shelikof_biomass \%>\%
+  dplyr::filter(year == 2021) \%>\%
+  dplyr::group_by(INTERVAL, START_LATITUDE, START_LONGITUDE) \%>\%
+  dplyr::summarize(
+    BIOMASS = sum(BIOMASS),
+    BIOMASS_NM2 = sum(BIOMASS_NM2)
+  )
 
-#build a sticks object
-sticks = build_sf_sticks(x = shelikof_xyz$START_LONGITUDE,
-                         y = shelikof_xyz$START_LATITUDE,
-                         z = shelikof_xyz$BIOMASS_NM2)
+# build a sticks object
+sticks <- build_sf_sticks(
+  x = shelikof_xyz$START_LONGITUDE,
+  y = shelikof_xyz$START_LATITUDE,
+  z = shelikof_xyz$BIOMASS_NM2
+)
 
-#get a list of all the place names in your document
-goa_labels_to_get = c('Shumagin Islands', 'Alaska Peninsula', 'Shelikof Strait',
-                      'Kodiak Island', 'Cape Kekurnoi', "Cape Nukshak", 'Korovin Island',
-                      'Kalsin Bay', 'Cape Igvak')
+# get a list of all the place names in your document
+goa_labels_to_get <- c(
+  "Shumagin Islands", "Alaska Peninsula", "Shelikof Strait",
+  "Kodiak Island", "Cape Kekurnoi", "Cape Nukshak", "Korovin Island",
+  "Kalsin Bay", "Cape Igvak"
+)
 
-#use the limits of the sticks to get your labels in the plot
-area_labels = get_area_labels(plot_limits_data = sticks, area_labels_list = goa_labels_to_get)
+# use the limits of the sticks to get your labels in the plot
+area_labels <- get_area_labels(plot_limits_data = sticks, area_labels_list = goa_labels_to_get)
 }
 }
 \author{

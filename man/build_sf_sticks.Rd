@@ -41,48 +41,52 @@ at each position. Sticks are returned as \code{sf LINESTRING} objects.
 These objects can be plotted using \code{ggplot2::geom_sf()} or base \code{plot}.
 }
 \examples{
-dat = data.frame('x' = c(-152.2, -150.3, -159.4),
-'y' = c(55.2, 55.8, 55.6),
-'z' = c(7500,40000, 28000),
-'species' = c('a', 'a', 'b'))
+dat <- data.frame(
+  "x" = c(-152.2, -150.3, -159.4),
+  "y" = c(55.2, 55.8, 55.6),
+  "z" = c(7500, 40000, 28000),
+  "species" = c("a", "a", "b")
+)
 
-#sticks can be plotted with ggplot2::geom_sf(),
-#and Coordinate Reference System (CRS) conversions are handled by sf::st_crs()
+# sticks can be plotted with ggplot2::geom_sf(),
+# and Coordinate Reference System (CRS) conversions are handled by sf::st_crs()
 library(ggplot2)
 library(sf)
 
-#you have to provide x,y,z at minimum
-sticks = build_sf_sticks(x = dat$x, y = dat$y, z = dat$z)
+# you have to provide x,y,z at minimum
+sticks <- build_sf_sticks(x = dat$x, y = dat$y, z = dat$z)
 
-#plot with ggplot2 geom_sf()
+# plot with ggplot2 geom_sf()
 ggplot() +
   geom_sf(data = sticks)
 
-#or with base r plotting
+# or with base r plotting
 plot(dat)
 
-#the rotation (from 0) can be specified (in degrees from 0-360). If not specified,
-#sticks will be rotated to 5 degrees
-sticks = build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = 15)
+# the rotation (from 0) can be specified (in degrees from 0-360). If not specified,
+# sticks will be rotated to 5 degrees
+sticks <- build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = 15)
 
 ggplot() +
   geom_sf(data = sticks)
 
-#If a CRS is not specified, none will be assigned; if one is specified,
-#it will be set using sf st_crs()
-sticks = build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = 15, crs = 3338,
-                         group_variable = dat$species)
+# If a CRS is not specified, none will be assigned; if one is specified,
+# it will be set using sf st_crs()
+sticks <- build_sf_sticks(
+  x = dat$x, y = dat$y, z = dat$z, rotation = 15, crs = 3338,
+  group_variable = dat$species
+)
 
 ggplot() +
   geom_sf(data = sticks, aes(color = species))
 
-#sticks are automatically scaled so that the largest abundance value
-#this can be modified with bar_scale argument
-sticks =  build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = -5, bar_scale = 2)
-sticks2 = build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = 5, bar_scale = .5)
+# sticks are automatically scaled so that the largest abundance value
+# this can be modified with bar_scale argument
+sticks <- build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = -5, bar_scale = 2)
+sticks2 <- build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = 5, bar_scale = .5)
 
 ggplot() +
- geom_sf(data = sticks)+
- geom_sf(data = sticks2)
+  geom_sf(data = sticks) +
+  geom_sf(data = sticks2)
 
 }

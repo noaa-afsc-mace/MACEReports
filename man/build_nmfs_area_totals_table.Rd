@@ -22,13 +22,13 @@ region. This table has been used in the GOA summer report.
 }
 \examples{
 \dontrun{
-#build the table and the caption
-area_totals_table_list =
+# build the table and the caption
+area_totals_table_list <-
   build_nmfs_area_totals_table(biomass_nums_length_data = current_survey_pollock_biomass_nums)
 
-#pull out the table and caption from the list
-area_totals_table = area_totals_table_list[[1]]
-area_totals_caption = area_totals_table_list[[2]]#'
+# pull out the table and caption from the list
+area_totals_table <- area_totals_table_list[[1]]
+area_totals_caption <- area_totals_table_list[[2]] #'
 }
 }
 \author{

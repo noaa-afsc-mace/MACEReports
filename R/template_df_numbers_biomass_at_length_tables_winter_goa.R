@@ -15,4 +15,3 @@
 #' }
 #' @source Template dateset was gathered using get_total_biomass_by_length.R function in winter 2022 GOA Cruise Report
 "template_df_numbers_biomass_at_length_tables_winter_goa"
-

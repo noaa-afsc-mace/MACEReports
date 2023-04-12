@@ -4,62 +4,63 @@
 #' @author Mike Levine
 #' @examples
 #' \dontrun{
-#' #build the table and the caption
-#' shelikof_historical_biomass_length_list =
-#'     build_shelikof_pre_selectivity_corrected_biomass_length_table()
+#' # build the table and the caption
+#' shelikof_historical_biomass_length_list <-
+#'   build_shelikof_pre_selectivity_corrected_biomass_length_table()
 #'
 #' # pull out the table and caption from the list
-#' shelikof_historical_biomass_length_table = shelikof_historical_biomass_length_list[[1]]
-#' shelikof_historical_biomass_length_caption = shelikof_historical_biomass_length_list[[2]]
-#'
+#' shelikof_historical_biomass_length_table <- shelikof_historical_biomass_length_list[[1]]
+#' shelikof_historical_biomass_length_caption <- shelikof_historical_biomass_length_list[[2]]
 #' }
 #' @export
-build_shelikof_pre_selectivity_corrected_biomass_length_table = function(){
+build_shelikof_pre_selectivity_corrected_biomass_length_table <- function() {
   ##############
-  #1. Biomass-at-length table
+  # 1. Biomass-at-length table
 
-  #the table data is stored in /data as as pre-formatted/canned object named:
-  #shelikof_historic_biomass_by_length_1981_to_2007.rda
+  # the table data is stored in /data as as pre-formatted/canned object named:
+  # shelikof_historic_biomass_by_length_1981_to_2007.rda
 
-  #define a border to use above and below caption and at bottom of table
-  table_border = officer::fp_border(color="black", width = 0.75)
+  # define a border to use above and below caption and at bottom of table
+  table_border <- officer::fp_border(color = "black", width = 0.75)
 
-  #make this into a flextable
-  biomass_length_table = flextable::flextable(shelikof_historic_biomass_by_length_1981_to_2007)%>%
-    #set the width of the table as 9" for landscape format
-    flextable::fit_to_width(max_width = 9)%>%
-    #align text: center justify everything
-    flextable::align(align = 'center', part = 'all')%>%
-    #get rid of padding around the cells
-    flextable::padding(padding = 0, part = "all")%>%
-    #add horizontal border on top and bottom of table
-    flextable::hline_top(part="all", border = table_border)%>%
-    flextable::hline_bottom(part="all", border = table_border)%>%
-    #set the font and font size
-    flextable::font(fontname = 'times', part = 'all')%>%
-    flextable::fontsize(size = 6, part = 'header')%>%
-    flextable::fontsize(size = 6, part = 'body')%>%
-    flextable::fontsize(size = 6, part = 'footer')%>%
-    #make sure format is consistent: no decimal, no commas
-    flextable::colformat_double(big.mark = '', digits = 0)
+  # make this into a flextable
+  biomass_length_table <- flextable::flextable(shelikof_historic_biomass_by_length_1981_to_2007) %>%
+    # set the width of the table as 9" for landscape format
+    flextable::fit_to_width(max_width = 9) %>%
+    # align text: center justify everything
+    flextable::align(align = "center", part = "all") %>%
+    # get rid of padding around the cells
+    flextable::padding(padding = 0, part = "all") %>%
+    # add horizontal border on top and bottom of table
+    flextable::hline_top(part = "all", border = table_border) %>%
+    flextable::hline_bottom(part = "all", border = table_border) %>%
+    # set the font and font size
+    flextable::font(fontname = "times", part = "all") %>%
+    flextable::fontsize(size = 6, part = "header") %>%
+    flextable::fontsize(size = 6, part = "body") %>%
+    flextable::fontsize(size = 6, part = "footer") %>%
+    # make sure format is consistent: no decimal, no commas
+    flextable::colformat_double(big.mark = "", digits = 0)
 
-   #add a line separating the totals column:
-   biomass_length_table = flextable::hline(biomass_length_table,
-                                        i = biomass_length_table$body$content$content$nrow -1, part = 'body',
-                                        border = table_border)
+  # add a line separating the totals column:
+  biomass_length_table <- flextable::hline(biomass_length_table,
+    i = biomass_length_table$body$content$content$nrow - 1, part = "body",
+    border = table_border
+  )
 
-  #build the caption:
-  #note it is hard-coded to say Shelikof Strait because that's the only region we currently make this table for
+  # build the caption:
+  # note it is hard-coded to say Shelikof Strait because that's the only region we currently make this table for
 
-  #get the years for the caption by reshaping data and getting the min and max values
-  years_for_caption = as.numeric(colnames(shelikof_historic_biomass_by_length_1981_to_2007
-                               [2:length(colnames(shelikof_historic_biomass_by_length_1981_to_2007))]))
-  #build the caption
-  cap_text = paste0('Biomass-at-length estimates (thousands of metric tons) from acoustic-trawl surveys of walleye pollock in the ',
-  'Shelikof Strait area from ', min(years_for_caption), '-',  max(years_for_caption),
-  '. Numbers reflect values that have not been corrected for for escapement of juveniles.')
+  # get the years for the caption by reshaping data and getting the min and max values
+  years_for_caption <- as.numeric(colnames(shelikof_historic_biomass_by_length_1981_to_2007
+  [2:length(colnames(shelikof_historic_biomass_by_length_1981_to_2007))]))
+  # build the caption
+  cap_text <- paste0(
+    "Biomass-at-length estimates (thousands of metric tons) from acoustic-trawl surveys of walleye pollock in the ",
+    "Shelikof Strait area from ", min(years_for_caption), "-", max(years_for_caption),
+    ". Numbers reflect values that have not been corrected for for escapement of juveniles."
+  )
 
-  #return table and caption
+  # return table and caption
   return(list(biomass_length_table, cap_text))
-
 }

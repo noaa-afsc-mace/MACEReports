@@ -28,10 +28,12 @@ Accepts a dataframe returned from the \code{build_sf_sticks} function and return
 library(ggplot2)
 library(sf)
 
-dat = data.frame('x' = c(-152.2, -150.3, -159.4),
-'y' = c(55.2, 55.8, 55.6),
-'z' = c(75000,400000, 280000),
-'species' = c('a', 'a', 'b'))
+dat <- data.frame(
+  "x" = c(-152.2, -150.3, -159.4),
+  "y" = c(55.2, 55.8, 55.6),
+  "z" = c(75000, 400000, 280000),
+  "species" = c("a", "a", "b")
+)
 sticks = build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = 15, crs = 3338)
 legend = build_stick_legend(stick_data = sticks, legend_pos = 'left', legend_color = 'black')
 ggplot()+

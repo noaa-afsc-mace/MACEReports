@@ -46,9 +46,11 @@ Accepts xyz data (for example, longitude/latitude/abundance) and returns a dataf
 }
 \examples{
 \dontrun{
-preds_vals = get_interpolated_plot_vals(x = plot_data$START_LONGITUDE,
-y = plot_data$START_LATITUDE, z = plot_data$BIOMASS,
-resolution = 2500, region = 'summer_goa', interp_type = 'universal')
+preds_vals <- get_interpolated_plot_vals(
+  x = plot_data$START_LONGITUDE,
+  y = plot_data$START_LATITUDE, z = plot_data$BIOMASS,
+  resolution = 2500, region = "summer_goa", interp_type = "universal"
+)
 }
 }
 \author{

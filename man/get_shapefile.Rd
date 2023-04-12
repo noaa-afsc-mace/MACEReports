@@ -15,9 +15,9 @@ get_shapefile(shapefile_name, crs = "EPSG:3338")
 Return layers as \code{sf} objects (shapefiles) or xyz dataframes (rasters).
 }
 \examples{
-#return Alaska land in default CRS
-ak_land = get_shapefile(shapefile_name = 'alaska_land')
+# return Alaska land in default CRS
+ak_land <- get_shapefile(shapefile_name = "alaska_land")
 
-#return Alaska land in a different CRS
-ak_land = get_shapefile(shapefile_name = 'alaska_land', crs = 'EPSG:4326')
+# return Alaska land in a different CRS
+ak_land <- get_shapefile(shapefile_name = "alaska_land", crs = "EPSG:4326")
 }

@@ -22,4 +22,4 @@
 #'   \item{region}{Survey region name (character)}
 #' }
 #' #' @source Template dateset was gathered using get_specimen_table_data.R function in Summer 2021 GOA Cruise Report
-'template_df_specimen_table_summer_goa'
+"template_df_specimen_table_summer_goa"

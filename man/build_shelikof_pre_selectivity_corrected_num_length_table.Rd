@@ -15,13 +15,12 @@ Build the historic pre-selectivity corrected era table for the Shelikof Strait s
 }
 \examples{
 \dontrun{
-#build the table and the caption
-shelikof_historical_num_length_list = build_shelikof_pre_selectivity_corrected_num_length_table()
+# build the table and the caption
+shelikof_historical_num_length_list <- build_shelikof_pre_selectivity_corrected_num_length_table()
 
 # pull out the table and caption from the list
-shelikof_historical_num_length_table = shelikof_historical_num_length_list[[1]]
-shelikof_historical_num_length_caption = shelikof_historical_num_length_list[[2]]
-
+shelikof_historical_num_length_table <- shelikof_historical_num_length_list[[1]]
+shelikof_historical_num_length_caption <- shelikof_historical_num_length_list[[2]]
 }
 }
 \author{

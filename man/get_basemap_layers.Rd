@@ -52,37 +52,44 @@ library(ggplot2)
 library(sf)
 library(MACEReports)
 
-dat = data.frame('x' = c(-152.2, -150.3, -159.4),
-'y' = c(55.2, 55.8, 55.6),
-'z' = c(7500,40000, 28000),
-'species' = c('a', 'a', 'b'))
+dat <- data.frame(
+  "x" = c(-152.2, -150.3, -159.4),
+  "y" = c(55.2, 55.8, 55.6),
+  "z" = c(7500, 40000, 28000),
+  "species" = c("a", "a", "b")
+)
 
-#create an sf dataframe
-dat = sf::st_as_sf(dat, coords = c('x', 'y'), crs = 4326)
-#convert CRS to a reasonable projection
-dat = sf::st_transform(dat, crs = 'EPSG:3338')
+# create an sf dataframe
+dat <- sf::st_as_sf(dat, coords = c("x", "y"), crs = 4326)
 
-#return the basemap as a ggplot layer
-mace_basemap = get_basemap_layers(plot_limits_data = dat)
+# convert CRS to a reasonable projection
+dat <- sf::st_transform(dat, crs = "EPSG:3338")
 
-#note that this basemap will replace the usual call to ggplot() as the start of your plot:
-mace_basemap+
- geom_sf(data = dat, aes(color = species))
+# return the basemap as a ggplot layer
+mace_basemap <- get_basemap_layers(plot_limits_data = dat)
 
-#You can add other commonly used MACE layers to the basemap
-mace_basemap = get_basemap_layers(plot_limits_data = dat, management_regions = TRUE)
+# note that this basemap will replace the usual call to ggplot() as the start of your plot:
+mace_basemap +
+  geom_sf(data = dat, aes(color = species))
+
+# You can add other commonly used MACE layers to the basemap
+mace_basemap <- get_basemap_layers(plot_limits_data = dat,
+management_regions = TRUE)
 mace_basemap
 
-mace_basemap = get_basemap_layers(plot_limits_data = dat, alaska_3nmi_buffer = TRUE)
+mace_basemap <- get_basemap_layers(plot_limits_data = dat,
+alaska_3nmi_buffer = TRUE)
 mace_basemap
 
-mace_basemap = get_basemap_layers(plot_limits_data = dat, SSL_critical_habitat = TRUE)
+mace_basemap <- get_basemap_layers(plot_limits_data = dat,
+SSL_critical_habitat = TRUE)
 mace_basemap
 
-mace_basemap = get_basemap_layers(plot_limits_data = dat, bathy = FALSE, contours = c(200, 100, 50))
+mace_basemap <- get_basemap_layers(plot_limits_data = dat,
+bathy = FALSE,
+contours = c(200, 100, 50))
 mace_basemap
 }
-
 }
 \author{
 Mike Levine

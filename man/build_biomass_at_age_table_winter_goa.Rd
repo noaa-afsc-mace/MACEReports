@@ -28,14 +28,15 @@ to the nomimal age 1- age 18 range.
 }
 \examples{
 \dontrun{
-#build the table and the caption
-biomass_age_table_list = build_numbers_at_age_table_winter_goa(
- biomass_nums_age_data = shelikof_sel_corr_surveys_biomass_nums_age,
- region_name = "Shelikof Strait")
+# build the table and the caption
+biomass_age_table_list <- build_numbers_at_age_table_winter_goa(
+  biomass_nums_age_data = shelikof_sel_corr_surveys_biomass_nums_age,
+  region_name = "Shelikof Strait"
+)
 
-#pull out the table and caption from the list
-biomass_age_table = biomass_age_table_list[[1]]
-biomass_age_caption = biomass_age_table_list[[2]]
+# pull out the table and caption from the list
+biomass_age_table <- biomass_age_table_list[[1]]
+biomass_age_caption <- biomass_age_table_list[[2]]
 }
 }
 \author{

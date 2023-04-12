@@ -77,6 +77,43 @@ the <a href="https://r-spatial.github.io/classInt/reference/classIntervals.html"
     <p>Mike Levine</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Get some interpolated plot values</span></span></span>
+<span class="r-in"><span><span class="va">shelikof_xyz</span> <span class="op">&lt;-</span> <span class="va">shelikof_biomass</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">==</span> <span class="fl">2021</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">INTERVAL</span>, <span class="va">START_LATITUDE</span>, <span class="va">START_LONGITUDE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">summarize</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    BIOMASS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">BIOMASS</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    BIOMASS_NM2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">BIOMASS_NM2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">interp_vals_2021</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_interpolated_plot_vals.html">get_interpolated_plot_vals</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">shelikof_xyz</span><span class="op">$</span><span class="va">START_LONGITUDE</span>,</span></span>
+<span class="r-in"><span>y <span class="op">=</span> <span class="va">shelikof_xyz</span><span class="op">$</span><span class="va">START_LATITUDE</span>,</span></span>
+<span class="r-in"><span>z <span class="op">=</span> <span class="va">shelikof_xyz</span><span class="op">$</span><span class="va">BIOMASS</span>,</span></span>
+<span class="r-in"><span>resolution <span class="op">=</span> <span class="fl">1000</span>,</span></span>
+<span class="r-in"><span>region <span class="op">=</span> <span class="st">"shelikof"</span>,</span></span>
+<span class="r-in"><span>interp_type <span class="op">=</span> <span class="st">"universal"</span>,</span></span>
+<span class="r-in"><span>neighborhood <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create an sf object we can use to define the basemap extent</span></span></span>
+<span class="r-in"><span><span class="va">extent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">interp_vals_2021</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"EPSG:3338"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># # Return a simple basemap with contours as the bathymetery seems too busy with interpolated maps</span></span></span>
+<span class="r-in"><span><span class="va">basemap</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_basemap_layers.html">get_basemap_layers</a></span><span class="op">(</span>plot_limits_data <span class="op">=</span> <span class="va">extent</span>,</span></span>
+<span class="r-in"><span>bathy <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>contours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get the interpolated values: at a minimum, provide Z values</span></span></span>
+<span class="r-in"><span><span class="va">interp_vals_2021</span><span class="op">$</span><span class="va">plot_col</span> <span class="op">&lt;-</span> <span class="fu">get_interpolated_color_bins</span><span class="op">(</span>z <span class="op">=</span> <span class="va">interp_vals_2021</span><span class="op">$</span><span class="va">z</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">basemap</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interp_vals_2021</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, fill <span class="op">=</span> <span class="va">plot_col</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"magma"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

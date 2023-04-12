@@ -21,11 +21,13 @@ An internal function to check the inputs to build_sf_sticks and stop if there ar
 }
 \examples{
 \dontrun{
- dat = data.frame('x' = c(-152.2, -150.3, -159.4),
-'y' = c(55.2, 55.8, 55.6),
-'z' = c(75000,400000, 280000))
+dat <- data.frame(
+  "x" = c(-152.2, -150.3, -159.4),
+  "y" = c(55.2, 55.8, 55.6),
+  "z" = c(75000, 400000, 280000)
+)
 
-stick_inputs(x, y ,z)
+stick_inputs(x, y, z)
 }
 }
 \keyword{internal}

@@ -23,12 +23,13 @@ and will do so for each report number (i.e. survey region) that was defined for 
 }
 \examples{
 \dontrun{
-#build the table and caption
-numbers_at_age_table_list =
- build_numbers_at_age_table_summer_goa
- (biomass_nums_age_data = current_survey_pollock_biomass_nums_age)
-numbers_at_age_table =  numbers_at_age_table_list[[1]]
-numbers_at_age_caption = numbers_at_age_table_list[[2]]
+# build the table and caption
+numbers_at_age_table_list <-
+  build_numbers_at_age_table_summer_goa
+(biomass_nums_age_data <- current_survey_pollock_biomass_nums_age)
+#
+numbers_at_age_table <- numbers_at_age_table_list[[1]]
+numbers_at_age_caption <- numbers_at_age_table_list[[2]]
 }
 }
 \author{

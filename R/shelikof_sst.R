@@ -6,4 +6,4 @@
 #'   \item{MEASUREMENT_VALUE}{Sea surface temperature (degrees C; numeric)}
 #' }
 #' #' @source Historic MACE reported values
-'shelikof_sst'
+"shelikof_sst"

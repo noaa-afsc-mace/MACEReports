@@ -4,7 +4,7 @@
 #' @keywords internal
 #' @param x a factor with levels at which breaks will be specified
 #' @export
-break_position =  function(x){
+break_position <- function(x) {
   z <- data.table::rleidv(x)
   c(z[-length(z)] != z[-1], FALSE)
 }

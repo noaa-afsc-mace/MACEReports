@@ -11,42 +11,33 @@
 #' @author Mike Levine
 #'
 #' @export
-check_input_df = function(template_df, input_df){
+check_input_df <- function(template_df, input_df) {
+  # get the name of the input df
+  df_name <- deparse(substitute(input_df))
 
-  #get the name of the input df
-  df_name = deparse(substitute(input_df))
+  # check that all columns are present
+  if (!all(colnames(template_df) %in% colnames(input_df))) {
+    # report what's missing:
+    missing_cols <- colnames(template_df)[which(!colnames(template_df) %in% colnames(input_df))]
 
-  #check that all columns are present
-  if (!all(colnames(template_df) %in% colnames(input_df))){
-
-    #report what's missing:
-    missing_cols = colnames(template_df)[which(!colnames(template_df) %in% colnames(input_df))]
-
-    stop(paste0('\n', df_name, ' is missing ', missing_cols, ' column'))
-
+    stop(paste0("\n", df_name, " is missing ", missing_cols, " column"))
   }
 
-  #if all columns are present, check that all data types are correct
-  if (all(colnames(template_df) %in% colnames(input_df))){
+  # if all columns are present, check that all data types are correct
+  if (all(colnames(template_df) %in% colnames(input_df))) {
+    wrong_data_type <- c()
+    correct_data_type <- c()
+    for (i in 1:ncol(template_df)) {
+      check_class <- class(input_df[colnames(template_df)[i]][[1]])
 
-    wrong_data_type = c()
-    correct_data_type = c()
-    for (i in 1:ncol(template_df)){
-
-      check_class = class(input_df[colnames(template_df)[i]][[1]])
-
-      if(!all(check_class == class(template_df[i][[1]]))){
-
-        wrong_data_type = rbind(wrong_data_type, colnames(input_df[colnames(template_df)[i]]))
-        correct_data_type = rbind(correct_data_type,  class(template_df[i][[1]]))
+      if (!all(check_class == class(template_df[i][[1]]))) {
+        wrong_data_type <- rbind(wrong_data_type, colnames(input_df[colnames(template_df)[i]]))
+        correct_data_type <- rbind(correct_data_type, class(template_df[i][[1]]))
       }
-
     }
 
-    if (!is.null(wrong_data_type)){
-
-      stop(paste0('\nWrong data type in ', df_name, ': ', wrong_data_type, '. Values should be: ', correct_data_type))
-
+    if (!is.null(wrong_data_type)) {
+      stop(paste0("\nWrong data type in ", df_name, ": ", wrong_data_type, ". Values should be: ", correct_data_type))
     }
   }
 }

@@ -77,13 +77,15 @@ If not specified, all hauls in the survey will be reported in the table.#'</p></
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="co">#build the table and caption</span></span></span>
-<span class="r-in"><span><span class="va">specimen_table_list</span> <span class="op">=</span> <span class="fu">build_specimen_table_summer_goa</span><span class="op">(</span>specimen_data <span class="op">=</span> <span class="va">specimen_table_data</span>,</span></span>
-<span class="r-in"><span>                                                      scaling_hauls_list <span class="op">=</span> <span class="va">scaling_hauls</span><span class="op">$</span><span class="va">EVENT_ID</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># build the table and caption</span></span></span>
+<span class="r-in"><span><span class="va">specimen_table_list</span> <span class="op">&lt;-</span> <span class="fu">build_specimen_table_summer_goa</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  specimen_data <span class="op">=</span> <span class="va">specimen_table_data</span>,</span></span>
+<span class="r-in"><span>  scaling_hauls_list <span class="op">=</span> <span class="va">scaling_hauls</span><span class="op">$</span><span class="va">EVENT_ID</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#unpack tables and captions</span></span></span>
-<span class="r-in"><span><span class="va">specimen_table</span> <span class="op">=</span> <span class="va">specimen_table_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">specimen_caption</span> <span class="op">=</span> <span class="va">specimen_table_list</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="co"># unpack tables and captions</span></span></span>
+<span class="r-in"><span><span class="va">specimen_table</span> <span class="op">&lt;-</span> <span class="va">specimen_table_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">specimen_caption</span> <span class="op">&lt;-</span> <span class="va">specimen_table_list</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

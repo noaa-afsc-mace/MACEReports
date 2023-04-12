@@ -25,14 +25,14 @@ to the nomimal 10 cm- 70 cm range.
 }
 \examples{
 \dontrun{
-#build the table and caption
-biomass_table_list =
-build_biomass_at_length_table_summer_goa
-(biomass_nums_length_data = current_survey_pollock_biomass_nums)
+# build the table and caption
+biomass_table_list <-
+  build_biomass_at_length_table_summer_goa
+(biomass_nums_length_data <- current_survey_pollock_biomass_nums)
 
-#pull out table and caption from the list
-biomass_table =  biomass_table_list[[1]]
-biomass_caption = biomass_table_list[[2]]
+# pull out table and caption from the list
+biomass_table <- biomass_table_list[[1]]
+biomass_caption <- biomass_table_list[[2]]
 }
 }
 \author{

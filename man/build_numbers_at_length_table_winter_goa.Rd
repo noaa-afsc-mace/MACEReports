@@ -28,13 +28,15 @@ to the nomimal 5 cm- 76 cm range.
 }
 \examples{
 \dontrun{
-#build the table and the caption
-nums_table_list = build_numbers_at_length_table_winter_goa(
- biomass_nums_length_data = shelikof_sel_corr_surveys_totals_by_length_and_region,
- region_name = "Shelikof Strait")
-#pull out the table and caption from the list
-nums_length_table = nums_table_list[[1]]
-nums_length_caption = nums_table_list[[2]]
+# build the table and the caption
+nums_table_list <- build_numbers_at_length_table_winter_goa(
+  biomass_nums_length_data = shelikof_sel_corr_surveys_totals_by_length_and_region,
+  region_name = "Shelikof Strait"
+)
+
+# pull out the table and caption from the list
+nums_length_table <- nums_table_list[[1]]
+nums_length_caption <- nums_table_list[[2]]
 }
 }
 \author{

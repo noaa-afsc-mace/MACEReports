@@ -11,8 +11,8 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width=8, 
-  fig.height=8
+  fig.width = 8,
+  fig.height = 8
 )
 ```
 
@@ -25,25 +25,25 @@ MACEReports provides a bunch of functions intended to handle mapping for cruise 
 In general, each function is intended to use data that we can readily query out of the database, and not require a ton of work to prepare and map it. You should only need to gather Latitude/Longitude (decimal degrees) and an abundance value (biomass, numbers, etc) in most cases. A dataframe like that provided here as an example:
 
 ```{r setup, echo=TRUE, message = FALSE, warning=FALSE}
-#Load some packages
+# Load some packages
 library(ggplot2)
 library(dplyr)
 library(MACEReports)
 library(sf)
-
 ```
 
 
 ```{r example_df, echo = TRUE, message = FALSE, warning=FALSE} 
-#get a simple dataset to work from: biomass_nmi2 from a single survey
-shelikof_xyz = shelikof_biomass%>%
-  filter(year == 2021)%>%
-  group_by(INTERVAL, START_LATITUDE, START_LONGITUDE)%>%
-  summarize(BIOMASS = sum(BIOMASS),
-            BIOMASS_NM2 = sum(BIOMASS_NM2))
-  
-knitr::kable(head(shelikof_xyz))
+# get a simple dataset to work from: biomass_nmi2 from a single survey
+shelikof_xyz <- shelikof_biomass %>%
+  filter(year == 2021) %>%
+  group_by(INTERVAL, START_LATITUDE, START_LONGITUDE) %>%
+  summarize(
+    BIOMASS = sum(BIOMASS),
+    BIOMASS_NM2 = sum(BIOMASS_NM2)
+  )
 
+knitr::kable(head(shelikof_xyz))
 ```
 
 provides all the values you'll need for most functions (well, technically, more: you don't need the INTERVAL index). Note that this dataframe has all intervals in the Shelkof present, including those that have no pollock (i.e. BIOMASS = 0). This is intentional- you'll want these if you interpolate values later.
@@ -61,23 +61,20 @@ The functions that create sticks and interpolated plots return data in forms tha
 To make a stickplot, you'll need: x,y, and an abundance value (z). The function `build_sf_sticks` will return your sticks as a `sf` (simple features) dataframe. `sf` dataframes can be plotted easily using `ggplot2`, or base r `plot`.
 
 ```{r stick_demo_1, echo=TRUE, message = FALSE, warning=FALSE}
-sticks = build_sf_sticks(x = shelikof_xyz$START_LONGITUDE, y = shelikof_xyz$START_LATITUDE, z = shelikof_xyz$BIOMASS_NM2)
-
+sticks <- build_sf_sticks(x = shelikof_xyz$START_LONGITUDE, y = shelikof_xyz$START_LATITUDE, z = shelikof_xyz$BIOMASS_NM2)
 ```
 
 By default, you'll get a bar that is rotated at 5 degrees from vertical, and is scaled to work in most plots. These can be specified differently using the arguments `rotation` and `bar_scale` (see `?build_sf_sticks` for details) Plotting your sticks is easy with `ggplot2::geom_sf()`:
 
 ```{r stick_demo_2, echo=TRUE, message = FALSE, warning=FALSE}
-ggplot(sticks)+
+ggplot(sticks) +
   geom_sf()
-
 ```
 
 There is a related function to produce a legend to go with your sticks, `build_stick_legend`:
 
 ```{r stick_demo_3, echo=TRUE, message = FALSE, warning=FALSE}
-stick_legend = build_stick_legend(stick_data = sticks)
-
+stick_legend <- build_stick_legend(stick_data = sticks)
 ```
 
 By default, it produces a white legend to be placed in the bottom right corner of the plot, with the proper units for our standard plots of biomss/nmi-2; all of these defaults can be modified as needed (see `?build_stick_legend`). This legend can then be added to you plot (see below).
@@ -89,18 +86,16 @@ Of course, what we have so far isn't a great way to look at your data! We need a
 If you just want a basic map, you can simply feed the sticks dataframe you just created to the function `get_basemap_layers`. 
 
 ```{r basic_basemap, echo = TRUE, message = FALSE, warning=FALSE}
-basemap = get_basemap_layers(plot_limits_data = sticks)
-
+basemap <- get_basemap_layers(plot_limits_data = sticks)
 ```
 
 This will produce land and bathymetric layers that encompass your data. It returns a `ggplot` object. If you find yourself wanting to access these layers without using `ggplot` plotting- complain, and we'll add this functionality.
 
 ```{r basic_sticks, echo = TRUE, message = FALSE, warning=FALSE}
-#plot it all: the basemap, the sticks, and the legend:
-basemap+
-  geom_sf(data = sticks, color = 'red')+
+# plot it all: the basemap, the sticks, and the legend:
+basemap +
+  geom_sf(data = sticks, color = "red") +
   stick_legend
-
 ```
 
 ## More stickplot options
@@ -108,28 +103,29 @@ basemap+
 We often present stickplots with multiple groups (say, small fish and big fish) as separate sticks. This can be done with `build_sf_sticks':
 
 ```{r multiple_groups_sticks, echo=TRUE, message = FALSE, warning=FALSE}
-#summarize the data by fish >=30 cm, <30 cm
-shelikof_by_size = shelikof_biomass%>%
-  filter(year == 2021)%>%
-  mutate(size_class = ifelse (LENGTH >= 30, 'big', 'small'))%>%
-  group_by(INTERVAL, size_class, START_LATITUDE, START_LONGITUDE)%>%
-  summarize(BIOMASS = sum(BIOMASS),
-            BIOMASS_NM2 = sum(BIOMASS_NM2))%>%
-  #cleanup: because we included intervals with zero pollock, the size class will be NA in those cases. 
-  #remove those from this plot!
+# summarize the data by fish >=30 cm, <30 cm
+shelikof_by_size <- shelikof_biomass %>%
+  filter(year == 2021) %>%
+  mutate(size_class = ifelse(LENGTH >= 30, "big", "small")) %>%
+  group_by(INTERVAL, size_class, START_LATITUDE, START_LONGITUDE) %>%
+  summarize(
+    BIOMASS = sum(BIOMASS),
+    BIOMASS_NM2 = sum(BIOMASS_NM2)
+  ) %>%
+  # cleanup: because we included intervals with zero pollock, the size class will be NA in those cases.
+  # remove those from this plot!
   filter(!is.na(size_class))
 
-#use the 'group_variable' argument in build_sf_sticks to build sticks for each group:
-sticks_by_size = build_sf_sticks(x = shelikof_by_size$START_LONGITUDE, y = shelikof_by_size$START_LATITUDE, z = shelikof_by_size$BIOMASS_NM2, group_variable = shelikof_by_size$size_class)
+# use the 'group_variable' argument in build_sf_sticks to build sticks for each group:
+sticks_by_size <- build_sf_sticks(x = shelikof_by_size$START_LONGITUDE, y = shelikof_by_size$START_LATITUDE, z = shelikof_by_size$BIOMASS_NM2, group_variable = shelikof_by_size$size_class)
 
-#plot everything again:
-basemap = get_basemap_layers(plot_limits_data = sticks_by_size)
-stick_legend = build_stick_legend(stick_data = sticks_by_size)
+# plot everything again:
+basemap <- get_basemap_layers(plot_limits_data = sticks_by_size)
+stick_legend <- build_stick_legend(stick_data = sticks_by_size)
 
-basemap+
-  geom_sf(data = sticks_by_size, aes(color = size_class))+
+basemap +
+  geom_sf(data = sticks_by_size, aes(color = size_class)) +
   stick_legend
-  
 ```
 
 
@@ -138,30 +134,27 @@ basemap+
 The bathymetry layer is nice for some plots, but inappropriate in others. Want to keep it simple? Specify what contours you'd like to draw. Your options are: 50, 100, 200, 300, 500, 700, 1000 (values are in M).
 
 ```{r basemap_options_1, echo=TRUE, message = FALSE, warning=FALSE}
-basemap = get_basemap_layers(plot_limits_data = sticks_by_size, bathy = FALSE, contours = c(100,200, 1000))
+basemap <- get_basemap_layers(plot_limits_data = sticks_by_size, bathy = FALSE, contours = c(100, 200, 1000))
 
-#view the plot
+# view the plot
 basemap
-
 ```
 
 You might also want to include a commonly used layer, such as the NMFS management area or the 3nmi buffer around land areas. Great. See `?get_basemap_layers` for all the current options, but here's how you'd add those ones:
 
 ```{r basemap_options_2, echo=TRUE, message = FALSE, warning=FALSE}
-basemap = get_basemap_layers(plot_limits_data = sticks_by_size, management_regions = TRUE, alaska_3nmi_buffer = TRUE)
+basemap <- get_basemap_layers(plot_limits_data = sticks_by_size, management_regions = TRUE, alaska_3nmi_buffer = TRUE)
 
-#view the plot
+# view the plot
 basemap
-
 ```
 
 Since the basemap is just a `ggplot` object, you can add anything you might want to it, change the themes, etc.
 
 ```{r basemap_options_3, echo=TRUE, message = FALSE, warning=FALSE}
-basemap+
-  labs(title = 'Shelikof')+
+basemap +
+  labs(title = "Shelikof") +
   theme(panel.border = element_blank())
-
 ```
 
 
@@ -170,41 +163,40 @@ basemap+
 We often present an overview figure that identifies all the areas you speak about in some text. MACEReports provides a list of 900 + Alaska area labels, sourced from the [NOAA Office of Coast Survey](https://encdirect.noaa.gov/). Want more? Request them! You can view them all alphabetically:
 
 ```{r all_labels, echo=TRUE, message = FALSE, warning=FALSE}
-all_labels = available_labels()
+all_labels <- available_labels()
 
-#look at the first few
+# look at the first few
 knitr::kable(head(all_labels))
-
 ```
 
 Of course, you probably don't want 900 labels on your plot. `get_area_labels` can be used to return a subset of area labels appropriate to your plot. Like the basemaps generated with `get_basemap_layers`, you'll need an existing `sf` spatial dataframe to specify the limits of your plot. `get_area_labels` will then return labels within this extent.
 
 ```{r limited_labels_1, echo=TRUE, message = FALSE, warning=FALSE}
-#generate an sf object for limits- here, we'll use the sticks object for convenience
-sticks = build_sf_sticks(x = shelikof_xyz$START_LONGITUDE, y = shelikof_xyz$START_LATITUDE, z = shelikof_xyz$BIOMASS_NM2)
+# generate an sf object for limits- here, we'll use the sticks object for convenience
+sticks <- build_sf_sticks(x = shelikof_xyz$START_LONGITUDE, y = shelikof_xyz$START_LATITUDE, z = shelikof_xyz$BIOMASS_NM2)
 
-#use this to return all the labels in this extent
-all_labels_in_extent = get_area_labels(plot_limits_data = sticks)
-
+# use this to return all the labels in this extent
+all_labels_in_extent <- get_area_labels(plot_limits_data = sticks)
 ```
 
 In this case, you'd still have 135 labels on your plot. It is more practical to only label the places you talk about in the text. So, go get all those lined up and add them to a list. We can use this list in combination with `get_area_labels` to return only the labels you care about. You can then plot these labels using `ggplot2::geom_sf_label`, `ggplot2::geom_sf_text`, or your choice of other `sf` plotting methods. 
 
 ```{r limited_labels_2, echo=TRUE, message = FALSE, warning=FALSE}
-#get a list of labels you refer to in the text
-goa_labels_to_get = c('Shumagin Islands', 'Alaska Peninsula', 'Shelikof Strait',
-                      'Kodiak Island', 'Korovin Island',
-                      'Cape Igvak')
+# get a list of labels you refer to in the text
+goa_labels_to_get <- c(
+  "Shumagin Islands", "Alaska Peninsula", "Shelikof Strait",
+  "Kodiak Island", "Korovin Island",
+  "Cape Igvak"
+)
 
-#use this to return only the labels that are both on the list AND within the plot extent
-plot_labels = get_area_labels(plot_limits_data = sticks, area_labels_list = goa_labels_to_get)
+# use this to return only the labels that are both on the list AND within the plot extent
+plot_labels <- get_area_labels(plot_limits_data = sticks, area_labels_list = goa_labels_to_get)
 
-#add these to a basemap
-basemap = get_basemap_layers(plot_limits_data = sticks, bathy = FALSE, contours = c(100, 200, 1000))
+# add these to a basemap
+basemap <- get_basemap_layers(plot_limits_data = sticks, bathy = FALSE, contours = c(100, 200, 1000))
 
-basemap+
+basemap +
   geom_sf_label(data = plot_labels, aes(label = area_name), alpha = 0.8)
-
 ```
 
 ## Interpolations
@@ -228,11 +220,10 @@ Creating interpolations requires you to make a few more choices as compared to c
 Using a local neighborhood (i.e. the number of nearest observations to use in estimation) speeds things up GREATLY and seems to capture the same trends as estimating without this limitation. Testing suggests that the best compromise between speed and a helpful presentation of abundance and distribution is to use universal kriging with a local neighborhood of 200 observations:
 
 ```{r interpolations_1, echo=TRUE, message = FALSE, warning=FALSE}
-interp_vals_2021 = get_interpolated_plot_vals(x = shelikof_xyz$START_LONGITUDE, y = shelikof_xyz$START_LATITUDE, z = shelikof_xyz$BIOMASS, resolution = 1000, region = 'shelikof', interp_type = 'universal', neighborhood = 200)
+interp_vals_2021 <- get_interpolated_plot_vals(x = shelikof_xyz$START_LONGITUDE, y = shelikof_xyz$START_LATITUDE, z = shelikof_xyz$BIOMASS, resolution = 1000, region = "shelikof", interp_type = "universal", neighborhood = 200)
 
-#return a small table
+# return a small table
 knitr::kable(head(interp_vals_2021), row.names = FALSE)
-
 ```
 
 Note that this function simply returns a dataframe with the columns 'x', 'y', and 'z'. x and y correspond to the positions of your interpolated values; z corresponds to the estimated value. By default, x and y are coordinates in Albers Equal Area projection (but this can be changed with the `out_crs` argument to `get_interpolated_plot_vals`), while z is the estimated abundance value (the default is in log10-transformed units, as these highlight abundance and distribution well in our data; linear values are also an option and using this is demonstrated with water temperature data below).
@@ -240,42 +231,36 @@ Note that this function simply returns a dataframe with the columns 'x', 'y', an
 The x and y points form a grid; therefore, each represents a box of equal size and can be plotted as a raster.
 
 ```{r interpolations_2, echo=TRUE, message = FALSE, warning=FALSE}
-
-ggplot()+
+ggplot() +
   geom_raster(data = interp_vals_2021, aes(x = x, y = y, fill = z))
-
 ```
 
 Of course, a basemap and a useful color scheme would really help here. Making a basemap requires one additional step, in comparison to the above examples with stickplots: because of current limitations in how some of these functions are written, you must provide an `sf` object to the `get_basemap_layers` function:
 
 ```{r interpolations_3, echo=TRUE, message = FALSE, warning=FALSE}
-#create an sf object we can use to define the basemap extent
-extent = st_as_sf(interp_vals_2021, coords = c('x', 'y'), crs = 'EPSG:3338')
+# create an sf object we can use to define the basemap extent
+extent <- st_as_sf(interp_vals_2021, coords = c("x", "y"), crs = "EPSG:3338")
 
-#use this to return the basemap; return a simple basemap with contours as the bathymetery seems too busy with interpolated maps
-basemap = get_basemap_layers(plot_limits_data = extent, bathy = FALSE, contours = c(100,200,1000))
-
+# use this to return the basemap; return a simple basemap with contours as the bathymetery seems too busy with interpolated maps
+basemap <- get_basemap_layers(plot_limits_data = extent, bathy = FALSE, contours = c(100, 200, 1000))
 ```
 
 Once you've got a basemap, you can add your raster (here, with a slightly upgraded color scheme):
 
 ```{r interpolations_4, echo=TRUE, message = FALSE, warning=FALSE}
-
-basemap+
-  geom_raster(data = interp_vals_2021, aes(x = x, y = y, fill = z))+
-  scale_fill_viridis_c(option = 'magma')
-
+basemap +
+  geom_raster(data = interp_vals_2021, aes(x = x, y = y, fill = z)) +
+  scale_fill_viridis_c(option = "magma")
 ```
 
 There is an additional function `get_interpolated_color_bins` to bin colors and make trends easier to see. At a minimum, you have to specify the z value:
 
 ```{r interpolations_5, echo=TRUE, message = FALSE, warning=FALSE}
-interp_vals_2021$plot_col = get_interpolated_color_bins(z = interp_vals_2021$z)
+interp_vals_2021$plot_col <- get_interpolated_color_bins(z = interp_vals_2021$z)
 
-basemap+
-  geom_raster(data = interp_vals_2021, aes(x = x, y = y, fill = plot_col))+
-  scale_fill_viridis_d(option = 'magma')
-
+basemap +
+  geom_raster(data = interp_vals_2021, aes(x = x, y = y, fill = plot_col)) +
+  scale_fill_viridis_d(option = "magma")
 ```
 
 By default, this returns log10-sized bins; this can be modified using the `style` argument to `get_interpolated_color_bins`. See `?get_interpolated_color_bins` for options, but `kmeans` tends to work well.
@@ -283,70 +268,63 @@ By default, this returns log10-sized bins; this can be modified using the `style
 If you want to interpolate and compare over multiple years, things get a bit more complex. The approach outlined above- which uses a local neighborhood to speed up plotting- isn't as great when comparing across years. This is because we constrain the extrapolations to areas with nearby samples when using a local neighborhood. If your sample grid changes between years, the area of your extrapolation will also change. This can be avoided by not using a local neighborhood. It slows things down, but makes datasets more easily comparable.
 
 ```{r compare_multiple_years, echo=TRUE, message = FALSE, warning=FALSE}
-#summarize example data: biomass per interval, per year
-shelikof_by_year = shelikof_biomass%>%
-  group_by(year, INTERVAL, START_LATITUDE, START_LONGITUDE)%>%
+# summarize example data: biomass per interval, per year
+shelikof_by_year <- shelikof_biomass %>%
+  group_by(year, INTERVAL, START_LATITUDE, START_LONGITUDE) %>%
   summarize(BIOMASS = sum(BIOMASS))
 
-#loop through each year to return each year's values:
-interp_by_year =c()
-for (i in unique(shelikof_by_year$year)){
-  
-  #limit your dataset to one year
-  tmp_data = shelikof_by_year[shelikof_by_year$year == i,]
-  
-  #get the interpolations for this year: note that no neighborhood is applied
-  interp_vals = get_interpolated_plot_vals(x = tmp_data$START_LONGITUDE, y = tmp_data$START_LATITUDE, z = tmp_data$BIOMASS, resolution = 1000, region = 'shelikof', interp_type = 'universal')
-  
-  #add a year index
-  interp_vals$year = i
-  
-  #and compile
-  interp_by_year = rbind(interp_by_year, interp_vals)
-  
+# loop through each year to return each year's values:
+interp_by_year <- c()
+for (i in unique(shelikof_by_year$year)) {
+  # limit your dataset to one year
+  tmp_data <- shelikof_by_year[shelikof_by_year$year == i, ]
+
+  # get the interpolations for this year: note that no neighborhood is applied
+  interp_vals <- get_interpolated_plot_vals(x = tmp_data$START_LONGITUDE, y = tmp_data$START_LATITUDE, z = tmp_data$BIOMASS, resolution = 1000, region = "shelikof", interp_type = "universal")
+
+  # add a year index
+  interp_vals$year <- i
+
+  # and compile
+  interp_by_year <- rbind(interp_by_year, interp_vals)
 }
 
-#create an sf object we can use to define the basemap extent
-extent = st_as_sf(interp_by_year, coords = c('x', 'y'), crs = 'EPSG:3338')
+# create an sf object we can use to define the basemap extent
+extent <- st_as_sf(interp_by_year, coords = c("x", "y"), crs = "EPSG:3338")
 
-#use this to return the basemap; return a simple basemap with contours as the bathymetery seems too busy with interpolated maps
-basemap = get_basemap_layers(plot_limits_data = extent, bathy = FALSE, contours = c(100,200,1000))
+# use this to return the basemap; return a simple basemap with contours as the bathymetery seems too busy with interpolated maps
+basemap <- get_basemap_layers(plot_limits_data = extent, bathy = FALSE, contours = c(100, 200, 1000))
 
-#bin colors to highlight patterns
-interp_by_year$plot_col = get_interpolated_color_bins(z = interp_by_year$z)
+# bin colors to highlight patterns
+interp_by_year$plot_col <- get_interpolated_color_bins(z = interp_by_year$z)
 
-#use ggplot to plot, facet plots by year
-basemap+
-  geom_raster(data = interp_by_year, aes(x = x, y = y, fill = plot_col))+
-  scale_fill_viridis_d(option = 'magma')+
-  facet_wrap(~year, ncol = 2)+
-  labs(fill = 'Biomass (kg)')+
-  theme(legend.position = 'bottom')
-
-
-
+# use ggplot to plot, facet plots by year
+basemap +
+  geom_raster(data = interp_by_year, aes(x = x, y = y, fill = plot_col)) +
+  scale_fill_viridis_d(option = "magma") +
+  facet_wrap(~year, ncol = 2) +
+  labs(fill = "Biomass (kg)") +
+  theme(legend.position = "bottom")
 ```
 **Water temperatures and interpolations**
 
 If you want to interpolate water temperature values instead of fish abundance values, there are some modifications to make a more logical interpolation. Namely, you'll probably want to interpolate values in the linear domain (as opposed to the default interpolations which work with log10-transformed values). Linear interpolations are possible using simple kriging and inverse-distance weighting in MACEReports. In this example, sea surface temperatures collected during a Shelikof winter survey are used to create an interpolated map using simple kriging:
 
 ```{r temp_interpolations, echo=TRUE, message = FALSE, warning=FALSE}
-#get interpolated sea surface temperatures using simple kriging of linear values:
-interp_temps = get_interpolated_plot_vals(x = shelikof_sst$LONGITUDE, y = shelikof_sst$LATITUDE, z = shelikof_sst$MEASUREMENT_VALUE, resolution = 1000, region = 'shelikof', interp_type = 'simple', interp_scale = 'linear', neighborhood = 200)
+# get interpolated sea surface temperatures using simple kriging of linear values:
+interp_temps <- get_interpolated_plot_vals(x = shelikof_sst$LONGITUDE, y = shelikof_sst$LATITUDE, z = shelikof_sst$MEASUREMENT_VALUE, resolution = 1000, region = "shelikof", interp_type = "simple", interp_scale = "linear", neighborhood = 200)
 
-#create an sf object we can use to define the basemap extent
-extent = st_as_sf(interp_temps, coords = c('x', 'y'), crs = 'EPSG:3338')
+# create an sf object we can use to define the basemap extent
+extent <- st_as_sf(interp_temps, coords = c("x", "y"), crs = "EPSG:3338")
 
-#use this to return the basemap; return a simple basemap with contours as the bathymetery seems too busy with interpolated maps
-basemap = get_basemap_layers(plot_limits_data = extent, bathy = FALSE, contours = c(100,200,1000))
+# use this to return the basemap; return a simple basemap with contours as the bathymetery seems too busy with interpolated maps
+basemap <- get_basemap_layers(plot_limits_data = extent, bathy = FALSE, contours = c(100, 200, 1000))
 
-#use ggplot to plot
-basemap+
-  geom_raster(data = interp_temps, aes(x = x, y = y, fill = z))+
-  scale_fill_distiller(palette = 'RdYlBu', direction = -1)+
-  labs(fill = 'Temperature (C)')
-
-
+# use ggplot to plot
+basemap +
+  geom_raster(data = interp_temps, aes(x = x, y = y, fill = z)) +
+  scale_fill_distiller(palette = "RdYlBu", direction = -1) +
+  labs(fill = "Temperature (C)")
 ```
 
 

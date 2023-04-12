@@ -10,4 +10,4 @@
 #'   \item{year}{survey year (numeric)}
 #' }
 #' #' @source Historic MACE reported values
-'shelikof_biomass'
+"shelikof_biomass"

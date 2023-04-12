@@ -21,21 +21,21 @@ Produce a TS-length relationships table for use in standard MACE cruise reports.
 }
 \examples{
 \dontrun{
-#build a table for all commonly used TS relationships
-ts_table_list = build_ts_relationships_table()
+# build a table for all commonly used TS relationships
+ts_table_list <- build_ts_relationships_table()
 
-#return table and caption
-ts_table = ts_table_list[[1]]
-ts_caption = ts_table_list[[2]]
+# return table and caption
+ts_table <- ts_table_list[[1]]
+ts_caption <- ts_table_list[[2]]
 
-#limit based on the relationships used (see macebase2.ts_relationships)
-ts_relationships_list = c('standard_pollock', 'chrysaora_melanaster', 'euphausiids_15_65mm_38khz')
+# limit based on the relationships used (see macebase2.ts_relationships)
+ts_relationships_list <- c("standard_pollock", "chrysaora_melanaster", "euphausiids_15_65mm_38khz")
 
-ts_table_list = build_ts_relationships_table(ts_relationships_used = ts_relationships_list)
+ts_table_list <- build_ts_relationships_table(ts_relationships_used = ts_relationships_list)
 
-#return table and caption
-ts_table = ts_table_list[[1]]
-ts_caption = ts_table_list[[2]]
+# return table and caption
+ts_table <- ts_table_list[[1]]
+ts_caption <- ts_table_list[[2]]
 }
 
 }

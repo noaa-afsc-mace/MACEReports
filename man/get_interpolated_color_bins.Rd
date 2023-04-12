@@ -19,6 +19,41 @@ get_interpolated_color_bins(z, n_bins = 9, style = "log10", nice_labels = TRUE)
 Return binned abundance data for plotting interpolated values with greater contrast. This is a wrapper around
 the \link[classInt:classIntervals]{classInt::classIntervals} function to make it easier to return binned color values.
 }
+\examples{
+\dontrun{
+# Get some interpolated plot values
+shelikof_xyz <- shelikof_biomass \%>\%
+  filter(year == 2021) \%>\%
+  group_by(INTERVAL, START_LATITUDE, START_LONGITUDE) \%>\%
+  summarize(
+    BIOMASS = sum(BIOMASS),
+    BIOMASS_NM2 = sum(BIOMASS_NM2)
+  )
+
+interp_vals_2021 <- get_interpolated_plot_vals(x = shelikof_xyz$START_LONGITUDE,
+y = shelikof_xyz$START_LATITUDE,
+z = shelikof_xyz$BIOMASS,
+resolution = 1000,
+region = "shelikof",
+interp_type = "universal",
+neighborhood = 200)
+
+# create an sf object we can use to define the basemap extent
+extent <- st_as_sf(interp_vals_2021, coords = c("x", "y"), crs = "EPSG:3338")
+
+# # Return a simple basemap with contours as the bathymetery seems too busy with interpolated maps
+basemap <- get_basemap_layers(plot_limits_data = extent,
+bathy = FALSE,
+contours = c(100, 200, 1000))
+
+# Get the interpolated values: at a minimum, provide Z values
+interp_vals_2021$plot_col <- get_interpolated_color_bins(z = interp_vals_2021$z)
+
+basemap +
+  geom_raster(data = interp_vals_2021, aes(x = x, y = y, fill = plot_col)) +
+  scale_fill_viridis_d(option = "magma")
+}
+}
 \author{
 Mike Levine
 }

@@ -23,12 +23,13 @@ that was defined for the analysis.
 }
 \examples{
 \dontrun{
-#build the table and caption
-biomass_at_age_table_list =
- build_biomass_at_age_table_summer_goa
- (biomass_nums_age_data = current_survey_pollock_biomass_nums_age)
-biomass_at_age_table =  biomass_at_age_table_list[[1]]
-biomass_at_age_caption = biomass_at_age_table_list[[2]]
+# build the table and caption
+biomass_at_age_table_list <-
+  build_biomass_at_age_table_summer_goa
+(biomass_nums_age_data <- current_survey_pollock_biomass_nums_age)
+#
+biomass_at_age_table <- biomass_at_age_table_list[[1]]
+biomass_at_age_caption <- biomass_at_age_table_list[[2]]
 }
 }
 \author{

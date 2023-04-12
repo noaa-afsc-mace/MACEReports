@@ -16,4 +16,3 @@
 #' }
 #' @source Template dateset was gathered using get_raw_catch_summary.R function in Summer 2021 GOA Cruise Report
 "template_df_catch_data_summer_goa"
-

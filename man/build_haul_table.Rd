@@ -20,12 +20,12 @@ Produce a haul table for use in standard MACE cruise reports.
 }
 \examples{
 \dontrun{
-#build the table and caption
-haul_table_list = build_haul_table(haul_data = shelikof_haul_data)
+# build the table and caption
+haul_table_list <- build_haul_table(haul_data = shelikof_haul_data)
 
-#pull out table and caption from the list
-haul_table = haul_table_list[[1]]
-haul_caption = haul_table_list[[2]]
+# pull out table and caption from the list
+haul_table <- haul_table_list[[1]]
+haul_caption <- haul_table_list[[2]]
 }
 
 }

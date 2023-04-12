@@ -21,13 +21,15 @@ Produce the specimen table for use in standard MACE GOA summer reports. This dif
 }
 \examples{
 \dontrun{
-#build the table and caption
-specimen_table_list = build_specimen_table_summer_goa(specimen_data = specimen_table_data,
-                                                      scaling_hauls_list = scaling_hauls$EVENT_ID)
+# build the table and caption
+specimen_table_list <- build_specimen_table_summer_goa(
+  specimen_data = specimen_table_data,
+  scaling_hauls_list = scaling_hauls$EVENT_ID
+)
 
-#unpack tables and captions
-specimen_table = specimen_table_list[[1]]
-specimen_caption = specimen_table_list[[2]]
+# unpack tables and captions
+specimen_table <- specimen_table_list[[1]]
+specimen_caption <- specimen_table_list[[2]]
 }
 }
 \author{

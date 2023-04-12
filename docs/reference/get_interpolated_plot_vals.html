@@ -116,9 +116,11 @@ z = abundance value. Note that these values are by default Log 10-transformed ab
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">preds_vals</span> <span class="op">=</span> <span class="fu">get_interpolated_plot_vals</span><span class="op">(</span>x <span class="op">=</span> <span class="va">plot_data</span><span class="op">$</span><span class="va">START_LONGITUDE</span>,</span></span>
-<span class="r-in"><span>y <span class="op">=</span> <span class="va">plot_data</span><span class="op">$</span><span class="va">START_LATITUDE</span>, z <span class="op">=</span> <span class="va">plot_data</span><span class="op">$</span><span class="va">BIOMASS</span>,</span></span>
-<span class="r-in"><span>resolution <span class="op">=</span> <span class="fl">2500</span>, region <span class="op">=</span> <span class="st">'summer_goa'</span>, interp_type <span class="op">=</span> <span class="st">'universal'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">preds_vals</span> <span class="op">&lt;-</span> <span class="fu">get_interpolated_plot_vals</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">plot_data</span><span class="op">$</span><span class="va">START_LONGITUDE</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="va">plot_data</span><span class="op">$</span><span class="va">START_LATITUDE</span>, z <span class="op">=</span> <span class="va">plot_data</span><span class="op">$</span><span class="va">BIOMASS</span>,</span></span>
+<span class="r-in"><span>  resolution <span class="op">=</span> <span class="fl">2500</span>, region <span class="op">=</span> <span class="st">"summer_goa"</span>, interp_type <span class="op">=</span> <span class="st">"universal"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

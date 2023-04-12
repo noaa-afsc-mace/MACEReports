@@ -78,13 +78,13 @@ the easiest input to the <code>build_nmfs_area_totals_table</code> function.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="co">#build the table and the caption</span></span></span>
-<span class="r-in"><span><span class="va">area_totals_table_list</span> <span class="op">=</span></span></span>
+<span class="r-in"><span><span class="co"># build the table and the caption</span></span></span>
+<span class="r-in"><span><span class="va">area_totals_table_list</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="fu">build_nmfs_area_totals_table</span><span class="op">(</span>biomass_nums_length_data <span class="op">=</span> <span class="va">current_survey_pollock_biomass_nums</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#pull out the table and caption from the list</span></span></span>
-<span class="r-in"><span><span class="va">area_totals_table</span> <span class="op">=</span> <span class="va">area_totals_table_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">area_totals_caption</span> <span class="op">=</span> <span class="va">area_totals_table_list</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="co">#'</span></span></span>
+<span class="r-in"><span><span class="co"># pull out the table and caption from the list</span></span></span>
+<span class="r-in"><span><span class="va">area_totals_table</span> <span class="op">&lt;-</span> <span class="va">area_totals_table_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">area_totals_caption</span> <span class="op">&lt;-</span> <span class="va">area_totals_table_list</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="co">#'</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

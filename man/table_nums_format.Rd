@@ -20,10 +20,9 @@ If values are <=0.01, label as '<0.01', otherwise, format the value as having a 
 \examples{
 \dontrun{
 
-values = c(1000, NA, .001)
+values <- c(1000, NA, .001)
 
- formatted_values = table_nums_format(values)
-
+formatted_values <- table_nums_format(values)
 }
 }
 \keyword{internal}

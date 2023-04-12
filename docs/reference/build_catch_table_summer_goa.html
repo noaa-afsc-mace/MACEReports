@@ -86,6 +86,40 @@ with two items: item 1 is the Flextable table object, item 2 is the table captio
     <p>Mike Levine</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># build the tables and captions</span></span></span>
+<span class="r-in"><span><span class="va">catch_tables</span> <span class="op">&lt;-</span> <span class="fu">build_catch_table_summer_goa</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  catch_data <span class="op">=</span> <span class="va">raw_catch_data</span>,</span></span>
+<span class="r-in"><span>  specimen_data <span class="op">=</span> <span class="va">specimen_measurements_data</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># unpack the tables and the captions</span></span></span>
+<span class="r-in"><span><span class="va">table_1</span> <span class="op">&lt;-</span> <span class="va">catch_tables</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">caption_1</span> <span class="op">&lt;-</span> <span class="va">catch_tables</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">table_2</span> <span class="op">&lt;-</span> <span class="va">catch_tables</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">caption_2</span> <span class="op">&lt;-</span> <span class="va">catch_tables</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># build the tables and captions</span></span></span>
+<span class="r-in"><span><span class="va">catch_tables</span> <span class="op">&lt;-</span> <span class="fu">build_catch_table_summer_goa</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  catch_data <span class="op">=</span> <span class="va">raw_catch_data</span>,</span></span>
+<span class="r-in"><span>  specimen_data <span class="op">=</span> <span class="va">specimen_measurements_data</span>,</span></span>
+<span class="r-in"><span>  scaling_hauls_list <span class="op">=</span> <span class="va">scaling_hauls</span><span class="op">$</span><span class="va">EVENT_ID</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># print the tables and the captions</span></span></span>
+<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">catch_tables</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># get table</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">catch_tables</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># get caption</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">catch_tables</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

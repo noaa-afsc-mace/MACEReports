@@ -67,6 +67,12 @@ build_catch_table_summer_goa <- function(catch_data, specimen_data, scaling_haul
       dplyr::filter(.data$EVENT_ID %in% scaling_hauls_list | .data$GEAR == "Methot")
   }
 
+  # sum catch counts across subcategory- important if multiple pollock age classes were used!
+  catch_data = catch_data %>%
+    dplyr::group_by(.data$EVENT_ID, .data$GEAR, .data$SPECIES_CODE, .data$SCIENTIFIC_NAME, .data$COMMON_NAME) %>%
+    dplyr::summarize(WEIGHT_IN_HAUL = sum(.data$WEIGHT_IN_HAUL),
+              NUMBER_IN_HAUL = sum(.data$NUMBER_IN_HAUL))
+
   # summarize the specimen data- number of lengths/weights per haul
   specimen_summary <- specimen_data %>%
     dplyr::mutate(

@@ -164,7 +164,7 @@ get_interpolated_plot_vals <- function(x,
     # alert user as it is slow
     print(paste0(
       "Interpolating using universal kridging; this can be very slow! Consider a higher resolution value if ",
-      "this is taking forever (recommended resolution for summer surveys >= 2500; for winter >= 1000"
+      "this is taking forever (recommended resolution for summer surveys >= 2500; for winter >= 1000)."
     ))
 
     # if no limit to the number of observations (neighborhood) is specified, use univeral kridging with all locations
@@ -204,7 +204,7 @@ get_interpolated_plot_vals <- function(x,
     print(paste0(
       "Interpolating using inverse distance weighting; this can be very slow! ",
       "Consider a higher resolution value if this is taking forever (recommended resolution ",
-      "for summer surveys >= 2500; for winter >= 1000"
+      "for summer surveys >= 2500; for winter >= 1000)."
     ))
 
     # fit the variogram to the log10 transformed abundance value
@@ -332,8 +332,10 @@ get_interpolated_plot_vals <- function(x,
   preds_plot <- terra::project(preds_raster, out_crs, method = "bilinear")
 
   # convert to a dataframe (to plot with ggplot2)
-  preds_plot <- terra::as.data.frame(preds_plot, xy = TRUE) %>%
-    dplyr::rename("z" = "lyr.1")
+  preds_plot <- terra::as.data.frame(preds_plot, xy = TRUE)
+
+  # rename the third column as "z" for consistent output
+  colnames(preds_plot)[3] <- "z"
 
   ## TODO: return as sf, raster, or points? options?
   # return as a dataframe for now

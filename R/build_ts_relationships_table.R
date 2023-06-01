@@ -44,11 +44,11 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
       "Walleye pollock",
       "Pacific capelin",
       "Pacific herring",
+      "Eulachon",
       "Fish with swim bladders",
       "Fish without swim bladders",
       "Jellyfish",
       "Squid",
-      "Eulachon",
       # paste0('Pelagic crustaceans^[', krill_footnote,']')),
       "Pelagic crustaceans"
     ),
@@ -56,11 +56,11 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
       "TS = 20 log$_{10}$ *L*-66",
       "TS = 20 log$_{10}$ *L*-70.3",
       "TS = 20 log$_10$ *L*-2.3 log$_10$(1 + *depth*/10) - 65.4",
+      "TS = 20 log$_10$ *L* - 84.5",
       "TS = 20 log$_10$ *L* - 67.4",
       "TS = 20 log$_10$ *L* - 83.2",
       "TS = 10 log$_10$($\\pi$$r^2$) -86.8",
       "TS = 20 log$_10$ *L* - 75.4",
-      "TS = 20 log$_10$ *L* - 84.5",
       "TS = *A* * (log$_10 (BkL)/(BkL))^c + D ((kL)^6) + E ((kL)^5) + F ((kL)^4) + G ((kL)^3) + H ((kL)^2) + I (kL) + J + 20$ log$_10( L/L_0)$"
     ),
     c(
@@ -69,20 +69,20 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
       "L = fork length",
       "L = total length",
       "L = total length",
+      "L = total length",
       "r = bell radius",
       "L = mantle length",
-      "L = total length",
       "L = total length"
     ),
     c(
       "*Gadus chalcogrammus*",
       "*Mallotus catervarius*",
       "*Clupea harengus*",
+      "*Thaleichthys pacificus*",
       "Physoclist fishes",
       "*Pleurogrammus monopterygius*",
       "*Chrysaora melanaster*",
       "*Todarodes pacificus*",
-      "*Thaleichthys pacificus*",
       "*Euphausia superba*"
     ),
     c(
@@ -90,22 +90,22 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
                        @Traynor_1996",
       "@Guttormsen_Wilson_2009",
       "@Ona_2003",
+      "@Gauthier_Horne_2004",
       "@Foote_etal_1987",
       "@Gauthier_Horne_2004",
       "@DeRobertis_Taylor_2014",
       "@Kang_et_al_2005",
-      "@Gauthier_Horne_2004",
       "@Demer_Conti_2005"
     ),
     c(
       "pollock",
       "capelin",
       "herring",
+      "eulachon",
       "swimbladder_fish",
       "no_swimbladder",
       "chrysaora_melanaster",
       "squid",
-      "eulachon",
       "euphausiid"
     )
   )

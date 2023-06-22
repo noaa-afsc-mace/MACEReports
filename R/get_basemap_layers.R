@@ -6,6 +6,8 @@
 #' @param plot_limits_data A \code{sf} spatial dataframe; this is required and used to define the base map extent and projection.
 #' @param bathy By default, a bathymetric baselayer based on the GEBCO (https://www.gebco.net/) gridded bathymetric dataset
 #' is included in the basemap; If \code{FALSE}, bathymetric baselayer will not be included
+#' @param bathy_max_plot_depth The maximum depth you want to emphasize in the bathymetric color scale (default to 1000 m); this
+#' helps to focus the contrast at shallower depths and not emphasize especially deep areas off of the shelf break.
 #' @param contours Provide contour lines at requested depths. Specify depths as positive numeric values,
 #' i.e. \code{c(200,100,50)}
 #' @param management_regions If \code{TRUE}, will add NMFS management regions to basemap
@@ -66,6 +68,7 @@
 #' @export
 get_basemap_layers <- function(plot_limits_data,
                                bathy = TRUE,
+                               bathy_max_plot_depth = 1000,
                                contours = NULL,
                                management_regions = NULL,
                                SSL_critical_habitat = NULL,
@@ -288,16 +291,20 @@ get_basemap_layers <- function(plot_limits_data,
     # crop to these dimensions
     bathy_raster_df <- terra::crop(bathy_raster, clip, snap = "near")
 
-
     bathy_raster_df <- terra::as.data.frame(bathy_raster_df, xy = TRUE) %>%
       dplyr::rename("z" = "lyr.1")
 
     # define a color scale- you can tweak this to give the right amount of weight to the deep vs shallow areas (right now),
-    # theres more weight given to 200 m and up
+    # theres more weight given to 250 m and up
+
+    # to maximize visibility only display negative (i.e. depth) values from -1000 m - 0 m
+    bathy_raster_df$z <- ifelse(bathy_raster_df$z < -bathy_max_plot_depth, -bathy_max_plot_depth, bathy_raster_df$z)
+    bathy_raster_df$z <- ifelse(bathy_raster_df$z > 0, 1, bathy_raster_df$z)
+
     bathy_colors <- ggplot2::scale_fill_gradientn(
       values = scales::rescale(c(
         min(bathy_raster_df$z, na.rm = TRUE),
-        -300, -50, .99,
+        -250, -50, .99,
         max(bathy_raster_df$z, na.rm = TRUE)
       )),
       colors = c("#737373", "#969696", "#d9d9d9", "#d9d9d9"),

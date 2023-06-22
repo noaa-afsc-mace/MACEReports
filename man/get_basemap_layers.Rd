@@ -7,6 +7,7 @@
 get_basemap_layers(
   plot_limits_data,
   bathy = TRUE,
+  bathy_max_plot_depth = 1000,
   contours = NULL,
   management_regions = NULL,
   SSL_critical_habitat = NULL,
@@ -21,6 +22,9 @@ get_basemap_layers(
 
 \item{bathy}{By default, a bathymetric baselayer based on the GEBCO (https://www.gebco.net/) gridded bathymetric dataset
 is included in the basemap; If \code{FALSE}, bathymetric baselayer will not be included}
+
+\item{bathy_max_plot_depth}{The maximum depth you want to emphasize in the bathymetric color scale (default to 1000 m); this
+helps to focus the contrast at shallower depths and not emphasize especially deep areas off of the shelf break.}
 
 \item{contours}{Provide contour lines at requested depths. Specify depths as positive numeric values,
 i.e. \code{c(200,100,50)}}

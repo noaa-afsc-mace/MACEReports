@@ -60,6 +60,7 @@ to fine-tune the plot extent.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_basemap_layers</span><span class="op">(</span></span>
 <span>  <span class="va">plot_limits_data</span>,</span>
 <span>  bathy <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bathy_max_plot_depth <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  contours <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  management_regions <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  SSL_critical_habitat <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -79,6 +80,11 @@ to fine-tune the plot extent.</p>
 <dt>bathy</dt>
 <dd><p>By default, a bathymetric baselayer based on the GEBCO (https://www.gebco.net/) gridded bathymetric dataset
 is included in the basemap; If <code>FALSE</code>, bathymetric baselayer will not be included</p></dd>
+
+
+<dt>bathy_max_plot_depth</dt>
+<dd><p>The maximum depth you want to emphasize in the bathymetric color scale (default to 1000 m); this
+helps to focus the contrast at shallower depths and not emphasize especially deep areas off of the shelf break.</p></dd>
 
 
 <dt>contours</dt>

@@ -36,7 +36,7 @@
 #'   geom_sf(data = sticks)
 #'
 #' # or with base r plotting
-#' plot(dat)
+#' plot(sticks)
 #'
 #' # the rotation (from 0) can be specified (in degrees from 0-360). If not specified,
 #' # sticks will be rotated to 5 degrees
@@ -62,7 +62,7 @@
 #'
 #' ggplot() +
 #'   geom_sf(data = sticks) +
-#'   geom_sf(data = sticks2)
+#'   geom_sf(data = sticks2, color = "red")
 #'
 #' @export
 build_sf_sticks <- function(x,

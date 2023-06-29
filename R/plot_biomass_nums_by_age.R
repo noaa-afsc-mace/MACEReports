@@ -8,22 +8,22 @@
 #'
 #' @examples
 #' \dontrun{
-#' generate a simulated fish population
+#' # generate a simulated fish population
 #' ages <- round(rnorm(mean = 5, sd =2, n = 100000), digits = 0)
 #' numbers <- sample(c(0, 3e5), size = 100000, replace = TRUE)
 #' weights <- (ages^3 * .02) * numbers
 #'
-#' plot it
+#' # plot it
 #' plot_biomass_nums_by_age(age_vector = ages,
 #'  biomass_vector = weights,
 #'    numbers_vector = numbers)
 #'
-#' plot it with totals added as text to
+#' # plot it with totals added as text
 #' plot_biomass_nums_by_age(age_vector = ages,
 #' biomass_vector = weights,
 #' numbers_vector = numbers,
 #' add_totals = TRUE)
-#' }
+#'}
 #' @export
 plot_biomass_nums_by_age <- function(age_vector, biomass_vector, numbers_vector, add_totals = FALSE){
 

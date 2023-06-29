@@ -61,7 +61,7 @@ ggplot() +
   geom_sf(data = sticks)
 
 # or with base r plotting
-plot(dat)
+plot(sticks)
 
 # the rotation (from 0) can be specified (in degrees from 0-360). If not specified,
 # sticks will be rotated to 5 degrees
@@ -87,6 +87,6 @@ sticks2 <- build_sf_sticks(x = dat$x, y = dat$y, z = dat$z, rotation = 5, bar_sc
 
 ggplot() +
   geom_sf(data = sticks) +
-  geom_sf(data = sticks2)
+  geom_sf(data = sticks2, color = "red")
 
 }

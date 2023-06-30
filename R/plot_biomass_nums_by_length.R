@@ -7,7 +7,6 @@
 #' @return A ggplot plot object. Note that the actual plot is a R baseplot; it is returned as a ggplot object so that it can be more easily integrated into Rmarkdown documents.
 #'
 #' @examples
-#' \dontrun{
 #' # generate a simulated fish population
 #' lengths <- round(rnorm(mean = 30, sd =3, n = 100000), digits = 0)
 #' weights <- lengths^3 * 0.01
@@ -23,7 +22,7 @@
 #' biomass_vector = weights,
 #' numbers_vector = numbers,
 #' add_totals = TRUE)
-#'}
+#'
 #' @export
 plot_biomass_nums_by_length <- function(length_vector, biomass_vector, numbers_vector, add_totals = FALSE){
 

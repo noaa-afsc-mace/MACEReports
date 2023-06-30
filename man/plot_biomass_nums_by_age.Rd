@@ -27,21 +27,20 @@ A ggplot plot object. Note that the actual plot is a R baseplot; it is returned 
 Returns a dual-axis plot with numbers as bars and biomass as lines; each abundance measure is plotted on independent y-axis scales. Plot units are automatically scaled to millions of fish OR thousands of fish/ 1000s of tons OR tons based on the magnitude of the biomass (if there is greater than 1 million KG at any length, the larger scale is used).
 }
 \examples{
-\dontrun{
-generate a simulated fish population
+# generate a simulated fish population
 ages <- round(rnorm(mean = 5, sd =2, n = 100000), digits = 0)
 numbers <- sample(c(0, 3e5), size = 100000, replace = TRUE)
 weights <- (ages^3 * .02) * numbers
 
-plot it
+# plot it
 plot_biomass_nums_by_age(age_vector = ages,
  biomass_vector = weights,
    numbers_vector = numbers)
 
-plot it with totals added as text to
+# plot it with totals added as text
 plot_biomass_nums_by_age(age_vector = ages,
 biomass_vector = weights,
 numbers_vector = numbers,
 add_totals = TRUE)
-}
+
 }

@@ -10,11 +10,11 @@
 #' Item 3 = A dataframe summarizing the historical survey weight at length
 #' @examples
 #' \dontrun{
-#' #load example data
+#' # load example data
 #' library(MACEReports)
 #' data("pollock_length_weight_age_data")
 #'
-#' #gather plot and summary dataframes
+#' # gather plot and summary dataframes
 #' pollock_wt_len <- plot_weight_at_length(
 #' survey_vector = pollock_length_weight_age_data$SURVEY,
 #'  length_vector = pollock_length_weight_age_data$FORK_LENGTH,

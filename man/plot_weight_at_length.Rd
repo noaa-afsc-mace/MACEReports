@@ -31,11 +31,11 @@ Present the current weight at length (mean +/- 1 s.d., with lengths binned at 1 
 }
 \examples{
 \dontrun{
-#load example data
+# load example data
 library(MACEReports)
 data("pollock_length_weight_age_data")
 
-#gather plot and summary dataframes
+# gather plot and summary dataframes
 pollock_wt_len <- plot_weight_at_length(
 survey_vector = pollock_length_weight_age_data$SURVEY,
  length_vector = pollock_length_weight_age_data$FORK_LENGTH,

@@ -14,7 +14,7 @@ plot_historical_biomass_nums_length_ridges(
 )
 }
 \arguments{
-\item{survey_year_vector}{a vector identifying the year a given numbers or abundance value is from. This vector must be equal in length to \code{length_vector}, \code{biomass_vector}, and \code{numbers_vector}.}
+\item{survey_year_vector}{A vector identifying the year a given numbers or abundance value is from. This vector must be equal in length to \code{length_vector}, \code{biomass_vector}, and \code{numbers_vector}.}
 
 \item{length_vector}{A vector of fish lengths (units are assumed to be cm). This vector must be equal in length to \code{survey_year_vector}, \code{biomass_vector}, and \code{numbers_vector}.}
 

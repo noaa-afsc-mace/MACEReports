@@ -1,6 +1,6 @@
 #' @title Plot 'ridgelines' comparing the survey timeseries biomass and numbers at length.
 #' @description Compare a survey timeseries numbers- and biomass- at length to visualize cohorts and compare trends over time. Because abundances can vary greatly over time, there are options to transform abundance values for more informative ridgeline plots. To be comparable to our typical plots, you can summarize your biomass and numbers as biomass (thousand tons) and numbers (million fish) by 1-cm length bins.
-#' @param survey_year_vector  a vector identifying the year a given numbers or abundance value is from. This vector must be equal in length to \code{length_vector}, \code{biomass_vector}, and \code{numbers_vector}.
+#' @param survey_year_vector  A vector identifying the year a given numbers or abundance value is from. This vector must be equal in length to \code{length_vector}, \code{biomass_vector}, and \code{numbers_vector}.
 #' @param length_vector A vector of fish lengths (units are assumed to be cm). This vector must be equal in length to \code{survey_year_vector}, \code{biomass_vector}, and \code{numbers_vector}.
 #' @param biomass_vector A vector of fish weights (units are not specified, but should be consistent.) This vector must be equal in length to \code{survey_year_vector}, \code{length_vector}, and \code{numbers_vector}.
 #' @param numbers_vector A vector of fish numbers (units are not specified, but should be consistent.) This vector must be equal in length to \code{survey_year_vector}, \code{length_vector}, and \code{biomass_vector}.

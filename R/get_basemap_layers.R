@@ -84,6 +84,11 @@ get_basemap_layers <- function(plot_limits_data,
   # if an sf dataframe with a valid CRS is present, get the crs
   crs <- sf::st_crs(plot_limits_data)$input
 
+  # this is a temporary fix to deal with SF changes- it points the most common case (EPSG:3338) to its pre-existing folder
+  if (crs == "NAD83 / Alaska Albers"){
+    crs <- "EPSG:3338"
+  }
+
   # check if we've already got a collection of shapefiles/rasters for the requested CRS
   # map_dir = paste0('inst/extdata/', stringr::str_remove(crs, ':'))
   map_dir <- system.file("extdata", stringr::str_remove(crs, ":"), package = "MACEReports")

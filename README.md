@@ -13,9 +13,9 @@ Functions used in creating MACE Cruise Reports
 
 3. Load MACEReports
 
-`devtools::install_github('mike-levine/MACEReports')`
+`devtools::install_github('noaa-afsc-mace/MACEReports')`
 
-## More information can be found on the [MACEReports page](https://mike-levine.github.io/MACEReports/)
+## More information can be found on the [MACEReports page](https://noaa-afsc-mace.github.io/MACEReports/)
 
 
 ## Disclaimer

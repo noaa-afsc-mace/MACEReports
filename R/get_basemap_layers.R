@@ -127,38 +127,38 @@ get_basemap_layers <- function(plot_limits_data,
 
     # if user requests contours instead of full bathy, produce these
     if (!is.null(contours)) {
-      # #check: make sure it is a numeric object
-      # if (!is.numeric(contours)){
-      #   stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
+       # check: make sure it is a numeric object
+       if (!is.numeric(contours)){
+         stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 400, 500, 600, 800, 1000.')
+       }
+
+       #if the contours are provided as negative values, set as positive
+       contours = ifelse(contours > 0, contours, -contours)
+
+       #open the contours file
+       bathy_contours = sf::st_read(paste0(map_dir, '/alaska_bathy_contours_',
+                                           stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+
+       # limit to the requested contour values
+       bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+
+      # # create contours from the bathy raster
+      #
+      # # check: make sure it is a numeric object
+      # if (!is.numeric(contours)) {
+      #   stop("Enter the contours you want, as in c(200,300).")
       # }
       #
-      # #if the contours are provided as negative values, set as positive
-      # contours = ifelse(contours > 0, contours, -contours)
+      # # if the contours are provided as positive values, set as negative
+      # contours <- ifelse(contours < 0, contours, -contours)
       #
-      # #open the contours file
-      # bathy_contours = sf::st_read(paste0(map_dir, '/alaska_race_bathy_',
-      #                                     stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+      # # open the raster and build the contours
+      # bathy_raster <- terra::rast(paste0(map_dir, "/alaska_bathy_raster_", stringr::str_remove(crs, ":"), ".tif"))
       #
-      # #limit to the requested contour values
-      # bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
-
-      # create contours from the bathy raster
-
-      # check: make sure it is a numeric object
-      if (!is.numeric(contours)) {
-        stop("Enter the contours you want, as in c(200,300).")
-      }
-
-      # if the contours are provided as positive values, set as negative
-      contours <- ifelse(contours < 0, contours, -contours)
-
-      # open the raster and build the contours
-      bathy_raster <- terra::rast(paste0(map_dir, "/alaska_bathy_raster_", stringr::str_remove(crs, ":"), ".tif"))
-
-      bathy_contours <- terra::as.contour(bathy_raster, levels = c(contours))
-
-      # convert to an sf object
-      bathy_contours <- sf::st_as_sf(bathy_contours)
+      # bathy_contours <- terra::as.contour(bathy_raster, levels = c(contours))
+      #
+      # # convert to an sf object
+      # bathy_contours <- sf::st_as_sf(bathy_contours)
     }
   }
 
@@ -174,6 +174,7 @@ get_basemap_layers <- function(plot_limits_data,
     management_regions_layer <- sf::st_read(paste0(base_dir, "/alaska_NMFS_management_regions_EPSG3338.gpkg"), quiet = TRUE)
     SSL_critical_habitat_layer <- sf::st_read(paste0(base_dir, "/SSL_critical_habitat_EPSG3338.gpkg"), quiet = TRUE)
     alaska_3nmi_buffer_layer <- sf::st_read(paste0(base_dir, "/alaska_3nmi_buffer_EPSG3338.gpkg"), quiet = TRUE)
+    bathy_contours <- sf::st_read(paste0(map_dir, '/alaska_bathy_contours_', stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
 
     # convert to the requested projection
     ak_land <- sf::st_transform(ak_land, crs = crs)
@@ -182,6 +183,7 @@ get_basemap_layers <- function(plot_limits_data,
     management_regions_layer <- sf::st_transform(management_regions_layer, crs = crs)
     SSL_critical_habitat_layer <- sf::st_transform(SSL_critical_habitat_layer, crs = crs)
     alaska_3nmi_buffer_layer <- sf::st_transform(alaska_3nmi_buffer_layer, crs = crs)
+    bathy_contours <- sf::st_transform(bathy_contours, crs = crs)
 
     if (bathy == TRUE) {
       # again, start with the 3338 layer
@@ -195,40 +197,40 @@ get_basemap_layers <- function(plot_limits_data,
     }
 
     if (!is.null(contours)) {
-      # #check: make sure it is a numeric object
-      # if (!is.numeric(contours)){
-      #   stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
+       #check: make sure it is a numeric object
+       if (!is.numeric(contours)){
+         stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
+       }
+
+       # if the contours are provided as negative values, set as positive
+       contours = ifelse(contours > 0, contours, -contours)
+
+       # open up the contours
+       bathy_contours = sf::st_read(paste0(base_dir, '/alaska_bathy_contours_EPSG3338.gpkg'), quiet = TRUE)
+
+       # limit to the requested contour values
+       bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+
+       # convert to the requested projection
+       bathy_contours = sf::st_transform(bathy_contours, crs = crs)
+
+      # if (!is.numeric(contours)) {
+      #   stop("Enter the contours you want, as in c(200,300).")
       # }
+
+      # # if the contours are provided as positive values, set as negative
+      # contours <- ifelse(contours < 0, contours, -contours)
       #
-      # #if the contours are provided as negative values, set as positive
-      # contours = ifelse(contours > 0, contours, -contours)
+      # # open the raster and build the contours
+      # bathy_raster <- terra::rast(paste0(map_dir, "/alaska_bathy_raster_", stringr::str_remove(crs, ":"), ".tif"))
       #
-      # #open up the contours
-      # bathy_contours = sf::st_read(paste0(base_dir, '/alaska_race_bathy_EPSG3338.gpkg'), quiet = TRUE)
+      # bathy_contours <- terra::as.contour(bathy_raster, levels = c(contours))
       #
-      # #limit to the requested contour values
-      # bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
+      # # convert to an sf object
+      # bathy_contours <- sf::st_as_sf(bathy_contours)
       #
-      # #convert to the requested projection
-      # bathy_contours = sf::st_transform(bathy_contours, crs = crs)
-
-      if (!is.numeric(contours)) {
-        stop("Enter the contours you want, as in c(200,300).")
-      }
-
-      # if the contours are provided as positive values, set as negative
-      contours <- ifelse(contours < 0, contours, -contours)
-
-      # open the raster and build the contours
-      bathy_raster <- terra::rast(paste0(map_dir, "/alaska_bathy_raster_", stringr::str_remove(crs, ":"), ".tif"))
-
-      bathy_contours <- terra::as.contour(bathy_raster, levels = c(contours))
-
-      # convert to an sf object
-      bathy_contours <- sf::st_as_sf(bathy_contours)
-
-      # convert to the requested projection
-      bathy_contours <- sf::st_transform(bathy_contours, crs = crs)
+      # # convert to the requested projection
+      # bathy_contours <- sf::st_transform(bathy_contours, crs = crs)
     }
   }
 

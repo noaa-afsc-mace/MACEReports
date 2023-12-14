@@ -1,8 +1,7 @@
 #' @title Create a MACE-themed basemap
 #' @description Returns a base map. This map is returned as a ggplot2 object that more complex maps can be built on top of.
 #' It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer #' regions,and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
-#' This layer will be slightly larger than the extent of \code{plot_limits_data}; users can still use \code{ggplot2::coord_sf}
-#' to fine-tune the plot extent.
+#' This layer will be slightly larger than the extent of \code{plot_limits_data}; users can use \code{plot_expansion} parameter to fine-tune the extent.
 #' @param plot_limits_data A \code{sf} spatial dataframe; this is required and used to define the base map extent and projection.
 #' @param bathy By default, a bathymetric baselayer based on the GEBCO (https://www.gebco.net/) gridded bathymetric dataset
 #' is included in the basemap; If \code{FALSE}, bathymetric baselayer will not be included
@@ -142,23 +141,6 @@ get_basemap_layers <- function(plot_limits_data,
        # limit to the requested contour values
        bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
 
-      # # create contours from the bathy raster
-      #
-      # # check: make sure it is a numeric object
-      # if (!is.numeric(contours)) {
-      #   stop("Enter the contours you want, as in c(200,300).")
-      # }
-      #
-      # # if the contours are provided as positive values, set as negative
-      # contours <- ifelse(contours < 0, contours, -contours)
-      #
-      # # open the raster and build the contours
-      # bathy_raster <- terra::rast(paste0(map_dir, "/alaska_bathy_raster_", stringr::str_remove(crs, ":"), ".tif"))
-      #
-      # bathy_contours <- terra::as.contour(bathy_raster, levels = c(contours))
-      #
-      # # convert to an sf object
-      # bathy_contours <- sf::st_as_sf(bathy_contours)
     }
   }
 
@@ -214,23 +196,6 @@ get_basemap_layers <- function(plot_limits_data,
        # convert to the requested projection
        bathy_contours = sf::st_transform(bathy_contours, crs = crs)
 
-      # if (!is.numeric(contours)) {
-      #   stop("Enter the contours you want, as in c(200,300).")
-      # }
-
-      # # if the contours are provided as positive values, set as negative
-      # contours <- ifelse(contours < 0, contours, -contours)
-      #
-      # # open the raster and build the contours
-      # bathy_raster <- terra::rast(paste0(map_dir, "/alaska_bathy_raster_", stringr::str_remove(crs, ":"), ".tif"))
-      #
-      # bathy_contours <- terra::as.contour(bathy_raster, levels = c(contours))
-      #
-      # # convert to an sf object
-      # bathy_contours <- sf::st_as_sf(bathy_contours)
-      #
-      # # convert to the requested projection
-      # bathy_contours <- sf::st_transform(bathy_contours, crs = crs)
     }
   }
 

@@ -131,7 +131,7 @@ basemap +
 
 ## More basemap options
 
-The bathymetry layer is nice for some plots, but inappropriate in others. Want to keep it simple? Specify what contours you'd like to draw. Your options are: 50, 100, 200, 300, 500, 700, 1000 (values are in M).
+The bathymetry layer is nice for some plots, but inappropriate in others. Want to keep it simple? Specify what contours you'd like to draw. Your options are: 50, 100, 200, 400, 500, 600, 800, 1000 (values are in M).
 
 ```{r basemap_options_1, echo=TRUE, message = FALSE, warning=FALSE}
 basemap <- get_basemap_layers(plot_limits_data = sticks_by_size, bathy = FALSE, contours = c(100, 200, 1000))
@@ -346,3 +346,32 @@ ak_management_areas <- get_shapefile(shapefile_name = "alaska_NMFS_management_re
 ak_management_areas <- get_shapefile(shapefile_name = "alaska_NMFS_management_regions", crs = "EPSG:4326")
 
 ```
+
+## More bathymetery options
+
+Maybe you'd like even more control over what bathymetry you display- say, different line types or colors for each depth. We've got two functions to make this pretty straightforward: `get_shapefile` and `easy_plot_limits`. `easy_plot_limits` is just a little convenience function for maps with ggplot so you don't have to deal with setting limits based on coordinates. 
+
+```{r fancy_bathy, echo=TRUE, message = FALSE, warning=FALSE}
+
+# first, go get the 50,100, and 200 m bathymetric lines
+bathy_lines <- get_shapefile(shapefile_name = 'alaska_bathy_contours') %>%
+  filter(METERS %in% c(50,100,200))
+
+# get a basemap based on the shelikof stickplots, but leave out the bathymetry
+basemap <- get_basemap_layers(plot_limits_data = sticks, bathy = FALSE)
+
+# now go add your sticks, and the custom bathymetry
+basemap +
+  # add the bathy lines with different linetypes for each depth
+  geom_sf(data = bathy_lines, aes(linetype = factor(METERS))) +
+  labs(linetype = 'Depth (m)') +
+  # add some data 
+  geom_sf(data = sticks, color = 'red') +
+  # use the easy_plot_limits function to handle the limits! 
+  # just feed it the same sf object that you used for your basemap.
+  # this is required when you bring in a new shapefile that has a greater extent than the basemap
+  # (in this case, bathy_lines)
+  easy_plot_limits(plot_limits_data = sticks)
+
+```
+

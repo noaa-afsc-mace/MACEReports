@@ -15,20 +15,20 @@ easy_plot_limits(plot_limits_data, plot_expansion = 0.05)
 a \code{ggplot2} object that will limit the extent of your ggplot map.
 }
 \description{
-Returns a \code{ggplot2} object that will limit the extent of your ggplot map to cover only the data you care about. This will be slightly larger than the extent of \code{plot_limits_data}; users can still use \code{ggplot2::coord_sf} to fine-tune the plot extent.
+Returns a \code{ggplot2} object that will limit the extent of your ggplot map to cover only the data you care about. This will be slightly larger than the extent of \code{plot_limits_data}; you can still use the param `plot_expansion` to fine-tune the plot extent.
 }
 \examples{
-\dontrun{
 library(ggplot2)
+library(dplyr)
 library(sf)
 library(MACEReports)
 
+# get some example data
 dat <- data.frame(
-  "x" = c(-152.2, -150.3, -159.4),
-  "y" = c(55.2, 55.8, 55.6),
-  "z" = c(7500, 40000, 28000),
-  "species" = c("a", "a", "b")
-)
+"x" = c(-151.2, -150.3, -153.4),
+"y" = c(58.2, 59.8, 56.6),
+"z" = c(7500, 40000, 28000),
+"species" = c("a", "a", "b"))
 
 # create an sf dataframe
 dat <- sf::st_as_sf(dat, coords = c("x", "y"), crs = 4326)
@@ -36,9 +36,15 @@ dat <- sf::st_as_sf(dat, coords = c("x", "y"), crs = 4326)
 # convert CRS to a reasonable projection
 dat <- sf::st_transform(dat, crs = "EPSG:3338")
 
-# return the basemap as a ggplot layer
-mace_basemap <- get_basemap_layers(plot_limits_data = dat)
+# return a basemap
+basemap <- get_basemap_layers(plot_limits_data = dat, bathy = FALSE)
 
-# now go get some other bathymetry
-}
+# get the bathymetry
+bathy_data <- get_shapefile(shapefile_name = "alaska_bathy_contours") \%>\%
+ filter(METERS \%in\% c(100,200))
+
+# plot it
+basemap +
+  geom_sf(data = bathy_data, aes(linetype = factor(METERS))) +
+  easy_plot_limits(plot_limits_data = dat)
 }

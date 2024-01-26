@@ -82,10 +82,21 @@ build_stick_legend <- function(stick_data,
     # add the value of the bar, with a prettier print format
     legend_value <- format(round(biggest_stick$z * 0.5, digits = 0), digits = 1, nsmall = 0, scientific = FALSE, big.mark = ",")
 
-    legend_annotation <- ggplot2::annotate(
-      geom = "text", x = (legend_x - bump), y = (legend_y - bump),
-      label = paste(legend_value, legend_label), color = legend_color
-    )
+    if (legend_pos == "right"){
+      legend_annotation <- ggplot2::annotate(
+        geom = "text", x = (legend_x - bump), y = (legend_y - bump),
+        label = paste(legend_value, legend_label), color = legend_color
+      )
+
+    }
+
+    if (legend_pos == "left"){
+      legend_annotation <- ggplot2::annotate(
+        geom = "text", x = (legend_x + bump), y = (legend_y - bump),
+        label = paste(legend_value, legend_label), color = legend_color
+      )
+
+    }
 
     # add both the line and the legend to a ggplot2 object
     legend_line <- list(legend_line, legend_annotation)
@@ -100,10 +111,24 @@ build_stick_legend <- function(stick_data,
 
     label_name <- deparse(bquote(.(legend_value) * " t/nmi"^-2))
 
-    legend_annotation <- ggplot2::annotate(
-      geom = "text", x = (legend_x - bump * 3), y = (legend_y - bump),
-      label = label_name, parse = TRUE, color = legend_color
-    )
+    if (legend_pos == "right"){
+
+      legend_annotation <- ggplot2::annotate(
+        geom = "text", x = (legend_x - bump * 3), y = (legend_y - bump),
+        label = label_name, parse = TRUE, color = legend_color
+      )
+
+    }
+
+    if (legend_pos == "left"){
+
+      legend_annotation <- ggplot2::annotate(
+        geom = "text", x = (legend_x + bump * 3), y = (legend_y - bump),
+        label = label_name, parse = TRUE, color = legend_color
+      )
+
+    }
+
 
     # add both the line and the legend to a ggplot2 object
     legend_line <- list(legend_line, legend_annotation)

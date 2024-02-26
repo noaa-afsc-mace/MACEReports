@@ -57,7 +57,7 @@ build_shelikof_pre_selectivity_corrected_num_length_table <- function() {
   cap_text <- paste0(
     "Numbers-at-length estimates (millions of fish) from acoustic-trawl surveys of walleye pollock in the ",
     "Shelikof Strait area from ", min(years_for_caption), "-", max(years_for_caption),
-    ". Numbers reflect values that have not been corrected for for escapement of juveniles."
+    ". Numbers reflect values that have not been corrected for escapement of juveniles."
   )
 
   # return table and caption

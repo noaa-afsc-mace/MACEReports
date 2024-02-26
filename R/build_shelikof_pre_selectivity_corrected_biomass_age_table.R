@@ -57,7 +57,7 @@ build_shelikof_pre_selectivity_corrected_biomass_age_table <- function() {
   cap_text <- paste0(
     "Biomass-at-age estimates (thousands of metric tons) from acoustic-trawl surveys of walleye pollock in the ",
     "Shelikof Strait area from ", min(years_for_caption), "-", max(years_for_caption),
-    ". Numbers reflect values that have not been corrected for for escapement of juveniles."
+    ". Numbers reflect values that have not been corrected for escapement of juveniles."
   )
 
   # return table and caption

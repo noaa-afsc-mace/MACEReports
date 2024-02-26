@@ -38,6 +38,9 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
   # define any footnotes first, to append to dataframe below
   krill_footnote <- flextable::as_paragraph("A = -930.429983; B = 3.21027896; C = 1.74003785; D = 1.36133896 x 10", flextable::as_sup("-8"), "; E = -2.26958555 x 10", flextable::as_sup("-6"), "\nF= 1.50291244 x 10", flextable::as_sup("-4"), "; G = -4.86306872 x 10", flextable::as_sup("-3"), "; H = 0.0738748423; I = -0.408004891; J = -73.9078690; and ", flextable::as_i("L"), flextable::as_sub("0"), " = 0.03835 \nIf L < 0.015 m, TS = -105 dB; and if L > 0.065 m, TS = -73 dB. \nk = 2\u03c0fc, where f = 38,000 (frequency in Hz) and c = 1470 (sound speed in m/s).")
 
+  herring_footnote <- flextable::as_paragraph(flextable::as_i("depth")," (m) is fixed at 75 m")
+
+
   # build the equations dataframe
   ts_df <- data.frame(
     c(
@@ -49,7 +52,6 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
       "Fish without swim bladders",
       "Jellyfish",
       "Squid",
-      # paste0('Pelagic crustaceans^[', krill_footnote,']')),
       "Pelagic crustaceans"
     ),
     c(
@@ -91,7 +93,7 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
       "@Guttormsen_Wilson_2009",
       "@Ona_2003",
       "@Gauthier_Horne_2004",
-      "@Foote_etal_1987",
+      "@Foote_1987",
       "@Gauthier_Horne_2004",
       "@DeRobertis_Taylor_2014",
       "@Kang_et_al_2005",
@@ -161,12 +163,31 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
     ftExtra::colformat_md(part = "all")
 
   # add the footnotes as needed
+
+  if ("Pacific herring" %in% ts_df$Group) {
+
+    ts_table <- flextable::footnote(
+      x = ts_table,
+      i = which(ts_df$Group == "Pacific herring"),
+      j = 1,
+      ref_symbols = c("1"),
+      value = herring_footnote,
+      part = "body"
+    )
+  }
+
   if ("Pelagic crustaceans" %in% ts_df$Group) {
+
+    # if this is the only footnote, label as 1, if there's also a herring footnote, label as 2
+    footnote_num <- ifelse("Pacific herring" %in% ts_df$Group,
+           "2",
+           "1")
+
     ts_table <- flextable::footnote(
       x = ts_table,
       i = which(ts_df$Group == "Pelagic crustaceans"),
       j = 1,
-      ref_symbols = c("1"),
+      ref_symbols = c(footnote_num),
       value = krill_footnote,
       part = "body"
     )

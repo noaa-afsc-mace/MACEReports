@@ -107,7 +107,8 @@ plot_historical_biomass_nums_length_ridges <- function(survey_year_vector,
   for (i in unique(historical_data$survey_year_vector)){
 
     # get a length vector that is equal to the 'traditional' historical data spread; get this as a dataframe to add to the current data
-    length_vec <- data.frame("length_vector" = seq(min(historical_data$length), max(historical_data$length), 1))
+    # currently by default this starts at 5 for consistancy between reports, and extends to max length + 1
+    length_vec <- data.frame("length_vector" = seq(5, max(historical_data$length) +1, 1))
     # add the year as well- this is needed to show where there were no fish in a given year
     length_vec$survey_year_vector<- i
 
@@ -151,13 +152,13 @@ plot_historical_biomass_nums_length_ridges <- function(survey_year_vector,
 
     if (biomass_scale_transform == "log10"){
 
-      biomass_plot_name <- expression(paste("Numbers", " (log"["10"], " fish)"))
+      biomass_plot_name <- expression(paste(" log"["10"], " Biomass"))
 
     }
 
     if (biomass_scale_transform == "sqrt"){
 
-      biomass_plot_name <- expression(paste("Numbers (", sqrt("fish"), ")"))
+      biomass_plot_name <- expression(paste(sqrt("Biomass")))
 
     }
 
@@ -183,7 +184,10 @@ plot_historical_biomass_nums_length_ridges <- function(survey_year_vector,
     ggridges::geom_density_ridges(stat = "identity", scale = 6, alpha = 0.8) +
     ggplot2::facet_wrap(~facets, ncol = 2, labeller = ggplot2::label_parsed) +
     ggplot2::scale_y_reverse(breaks = seq(min(historical_data$survey_year_vector), max(historical_data$survey_year_vector), 1), expand = c(0.01, 0.01)) +
-    ggplot2::scale_x_continuous(breaks = seq(min(historical_data$length_vector), max(historical_data$length_vector), 10), expand = c(0.01, 0.01)) +
+    #ggplot2::scale_x_continuous(breaks = seq(min(historical_data$length_vector), max(historical_data$length_vector), 10), expand = c(0.01, 0.01)) +
+    ggplot2::scale_x_continuous(breaks = seq(5, max(historical_data$length_vector)+ 1, 10),
+                                limits = c(5, max(historical_data$length_vector)+ 1),
+                                expand = c(0.01, 0.01)) +
     ggplot2::scale_fill_manual(values = c("#a50f15", "#08519c")) +
     ggplot2::labs(x = "Fork length (cm)", y = "Survey year") +
     ggplot2::theme_bw() +

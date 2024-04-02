@@ -9,6 +9,7 @@ get_basemap_layers(
   bathy = TRUE,
   bathy_max_plot_depth = 1000,
   contours = NULL,
+  contour_linescale = TRUE,
   management_regions = NULL,
   SSL_critical_habitat = NULL,
   alaska_3nmi_buffer = NULL,
@@ -28,6 +29,8 @@ helps to focus the contrast at shallower depths and not emphasize especially dee
 
 \item{contours}{Provide contour lines at requested depths. Specify depths as positive numeric values,
 i.e. \code{c(200,100,50)}}
+
+\item{contour_linescale}{Make each contour line a different type (solid, dashed, etc). Default is true. Note that the plot does not include the values in a legend, because MACE plots are already busy enough and we typically denote the values in captions. Default is TRUE.}
 
 \item{management_regions}{If \code{TRUE}, will add NMFS management regions to basemap}
 

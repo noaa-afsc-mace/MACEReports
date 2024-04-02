@@ -59,6 +59,7 @@ This layer will be slightly larger than the extent of <code>plot_limits_data</co
 <span>  bathy <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  bathy_max_plot_depth <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  contours <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  contour_linescale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  management_regions <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  SSL_critical_habitat <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alaska_3nmi_buffer <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -87,6 +88,10 @@ helps to focus the contrast at shallower depths and not emphasize especially dee
 <dt>contours</dt>
 <dd><p>Provide contour lines at requested depths. Specify depths as positive numeric values,
 i.e. <code>c(200,100,50)</code></p></dd>
+
+
+<dt>contour_linescale</dt>
+<dd><p>Make each contour line a different type (solid, dashed, etc). Default is true. Note that the plot does not include the values in a legend, because MACE plots are already busy enough and we typically denote the values in captions. Default is TRUE.</p></dd>
 
 
 <dt>management_regions</dt>

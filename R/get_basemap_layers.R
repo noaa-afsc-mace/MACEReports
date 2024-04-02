@@ -9,6 +9,7 @@
 #' helps to focus the contrast at shallower depths and not emphasize especially deep areas off of the shelf break.
 #' @param contours Provide contour lines at requested depths. Specify depths as positive numeric values,
 #' i.e. \code{c(200,100,50)}
+#' @param contour_linescale Make each contour line a different type (solid, dashed, etc). Default is true. Note that the plot does not include the values in a legend, because MACE plots are already busy enough and we typically denote the values in captions. Default is TRUE.
 #' @param management_regions If \code{TRUE}, will add NMFS management regions to basemap
 #' @param SSL_critical_habitat If \code{TRUE}, will add Steller Sea Lion critical habitat buffers to basemap
 #' @param alaska_3nmi_buffer If \code{TRUE}, will add the ADFG 3 nmi management buffer to basemap
@@ -69,6 +70,7 @@ get_basemap_layers <- function(plot_limits_data,
                                bathy = TRUE,
                                bathy_max_plot_depth = 1000,
                                contours = NULL,
+                               contour_linescale = TRUE,
                                management_regions = NULL,
                                SSL_critical_habitat = NULL,
                                alaska_3nmi_buffer = NULL,
@@ -290,10 +292,12 @@ get_basemap_layers <- function(plot_limits_data,
 
   if (!is.null(contours)) {
     # crop the contour layer
-    bathy_contours <- sf::st_intersection(
-      sf::st_make_valid(sf::st_geometry(bathy_contours)),
-      sf::st_geometry(region_zoom_box)
-    )
+    # bathy_contours <- sf::st_intersection(
+    #   sf::st_make_valid(sf::st_geometry(bathy_contours)),
+    #   sf::st_geometry(region_zoom_box)
+    # )
+    sf::st_agr(bathy_contours) = "constant"
+    bathy_contours <- sf::st_crop(bathy_contours, region_zoom_box)
   }
 
   # define a color for the added layers (management regions, etc): white if bathy, black if contours
@@ -308,7 +312,10 @@ get_basemap_layers <- function(plot_limits_data,
       if (bathy == TRUE) bathy_colors
     } +
     {
-      if (!is.null(contours) & bathy != TRUE) ggplot2::geom_sf(data = bathy_contours, color = "gray60")
+      if (!is.null(contours) & bathy != TRUE & contour_linescale == FALSE) ggplot2::geom_sf(data = bathy_contours, color = "gray60")
+    } +
+    {
+      if (!is.null(contours) & bathy != TRUE & contour_linescale == TRUE) ggplot2::geom_sf(data = bathy_contours, ggplot2::aes(linetype = factor(METERS)))
     } +
     {
       if (!is.null(SSL_critical_habitat)) ggplot2::geom_sf(data = SSL_critical_habitat_layer, color = layer_col, fill = "transparent")
@@ -324,6 +331,9 @@ get_basemap_layers <- function(plot_limits_data,
     ggplot2::geom_sf(data = canada_land, fill = land_fill_color, color = land_outline_color) +
     {
       if (bathy == TRUE) ggplot2::guides(fill = "none")
+    } +
+    {
+      if (!is.null(contours) & bathy != TRUE) ggplot2::guides(linetype = 'none')
     } +
     # adjust x-axis labels- either add a few (if there are <3), or accept defaults (if >3)
     {

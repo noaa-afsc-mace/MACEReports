@@ -19,5 +19,6 @@ utils::globalVariables(c(
   "base_dir",
   "x",
   "y",
-  "z"
+  "z",
+  "METERS"
 ))

@@ -172,7 +172,7 @@ build_biomass_at_length_table_winter_goa <- function(biomass_nums_length_data, r
   cap_text <- paste0(
     "Biomass-at-length estimates (thousands of metric tons) from acoustic-trawl ",
     "surveys of walleye pollock in the Shelikof Strait area. ",
-    "Biomass from ", min(unique(nums_and_biomass_by_length$year)), "-",
+    "Biomass from ", min(unique(nums_and_biomass_by_length$year)), " to ",
     max(unique(nums_and_biomass_by_length$year)),
     " reflects selectivity corrections for escapement of juveniles."
   )

@@ -166,7 +166,7 @@ build_biomass_at_age_table_winter_goa <- function(biomass_nums_age_data, region_
   cap_text <- paste0(
     "Biomass-at-age estimates (thousands of metric tons) from acoustic-trawl surveys ",
     "of walleye pollock in the Shelikof Strait area. ",
-    "Numbers from ", min(unique(summary_nums_biomass_by_age$year)), "-",
+    "Numbers from ", min(unique(summary_nums_biomass_by_age$year)), " to ",
     max(unique(summary_nums_biomass_by_age$year)),
     " reflect selectivity corrections for escapement of juveniles."
   )

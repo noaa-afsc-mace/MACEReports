@@ -126,9 +126,9 @@ build_biomass_at_age_table_winter_goa <- function(biomass_nums_age_data, region_
     flextable::hline_bottom(part = "all", border = table_border) %>%
     # set the font and font size
     flextable::font(fontname = "times", part = "all") %>%
-    flextable::fontsize(size = 6, part = "header") %>%
-    flextable::fontsize(size = 6, part = "body") %>%
-    flextable::fontsize(size = 6, part = "footer")
+    flextable::fontsize(size = 9, part = "header") %>%
+    flextable::fontsize(size = 9, part = "body") %>%
+    flextable::fontsize(size = 9, part = "footer")
 
 
   # idea is you pass a list of column names to be formatted as a list, paired with the function they need,

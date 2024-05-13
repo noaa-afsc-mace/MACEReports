@@ -28,6 +28,7 @@ Imports:
     gstat,
     grDevices,
     graphics,
+    gridGraphics,
     cowplot,
     ggridges
 License: GPL-2

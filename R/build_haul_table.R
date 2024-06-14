@@ -81,7 +81,7 @@ build_haul_table <- function(haul_data) {
   )
 
   # set a table border above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # make into a flextable
   haul_table <- flextable::flextable(haul_data) %>%

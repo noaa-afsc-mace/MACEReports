@@ -21,7 +21,7 @@ build_shelikof_pre_selectivity_corrected_biomass_length_table <- function() {
   # shelikof_historic_biomass_by_length_1981_to_2007.rda
 
   # define a border to use above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # make this into a flextable
   biomass_length_table <- flextable::flextable(shelikof_historic_biomass_by_length_1981_to_2007) %>%

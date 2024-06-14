@@ -138,7 +138,7 @@ build_biomass_at_length_table_summer_goa <- function(biomass_nums_length_data) {
   }
 
   # define a border to use above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # make the biomass-at-length summary into a flextable
   biomass_length_table <- flextable::flextable(biomass_for_presentation) %>%

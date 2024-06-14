@@ -125,7 +125,7 @@ build_biomass_at_age_table_summer_goa <- function(biomass_nums_age_data) {
   }
 
   # define a border to use above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # make the nums-at-length table into a flextable
   biomass_age_table <- flextable::flextable(biomass_for_presentation) %>%

@@ -110,7 +110,7 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data, r
     dplyr::mutate(Length = "Total")
 
   # define a border to add above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # make it into a flextable
   nums_length_table <- flextable::flextable(nums_by_length_wide) %>%

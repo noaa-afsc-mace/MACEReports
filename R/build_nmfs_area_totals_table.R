@@ -104,7 +104,7 @@ build_nmfs_area_totals_table <- function(biomass_nums_length_data) {
   biomass_nums_summary <- dplyr::bind_rows(biomass_nums_summary, survey_totals)
 
   # define a border to use above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # make the summary table into a flextable
   biomass_nums_table <- flextable::flextable(biomass_nums_summary)

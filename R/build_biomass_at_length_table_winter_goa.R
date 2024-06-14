@@ -112,7 +112,7 @@ build_biomass_at_length_table_winter_goa <- function(biomass_nums_length_data, r
   # 2. Make the table
 
   # define a border to add above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # make it into a flextable
   biomass_length_table <- flextable::flextable(biomass_by_length_selectivity_corrected) %>%

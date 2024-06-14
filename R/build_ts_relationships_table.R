@@ -155,7 +155,7 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
   # step 3: make the table
 
   # define a border above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # create the basic table + convert markdown to word text
   ts_table <- flextable::flextable(ts_df) %>%

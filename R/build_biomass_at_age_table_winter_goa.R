@@ -107,7 +107,7 @@ build_biomass_at_age_table_winter_goa <- function(biomass_nums_age_data, region_
     dplyr::mutate(Age = "Total")
 
   # define a border to use above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # make it into a flextable
   biomass_age_table <- flextable::flextable(biomass_by_age_selectivity_corrected) %>%

@@ -137,7 +137,7 @@ build_numbers_at_length_table_summer_goa <- function(biomass_nums_data) {
   }
 
   # define a border to add above and below caption and at bottom of table
-  table_border <- officer::fp_border(color = "black", width = 0.75)
+  table_border <- officer::fp_border(color = "black", width = 1.0)
 
   # make the nums-at-length table into a flextable
   nums_length_table <- flextable::flextable(nums_for_presentation) %>%

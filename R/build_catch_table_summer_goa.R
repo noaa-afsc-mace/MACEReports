@@ -185,7 +185,7 @@ build_catch_table_summer_goa <- function(catch_data, specimen_data, scaling_haul
     )
 
     # add a border above and below caption and at bottom of table
-    table_border <- officer::fp_border(color = "black", width = 0.75)
+    table_border <- officer::fp_border(color = "black", width = 1.0)
 
     # make the catch table into a flextable
     catch_table <- flextable::flextable(catch_table_summary) %>%

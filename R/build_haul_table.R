@@ -71,7 +71,7 @@ build_haul_table <- function(haul_data) {
     col_keys = colnames(haul_data),
     row1 = c(
       "Haul", "Area", "Gear", "Date", "Time", "Duration", "Start Position", "", "", "Depth (m)",
-      "", "", paste0("Temp (", intToUtf8(176), "C)"), "", "", "walleye pollock", "", "", "Other"
+      "", "", paste0("Temp (", intToUtf8(176), "C)"), "", "", "pollock", "", "", "Other"
     ),
     row2 = c(
       "No.", "", "Type", "(GMT)", "(GMT)", "(mins)", "Lat. (N)", "Long. (W)", "", "Headrope",
@@ -167,7 +167,7 @@ build_haul_table <- function(haul_data) {
   # get some caption text; use 'combine_words' to print the regions in the survey as 'a, b, and c'
   cap_text <- paste0(
     "Trawl stations and catch data summary from the ", survey_year,
-    " acoustic-trawl survey of walleye pollock in the ",
+    " acoustic-trawl survey of pollock in the ",
     knitr::combine_words(unique(as.character(haul_data$area))), " regions."
   )
 

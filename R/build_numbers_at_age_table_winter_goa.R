@@ -165,7 +165,7 @@ build_numbers_at_age_table_winter_goa <- function(biomass_nums_age_data, region_
 
   cap_text <- paste0(
     "Numbers-at-age estimates (millions of fish) from acoustic-trawl surveys ",
-    "of walleye pollock in the Shelikof Strait area. ",
+    "of pollock in the Shelikof Strait area. ",
     "Numbers from ", min(unique(summary_nums_biomass_by_age$year)), " to ",
     max(unique(summary_nums_biomass_by_age$year)),
     " reflect selectivity corrections for escapement of juveniles. "

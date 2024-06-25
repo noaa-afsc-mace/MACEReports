@@ -56,7 +56,7 @@ build_shelikof_pre_selectivity_corrected_biomass_length_table <- function() {
   [2:length(colnames(shelikof_historic_biomass_by_length_1981_to_2007))]))
   # build the caption
   cap_text <- paste0(
-    "Biomass-at-length estimates (thousands of metric tons) from acoustic-trawl surveys of walleye pollock in the ",
+    "Biomass-at-length estimates (thousands of metric tons) from acoustic-trawl surveys of pollock in the ",
     "Shelikof Strait area from ", min(years_for_caption), " to ", max(years_for_caption),
     ". Numbers reflect values that have not been corrected for escapement of juveniles."
   )

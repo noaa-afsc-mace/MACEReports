@@ -44,7 +44,7 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
   # build the equations dataframe
   ts_df <- data.frame(
     c(
-      "Walleye pollock",
+      "Pollock",
       "Pacific capelin",
       "Pacific herring",
       "Eulachon",

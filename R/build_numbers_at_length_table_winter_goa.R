@@ -162,7 +162,7 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data, r
   # build the caption:
 
   cap_text <- paste0(
-    "Numbers-at-length estimates (millions of fish) from acoustic-trawl surveys of walleye pollock in the ",
+    "Numbers-at-length estimates (millions of fish) from acoustic-trawl surveys of pollock in the ",
     region_name, " area. ",
     "Numbers from ", min(unique(nums_and_biomass_by_length$year)), " to ",
     max(unique(nums_and_biomass_by_length$year)),

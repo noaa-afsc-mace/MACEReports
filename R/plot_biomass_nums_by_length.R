@@ -85,9 +85,12 @@ plot_biomass_nums_by_length <- function(length_vector, biomass_vector, numbers_v
 
     # specify left y-axis limit & define interval width for Numbers
     y_axis_max <- round(max(plot_data$num / units_scaler) * 1.05, 0)
-    y_axis_int <- ifelse(y_axis_max <= 25 & y_axis_max <= 100, 5,
-                         ifelse(y_axis_max > 100, round(y_axis_max / 5, digits = -1), 10)
-    )
+    y_axis_int <- ifelse(units_scaler == 1e3,
+                         round(y_axis_max/5, digits = -2),
+                         ifelse(y_axis_max <= 100,
+                         5,
+                         round(y_axis_max / 5, digits = -1))
+                         )
 
     # add the numbers bars
     plot_bars <- graphics::barplot(
@@ -112,14 +115,15 @@ plot_biomass_nums_by_length <- function(length_vector, biomass_vector, numbers_v
     graphics::axis(side = 1, at = seq(0, x_axis_max, 10) + .5, labels = seq(0, x_axis_max, 10), col.ticks = "gray50", lwd = 0, lwd.ticks = 1, tck = -0.04)
     graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = 1.2, family = "Times", col.axis = "#0072B2")
 
-    # specify left y-axis limit & define interval width for Numbers
+    # specify right y-axis limit & define interval width for biomass
     y2_axis_max <- max(plot_data$wt / units_scaler) * 1.05
-    y2_axis_int <- ifelse(y2_axis_max < 5, 0.5,
+    y2_axis_int <- ifelse(units_scaler == 1e3,
+                          round(y2_axis_max/5, digits = -1),
+                          ifelse(y2_axis_max < 5, 0.5,
                           ifelse(y2_axis_max >= 5 & y2_axis_max <= 100,
                                  round(y2_axis_max / 5, digits = 0),
-                                 10
-                          )
-    )
+                                 10)))
+
 
     # add lines
     graphics::par(new = T)

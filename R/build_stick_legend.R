@@ -4,6 +4,8 @@
 #' @param legend_pos One of 'right' or 'left'; legend bar will be placed at the corresponding corner.
 #' @param legend_color Default is white for standard MACE basemaps; specify alternates in standard \code{ggplot}-compatible formats
 #' @param legend_label Defaults to a label in standard MACE units (t/nmi^2); specify alternate if needed to reflect your units
+#' @param fontsize The font size for the stickplot legend. Defaults to a reasonable size for reports; make larger for presentations. ~18 works.
+#' @param barwidth The width of the legend bar. Defaults to a reasonable size for reports; make larger for presentations. ~ 3 works.
 #'
 #' @examples
 #'
@@ -27,7 +29,9 @@
 build_stick_legend <- function(stick_data,
                                legend_pos = "right",
                                legend_color = "white",
-                               legend_label = NULL) {
+                               legend_label = NULL,
+                               fontsize = 11,
+                               barwidth = 0.75) {
   # checks: Make sure we have a sf dataframe WITH a defined CRS for the plot data; stop if not.
   if (!"sf" %in% class(stick_data) | is.na(sf::st_crs(stick_data)$input)) {
     stop("Your plot data must be an sf spatial dataframe with a coordinate reference system (CRS)!")
@@ -72,7 +76,7 @@ build_stick_legend <- function(stick_data,
   sf::st_crs(legend_line) <- crs
 
   # store the line as ggplot2 object
-  legend_line <- ggplot2::geom_sf(data = legend_line, color = legend_color, size = 1.5)
+  legend_line <- ggplot2::geom_sf(data = legend_line, color = legend_color, linewidth = barwidth)
 
   # add the value of the bar, with a prettier print format
   legend_value <- format(round(biggest_stick$z * 0.5, digits = -2), digits = 1, nsmall = 0, scientific = FALSE, big.mark = ",")
@@ -85,7 +89,7 @@ build_stick_legend <- function(stick_data,
     if (legend_pos == "right"){
       legend_annotation <- ggplot2::annotate(
         geom = "text", x = (legend_x - bump), y = (legend_y - bump),
-        label = paste(legend_value, legend_label), color = legend_color
+        label = paste(legend_value, legend_label), color = legend_color, size = fontsize/ggplot2::.pt
       )
 
     }
@@ -93,7 +97,7 @@ build_stick_legend <- function(stick_data,
     if (legend_pos == "left"){
       legend_annotation <- ggplot2::annotate(
         geom = "text", x = (legend_x + bump), y = (legend_y - bump),
-        label = paste(legend_value, legend_label), color = legend_color
+        label = paste(legend_value, legend_label), color = legend_color, size = fontsize/ggplot2::.pt
       )
 
     }
@@ -115,7 +119,7 @@ build_stick_legend <- function(stick_data,
 
       legend_annotation <- ggplot2::annotate(
         geom = "text", x = (legend_x - bump * 3), y = (legend_y - bump),
-        label = label_name, parse = TRUE, color = legend_color
+        label = label_name, parse = TRUE, color = legend_color, size = fontsize/ggplot2::.pt
       )
 
     }
@@ -124,7 +128,7 @@ build_stick_legend <- function(stick_data,
 
       legend_annotation <- ggplot2::annotate(
         geom = "text", x = (legend_x + bump * 3), y = (legend_y - bump),
-        label = label_name, parse = TRUE, color = legend_color
+        label = label_name, parse = TRUE, color = legend_color, size = fontsize/ggplot2::.pt
       )
 
     }

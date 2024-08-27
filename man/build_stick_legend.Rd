@@ -8,7 +8,9 @@ build_stick_legend(
   stick_data,
   legend_pos = "right",
   legend_color = "white",
-  legend_label = NULL
+  legend_label = NULL,
+  fontsize = 11,
+  barwidth = 0.75
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ build_stick_legend(
 \item{legend_color}{Default is white for standard MACE basemaps; specify alternates in standard \code{ggplot}-compatible formats}
 
 \item{legend_label}{Defaults to a label in standard MACE units (t/nmi^2); specify alternate if needed to reflect your units}
+
+\item{fontsize}{The font size for the stickplot legend. Defaults to a reasonable size for reports; make larger for presentations. ~18 works.}
+
+\item{barwidth}{The width of the legend bar. Defaults to a reasonable size for reports; make larger for presentations. ~ 3 works.}
 }
 \description{
 Accepts a dataframe returned from the \code{build_sf_sticks} function and returns a nicely placed legend bar.This legend is half the height of the tallest value in the dataframe. This object can be plotted using \code{ggplot2::geom_sf()} or base \code{plot}.

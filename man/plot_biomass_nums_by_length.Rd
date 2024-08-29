@@ -8,7 +8,8 @@ plot_biomass_nums_by_length(
   length_vector,
   biomass_vector,
   numbers_vector,
-  add_totals = FALSE
+  add_totals = FALSE,
+  cex_label_size = 1
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ plot_biomass_nums_by_length(
 \item{numbers_vector}{A vector of fish numbers (units are assumed to be individual fish). This must should be equal in length to \code{length_vector} and \code{biomass_vector}.}
 
 \item{add_totals}{Option to add the totals as the title of the plot. Default is to not add a title. Set to TRUE if you'd like a title with the total biomass and number values.}
+
+\item{cex_label_size}{the font size of the axis labels (default 1.0). These are specified as scaling factors from the default of 1.0 (i.e. 2 is twice as large).}
 }
 \value{
 A ggplot plot object. Note that the actual plot is a R baseplot; it is returned as a ggplot object so that it can be more easily integrated into Rmarkdown documents.

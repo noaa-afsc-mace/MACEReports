@@ -4,6 +4,7 @@
 #' @param biomass_vector A vector of fish weights (units are assumed to be KG). This must should be equal in length to \code{length_vector} and \code{numbers_vector}.
 #' @param numbers_vector A vector of fish numbers (units are assumed to be individual fish). This must should be equal in length to \code{length_vector} and \code{biomass_vector}.
 #' @param add_totals Option to add the totals as the title of the plot. Default is to not add a title. Set to TRUE if you'd like a title with the total biomass and number values.
+#' @param cex_label_size the font size of the axis labels (default 1.0). These are specified as scaling factors from the default of 1.0 (i.e. 2 is twice as large).
 #' @return A ggplot plot object. Note that the actual plot is a R baseplot; it is returned as a ggplot object so that it can be more easily integrated into Rmarkdown documents.
 #'
 #' @examples
@@ -24,7 +25,11 @@
 #' add_totals = TRUE)
 #'
 #' @export
-plot_biomass_nums_by_length <- function(length_vector, biomass_vector, numbers_vector, add_totals = FALSE){
+plot_biomass_nums_by_length <- function(length_vector,
+                                        biomass_vector,
+                                        numbers_vector,
+                                        add_totals = FALSE,
+                                        cex_label_size = 1.0){
 
   # checks: make sure each vector is the same length
   if (!(all(sapply(list(length(length_vector),
@@ -52,9 +57,9 @@ plot_biomass_nums_by_length <- function(length_vector, biomass_vector, numbers_v
     # for the lineplot (numbers); this allows for the lines to be centered properly over the bars
 
     # bigger margins to allow room for text
-    graphics::par(mar = c(4, 5, 3, 5))
+    graphics::par(mar = c(5, 5, 3, 5))
     # and smaller outer margins to shrink spaces between plots
-    graphics::par(oma = c(0, 1, 0, 1))
+    graphics::par(oma = c(1, 1, 1, 2))
 
     # enable Times New Roman font to be used (for windows only!)
     grDevices::windowsFonts("Times" = grDevices::windowsFont("Times New Roman"))
@@ -141,9 +146,9 @@ plot_biomass_nums_by_length <- function(length_vector, biomass_vector, numbers_v
     # major tick marks every 10 cm, center bars over ticks
     graphics::axis(side = 4, las = 2, at = seq(0, y2_axis_max, y2_axis_int), cex.axis = 1.0, family = "Times", col.axis = "#cb181d")
 
-    graphics::mtext(side = 4, line = 2.5, paste0("Biomass ", units_biomass_id), cex = 1.0, padj = 1, family = "Times", col = "#cb181d")
-    graphics::mtext(side = 2, line = 4.5, paste0("Numbers of fish ", units_number_id), cex = 1.0, padj = 1, family = "Times", col = "#0072B2")
-    graphics::mtext(side = 1, line = 2, "Length (cm)", cex = 1.0, padj = 1, family = "Times")
+    graphics::mtext(side = 4, line = 2.5, paste0("Biomass ", units_biomass_id), cex = cex_label_size, padj = 1, family = "Times", col = "#cb181d")
+    graphics::mtext(side = 2, line = 4.5, paste0("Numbers of fish ", units_number_id), cex = cex_label_size, padj = 1, family = "Times", col = "#0072B2")
+    graphics::mtext(side = 1, line = 2, "Length (cm)", cex = cex_label_size, padj = 1, family = "Times")
 
     # add a box around plot
     graphics::box(lty = "solid", col = "black")

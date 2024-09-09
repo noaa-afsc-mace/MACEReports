@@ -1,8 +1,8 @@
 #' @title Get biomass- and numbers- by age plots with dual y-axis
 #' @description Returns a dual-axis plot with numbers as bars and biomass as lines; each abundance measure is plotted on independent y-axis scales. Plot units are automatically scaled to millions of fish OR thousands of fish/ 1000s of tons OR tons based on the magnitude of the biomass (if there is greater than 1 million KG at any length, the larger scale is used).
 #' @param age_vector A vector of fish ages (units are assumed to be cm in 1 year increments). This vector must be equal in length to \code{biomass_vector} and \code{numbers_vector}.
-#' @param biomass_vector A vector of fish weights (units are assumed to be KG). This must should be equal in length to \code{age_vector} and \code{numbers_vector}.
-#' @param numbers_vector A vector of fish numbers (units are assumed to be individual fish). This must should be equal in length to \code{age_vector} and \code{biomass_vector}.
+#' @param biomass_vector A vector of fish weights (units should be KG. Be sure to provide weights in KG!). This must should be equal in length to \code{age_vector} and \code{numbers_vector}.
+#' @param numbers_vector A vector of fish numbers (units should be individual fish. Be sure to provide weights in individual fish!). This must should be equal in length to \code{age_vector} and \code{biomass_vector}.
 #' @param add_totals Option to add the totals as the title of the plot. Default is to not add a title. Set to TRUE if you'd like a title with the total biomass and number values.
 #' @param cex_label_size the font size of the axis labels (default 1.0). These are specified as scaling factors from the default of 1.0 (i.e. 2 is twice as large).
 #' @return A ggplot plot object. Note that the actual plot is a R baseplot; it is returned as a ggplot object so that it can be more easily integrated into Rmarkdown documents.

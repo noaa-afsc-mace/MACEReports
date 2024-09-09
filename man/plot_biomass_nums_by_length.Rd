@@ -15,9 +15,9 @@ plot_biomass_nums_by_length(
 \arguments{
 \item{length_vector}{A vector of fish lengths (units are assumed to be cm in 1 cm increments). This vector must be equal in length to \code{biomass_vector} and \code{numbers_vector}.}
 
-\item{biomass_vector}{A vector of fish weights (units are assumed to be KG). This must should be equal in length to \code{length_vector} and \code{numbers_vector}.}
+\item{biomass_vector}{A vector of fish weights (units should be KG. Be sure to provide weights in KG!). This must should be equal in length to \code{length_vector} and \code{numbers_vector}.}
 
-\item{numbers_vector}{A vector of fish numbers (units are assumed to be individual fish). This must should be equal in length to \code{length_vector} and \code{biomass_vector}.}
+\item{numbers_vector}{A vector of fish numbers (units should be individual fish. Be sure to provide weights in individual fish!). This must should be equal in length to \code{length_vector} and \code{biomass_vector}.}
 
 \item{add_totals}{Option to add the totals as the title of the plot. Default is to not add a title. Set to TRUE if you'd like a title with the total biomass and number values.}
 

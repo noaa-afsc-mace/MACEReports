@@ -1,5 +1,5 @@
 #' @title Get biomass- and numbers- by length plots with dual y-axis
-#' @description Returns a dual-axis plot with numbers as bars and biomass as lines; each abundance measure is plotted on independent y-axis scales. Plot units are automatically scaled to millions of fish OR thousands of fish/ 1000s of tons OR tons based on the magnitude of the biomass (if there is greater than 1 million KG at any length, the larger scale is used).
+#' @description Returns a dual-axis plot with numbers as bars and biomass as lines; each abundance measure is plotted on independent y-axis scales. Plot units are automatically scaled to billions of fish, millions of fish OR thousands of fish/ millions of tons, 1000s of tons OR tons based on the magnitude of the biomass or numbers.
 #' @param length_vector A vector of fish lengths (units are assumed to be cm in 1 cm increments). This vector must be equal in length to \code{biomass_vector} and \code{numbers_vector}.
 #' @param biomass_vector A vector of fish weights (units should be KG. Be sure to provide weights in KG!). This must should be equal in length to \code{length_vector} and \code{numbers_vector}.
 #' @param numbers_vector A vector of fish numbers (units should be individual fish. Be sure to provide weights in individual fish!). This must should be equal in length to \code{length_vector} and \code{biomass_vector}.
@@ -84,22 +84,48 @@ plot_biomass_nums_by_length <- function(length_vector,
     # we need to deal with very small totals and very large areas differently for nice plotting- most
     # areas are best as millions of fish + 1000s of tons; for very small areas thousands of fish and tons are better
     # if there's less than an million tons total, use the smaller scale, if more, use the larger
-    units_scaler <- ifelse(max(plot_data$wt) > 1e6, 1e6, 1e3)
-    units_number_id <- ifelse(max(plot_data$wt) > 1e6, "(millions)", "(thousands)")
-    units_biomass_id <- ifelse(max(plot_data$wt) > 1e6, "(1000s t)", "(t)")
+    units_scaler_numbers <- ifelse(sum(plot_data$num) > 1e9,
+                                   1e9,
+                                   ifelse(sum(plot_data$wt) <= 1e9 & sum(plot_data$wt) > 10e6,
+                                          1e6,
+                                          1e3))
+
+    units_scaler_biomass <- ifelse(sum(plot_data$wt) > 1e9,
+                                   1e9,
+                                   ifelse(sum(plot_data$wt) <= 1e9 & sum(plot_data$wt) > 10e6,
+                                          1e6,
+                                          1e3))
+
+    units_number_id <- ifelse(sum(plot_data$num) > 1e9,
+                               "(billions)",
+                               ifelse(sum(plot_data$wt) <= 1e9 & sum(plot_data$wt) > 10e6,
+                                      "(millions)",
+                                      "(thousands)"))
+
+    units_biomass_id <- ifelse(sum(plot_data$wt) > 1e9,
+                               "(million t)",
+                                 ifelse(sum(plot_data$wt) <= 1e9 & sum(plot_data$wt) > 10e6,
+                                        "(1000s t)",
+                                        "(t)"))
 
     # specify left y-axis limit & define interval width for Numbers
-    y_axis_max <- round(max(plot_data$num / units_scaler) * 1.05, 0)
-    y_axis_int <- ifelse(units_scaler == 1e3,
-                         round(y_axis_max/5, digits = -2),
-                         ifelse(y_axis_max <= 100,
-                         5,
-                         round(y_axis_max / 5, digits = -1))
-                         )
+    y_axis_max <- round(max(plot_data$num / units_scaler_numbers) * 1.05, 0)
+    # y_axis_int <- ifelse(units_scaler_numbers == 1e3,
+    #                      round(y_axis_max/5, digits = -2),
+    #                      ifelse(y_axis_max <= 100,
+    #                      5,
+    #                      round(y_axis_max / 5, digits = -1))
+    #                      )
+
+    y_axis_int <- ifelse(units_number_id ==  "(thousands)",
+                          round(y_axis_max/5, digits = -1),
+                          ifelse(units_number_id == "(millions)" & y_axis_max >= 5 & y_axis_max <= 100,
+                                 round(y_axis_max / 5, digits = 0),
+                                 round(y_axis_max / 5, digits = 1)))
 
     # add the numbers bars
     plot_bars <- graphics::barplot(
-      height = plot_data$num / units_scaler, xlab = NA, ylab = NA,
+      height = plot_data$num / units_scaler_numbers, xlab = NA, ylab = NA,
       # up font sizes, rotate labels to perpendicular
       col = "#6baed6", cex.axis = 0.75, cex.names = 0.75, border = "white",
       # make bars fill length bins
@@ -121,18 +147,16 @@ plot_biomass_nums_by_length <- function(length_vector,
     graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = 1.2, family = "Times", col.axis = "#0072B2")
 
     # specify right y-axis limit & define interval width for biomass
-    y2_axis_max <- max(plot_data$wt / units_scaler) * 1.05
-    y2_axis_int <- ifelse(units_scaler == 1e3,
+    y2_axis_max <- max(plot_data$wt / units_scaler_biomass) * 1.05
+    y2_axis_int <- ifelse(units_biomass_id ==  "(thousands)",
                           round(y2_axis_max/5, digits = -1),
-                          ifelse(y2_axis_max < 5, 0.5,
-                          ifelse(y2_axis_max >= 5 & y2_axis_max <= 100,
+                          ifelse(units_biomass_id == "(1000s t)" & y2_axis_max >= 5 & y2_axis_max <= 100,
                                  round(y2_axis_max / 5, digits = 0),
-                                 10)))
-
+                                 round(y2_axis_max / 5, digits = 1)))
 
     # add lines
     graphics::par(new = T)
-    plot_lines <- graphics::plot(plot_bars, plot_data$wt / units_scaler,
+    plot_lines <- graphics::plot(plot_bars, plot_data$wt / units_scaler_biomass,
                        col = "#cb181d",
                        type = "l", axes = F, xlab = NA, ylab = NA, yaxs = "i",
                        ylim = c(0, y2_axis_max), lwd = 3,
@@ -156,13 +180,12 @@ plot_biomass_nums_by_length <- function(length_vector,
     # add title - either with or without the summed values
     if (add_totals == TRUE) {
       graphics::title(main = paste0(
-        "Total abundance: \n", formatC(round(sum(plot_data$num) / 1e6, digits = 1),
+        "Total abundance: \n", formatC(round(sum(plot_data$num) / units_scaler_numbers, digits = 1),
                                        big.mark = ",", format = "f", digits = 1
-        ),
-        " million fish and ", formatC(round(sum(plot_data$wt) / 1e6, digits = 1),
+        ), " ", stringr::str_remove_all(units_number_id, paste( c('\\(', '\\)', 's'), collapse = "|")),
+        " fish and ", formatC(round(sum(plot_data$wt) / units_scaler_biomass, digits = 1),
                                       big.mark = ",", format = "f", digits = 1
-        ),
-        " thousand metric tons"
+        ), " ", stringr::str_remove_all(units_biomass_id, paste( c('\\(', '\\)'), collapse = "|"))
       ), cex.main = 1.5, family = "Times")
     }
   }

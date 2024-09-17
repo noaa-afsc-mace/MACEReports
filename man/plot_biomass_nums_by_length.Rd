@@ -27,7 +27,7 @@ plot_biomass_nums_by_length(
 A ggplot plot object. Note that the actual plot is a R baseplot; it is returned as a ggplot object so that it can be more easily integrated into Rmarkdown documents.
 }
 \description{
-Returns a dual-axis plot with numbers as bars and biomass as lines; each abundance measure is plotted on independent y-axis scales. Plot units are automatically scaled to millions of fish OR thousands of fish/ 1000s of tons OR tons based on the magnitude of the biomass (if there is greater than 1 million KG at any length, the larger scale is used).
+Returns a dual-axis plot with numbers as bars and biomass as lines; each abundance measure is plotted on independent y-axis scales. Plot units are automatically scaled to billions of fish, millions of fish OR thousands of fish/ millions of tons, 1000s of tons OR tons based on the magnitude of the biomass or numbers.
 }
 \examples{
 # generate a simulated fish population

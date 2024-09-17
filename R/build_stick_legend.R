@@ -113,7 +113,7 @@ build_stick_legend <- function(stick_data,
       digits = 1, nsmall = 0, scientific = FALSE, big.mark = ","
     )
 
-    label_name <- deparse(bquote(.(legend_value) * " t/nmi"^-2))
+    label_name <- deparse(bquote(.(legend_value) * " t/nmi"^2))
 
     if (legend_pos == "right"){
 

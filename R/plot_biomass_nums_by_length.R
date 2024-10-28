@@ -143,8 +143,8 @@ plot_biomass_nums_by_length <- function(length_vector,
     # major tick marks every 10 cm, center bars over ticks
     graphics::axis(side = 1, at = seq(0, x_axis_max, 1) + .5, labels = F, col.ticks = "gray50", lwd = 1, tck = -0.02)
     graphics::axis(side = 1, at = seq(5, x_axis_max, 10) + .5, labels = F, col.ticks = "gray50", lwd = 0, lwd.ticks = 1, tck = -0.04)
-    graphics::axis(side = 1, at = seq(0, x_axis_max, 10) + .5, labels = seq(0, x_axis_max, 10), col.ticks = "gray50", lwd = 0, lwd.ticks = 1, tck = -0.04)
-    graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = 1.2, family = "Times", col.axis = "#0072B2")
+    graphics::axis(side = 1, at = seq(0, x_axis_max, 10) + .5, labels = seq(0, x_axis_max, 10), col.ticks = "gray50", lwd = 0, lwd.ticks = 1, tck = -0.04, cex.axis = cex_label_size)
+    graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = cex_label_size, family = "Times", col.axis = "#0072B2")
 
     # specify right y-axis limit & define interval width for biomass
     y2_axis_max <- max(plot_data$wt / units_scaler_biomass) * 1.05
@@ -168,7 +168,7 @@ plot_biomass_nums_by_length <- function(length_vector,
 
     # add axis ticks on x axis too
     # major tick marks every 10 cm, center bars over ticks
-    graphics::axis(side = 4, las = 2, at = seq(0, y2_axis_max, y2_axis_int), cex.axis = 1.0, family = "Times", col.axis = "#cb181d")
+    graphics::axis(side = 4, las = 2, at = seq(0, y2_axis_max, y2_axis_int), cex.axis = cex_label_size, family = "Times", col.axis = "#cb181d")
 
     graphics::mtext(side = 4, line = 2.5, paste0("Biomass ", units_biomass_id), cex = cex_label_size, padj = 1, family = "Times", col = "#cb181d")
     graphics::mtext(side = 2, line = 4.5, paste0("Numbers of fish ", units_number_id), cex = cex_label_size, padj = 1, family = "Times", col = "#0072B2")

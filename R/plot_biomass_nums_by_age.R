@@ -100,8 +100,8 @@ plot_biomass_nums_by_age <- function(age_vector,
       )
 
       # major tick marks every 10 cm, center bars over ticks
-      graphics::axis(side = 1, at = seq(0, x_axis_max, 1) + .5, labels = seq(1, x_axis_max + 1, 1), cex.axis = 1.0, col = "grey50", col.ticks = "grey50", )
-      graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = 1.0, family = "Times", col.axis = "#0072B2")
+      graphics::axis(side = 1, at = seq(0, x_axis_max, 1) + .5, labels = seq(1, x_axis_max + 1, 1), cex.axis = cex_label_size, col = "grey50", col.ticks = "grey50", )
+      graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = cex_label_size, family = "Times", col.axis = "#0072B2")
 
       # add lines
       graphics::par(new = T)
@@ -114,7 +114,7 @@ plot_biomass_nums_by_age <- function(age_vector,
       )
 
       # add second axis, format the initial axis correctly too
-      graphics::axis(side = 4, las = 2, cex.axis = 1.0, family = "Times", col.axis = "#cb181d")
+      graphics::axis(side = 4, las = 2, cex.axis = cex_label_size, family = "Times", col.axis = "#cb181d")
 
       graphics::mtext(side = 4, line = 2.5, "Biomass (1000s t)", cex = cex_label_size, padj = 1, family = "Times", col = "#cb181d")
       graphics::mtext(side = 2, line = 4.5, "Numbers of fish (millions)", cex = cex_label_size, padj = 1, family = "Times", col = "#0072B2")

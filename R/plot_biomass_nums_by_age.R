@@ -116,9 +116,14 @@ plot_biomass_nums_by_age <- function(age_vector,
       # add second axis, format the initial axis correctly too
       graphics::axis(side = 4, las = 2, cex.axis = cex_label_size, family = "Times", col.axis = "#cb181d")
 
-      graphics::mtext(side = 4, line = 2.5, "Biomass (1000s t)", cex = cex_label_size, padj = 1, family = "Times", col = "#cb181d")
-      graphics::mtext(side = 2, line = 4.5, "Numbers of fish (millions)", cex = cex_label_size, padj = 1, family = "Times", col = "#0072B2")
-      graphics::mtext(side = 1, line = 2, "Age", cex = cex_label_size, padj = 1, family = "Times")
+      # set the line to put the captions on if cex >1, move them out a bit
+      text_pos_r <- ifelse(cex_label_size > 1, 2.5, 1.5)
+      text_pos_l <- ifelse(cex_label_size > 1, 4.5, 3.5)
+      text_pos_bot <- ifelse(cex_label_size > 1, 2.2, 1.2)
+
+      graphics::mtext(side = 4, line = text_pos_r, "Biomass (1000s t)", cex = cex_label_size, padj = 1, family = "Times", col = "#cb181d")
+      graphics::mtext(side = 2, line = text_pos_l, "Numbers of fish (millions)", cex = cex_label_size, padj = 1, family = "Times", col = "#0072B2")
+      graphics::mtext(side = 1, line = text_pos_bot, "Age", cex = cex_label_size, padj = 1, family = "Times")
 
       # add a box around plot
       graphics::box(lty = "solid", col = "black")

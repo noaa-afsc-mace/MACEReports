@@ -11,11 +11,18 @@ get_basemap_layers(
   contours = NULL,
   contour_linescale = TRUE,
   management_regions = NULL,
-  SSL_critical_habitat = NULL,
   alaska_3nmi_buffer = NULL,
   land_fill_color = "#616161",
   land_outline_color = "black",
-  plot_expansion = 0.05
+  plot_expansion = 0.05,
+  SSL_critical_habitat = NULL,
+  SSL_no_transit = NULL,
+  humpback_critical_habitat = NULL,
+  NPRW_critical_habitat = NULL,
+  sea_otter_critical_habitat = NULL,
+  CI_beluga_critical_habitat = NULL,
+  walrus_protection_area = NULL,
+  walrus_no_transit = NULL
 )
 }
 \arguments{
@@ -34,8 +41,6 @@ i.e. \code{c(200,100,50)}}
 
 \item{management_regions}{If \code{TRUE}, will add NMFS management regions to basemap}
 
-\item{SSL_critical_habitat}{If \code{TRUE}, will add Steller Sea Lion critical habitat buffers to basemap}
-
 \item{alaska_3nmi_buffer}{If \code{TRUE}, will add the ADFG 3 nmi management buffer to basemap}
 
 \item{land_fill_color}{If you'd like a different fill color on landmasses, specify as required by \code{ggplot2}.}
@@ -43,13 +48,29 @@ i.e. \code{c(200,100,50)}}
 \item{land_outline_color}{If you'd like a different outline color on landmasses, specify as required by \code{ggplot2}.}
 
 \item{plot_expansion}{This controls the amount of buffer around the basemap (default is 5\% (0.05) around the extent of the data; set from 0-1).}
+
+\item{SSL_critical_habitat}{If \code{TRUE}, will add Steller Sea Lion critical habitat buffers to basemap}
+
+\item{SSL_no_transit}{If \code{TRUE}, will add Steller Sea Lion no transit zones to basemap}
+
+\item{humpback_critical_habitat}{If \code{TRUE}, will add the Humpack whale DPS critical habitat to basemap}
+
+\item{NPRW_critical_habitat}{If \code{TRUE}, will add the North Pacific Right Whale critical habitat to basemap}
+
+\item{sea_otter_critical_habitat}{If \code{TRUE}, will add Sea Otter critical habitat to basemap}
+
+\item{CI_beluga_critical_habitat}{If \code{TRUE}, will add Cook Inlet Beluga critical habitat to basemap}
+
+\item{walrus_protection_area}{If \code{TRUE}, will add Pacific Walrus protection area to basemap}
+
+\item{walrus_no_transit}{If \code{TRUE}, will add Round Island Pacific Walrus no transit area to basemap}
 }
 \value{
 A list of class \code{ggplot} containing information required for plotting a basemap.
 }
 \description{
 Returns a base map. This map is returned as a ggplot2 object that more complex maps can be built on top of.
-It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer #' regions,and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
+It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer #' regions,and Critical Habitat and No Transit zones for ESA-listed species (these layers were gathered from https://www.fisheries.noaa.gov/resource/map/national-esa-critical-habitat-mapper by Abigail McCarthy in 2024) . These basemaps are intended for the Bering Sea and Gulf of Alaska.
 This layer will be slightly larger than the extent of \code{plot_limits_data}; users can use \code{plot_expansion} parameter to fine-tune the extent.
 }
 \examples{

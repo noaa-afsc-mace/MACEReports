@@ -1,6 +1,6 @@
 #' @title Create a MACE-themed basemap
 #' @description Returns a base map. This map is returned as a ggplot2 object that more complex maps can be built on top of.
-#' It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer #' regions,and Steller Sea Lion exclusions. These basemaps are intended for the Bering Sea and Gulf of Alaska.
+#' It provides land, bathymetry, and, optionally, a variety of common layers including the NMFS management areas, 3 NMI buffer #' regions,and Critical Habitat and No Transit zones for ESA-listed species (these layers were gathered from https://www.fisheries.noaa.gov/resource/map/national-esa-critical-habitat-mapper by Abigail McCarthy in 2024) . These basemaps are intended for the Bering Sea and Gulf of Alaska.
 #' This layer will be slightly larger than the extent of \code{plot_limits_data}; users can use \code{plot_expansion} parameter to fine-tune the extent.
 #' @param plot_limits_data A \code{sf} spatial dataframe; this is required and used to define the base map extent and projection.
 #' @param bathy By default, a bathymetric baselayer based on the GEBCO (https://www.gebco.net/) gridded bathymetric dataset
@@ -11,12 +11,18 @@
 #' i.e. \code{c(200,100,50)}
 #' @param contour_linescale Make each contour line a different type (solid, dashed, etc). Default is true. Note that the plot does not include the values in a legend, because MACE plots are already busy enough and we typically denote the values in captions. Default is TRUE.
 #' @param management_regions If \code{TRUE}, will add NMFS management regions to basemap
-#' @param SSL_critical_habitat If \code{TRUE}, will add Steller Sea Lion critical habitat buffers to basemap
 #' @param alaska_3nmi_buffer If \code{TRUE}, will add the ADFG 3 nmi management buffer to basemap
 #' @param land_fill_color If you'd like a different fill color on landmasses, specify as required by \code{ggplot2}.
 #' @param land_outline_color If you'd like a different outline color on landmasses, specify as required by \code{ggplot2}.
 #' @param plot_expansion This controls the amount of buffer around the basemap (default is 5\% (0.05) around the extent of the data; set from 0-1).
-#'
+#' @param SSL_critical_habitat If \code{TRUE}, will add Steller Sea Lion critical habitat buffers to basemap
+#' @param SSL_no_transit If \code{TRUE}, will add Steller Sea Lion no transit zones to basemap
+#' @param humpback_critical_habitat If \code{TRUE}, will add the Humpack whale DPS critical habitat to basemap
+#' @param NPRW_critical_habitat If \code{TRUE}, will add the North Pacific Right Whale critical habitat to basemap
+#' @param sea_otter_critical_habitat If \code{TRUE}, will add Sea Otter critical habitat to basemap
+#' @param CI_beluga_critical_habitat If \code{TRUE}, will add Cook Inlet Beluga critical habitat to basemap
+#' @param walrus_protection_area If \code{TRUE}, will add Pacific Walrus protection area to basemap
+#' @param walrus_no_transit If \code{TRUE}, will add Round Island Pacific Walrus no transit area to basemap
 #' @return A list of class \code{ggplot} containing information required for plotting a basemap.
 #'
 #' @author Mike Levine
@@ -72,11 +78,18 @@ get_basemap_layers <- function(plot_limits_data,
                                contours = NULL,
                                contour_linescale = TRUE,
                                management_regions = NULL,
-                               SSL_critical_habitat = NULL,
                                alaska_3nmi_buffer = NULL,
                                land_fill_color = "#616161",
                                land_outline_color = "black",
-                               plot_expansion = 0.05) {
+                               plot_expansion = 0.05,
+                               SSL_critical_habitat = NULL,
+                               SSL_no_transit = NULL,
+                               humpback_critical_habitat = NULL,
+                               NPRW_critical_habitat = NULL,
+                               sea_otter_critical_habitat = NULL,
+                               CI_beluga_critical_habitat = NULL,
+                               walrus_protection_area = NULL,
+                               walrus_no_transit = NULL) {
   # checks: Make sure we have a sf dataframe WITH a defined CRS for the plot data; stop if not.
   if (!"sf" %in% class(plot_limits_data) | is.na(sf::st_crs(plot_limits_data)$input)) {
     stop("Your plot data must be an sf spatial dataframe with a coordinate reference system (CRS)!")
@@ -89,6 +102,9 @@ get_basemap_layers <- function(plot_limits_data,
   if (crs == "NAD83 / Alaska Albers"){
     crs <- "EPSG:3338"
   }
+
+  ##TODO: just default to opening up EPSG 3338; if this differs from the input CRS, convert everything to the
+  # input CRS
 
   # check if we've already got a collection of shapefiles/rasters for the requested CRS
   # map_dir = paste0('inst/extdata/', stringr::str_remove(crs, ':'))
@@ -111,6 +127,55 @@ get_basemap_layers <- function(plot_limits_data,
     if (!is.null(SSL_critical_habitat)) {
       SSL_critical_habitat_layer <- sf::st_read(paste0(
         map_dir, "/SSL_critical_habitat_",
+        stringr::str_remove(crs, ":"), ".gpkg"
+      ), quiet = TRUE)
+    }
+
+    if (!is.null(SSL_no_transit)) {
+      SSL_no_transit_layer <- sf::st_read(paste0(
+        map_dir, "/SSL_no_transit_",
+        stringr::str_remove(crs, ":"), ".gpkg"
+      ), quiet = TRUE)
+    }
+
+    if (!is.null(humpback_critical_habitat)) {
+      humpback_critical_habitat_layer <- sf::st_read(paste0(
+        map_dir, "/humpback_whale_dps_critical_habitat_2021_",
+        stringr::str_remove(crs, ":"), ".gpkg"
+      ), quiet = TRUE)
+    }
+
+    if (!is.null(NPRW_critical_habitat)) {
+      NPRW_critical_habitat_layer <- sf::st_read(paste0(
+        map_dir, "/NPRW_critical_habitat_",
+        stringr::str_remove(crs, ":"), ".gpkg"
+      ), quiet = TRUE)
+    }
+
+    if (!is.null(sea_otter_critical_habitat)) {
+      sea_otter_critical_habitat_layer <- sf::st_read(paste0(
+        map_dir, "/sea_otter_critical_habitat_",
+        stringr::str_remove(crs, ":"), ".gpkg"
+      ), quiet = TRUE)
+    }
+
+    if (!is.null(CI_beluga_critical_habitat)) {
+      CI_beluga_critical_habitat_layer <- sf::st_read(paste0(
+        map_dir, "/ci_beluga_",
+        stringr::str_remove(crs, ":"), ".gpkg"
+      ), quiet = TRUE)
+    }
+
+    if (!is.null(walrus_no_transit)) {
+      walrus_no_transit_layer <- sf::st_read(paste0(
+        map_dir, "/walrus_no_transit_",
+        stringr::str_remove(crs, ":"), ".gpkg"
+      ), quiet = TRUE)
+    }
+
+    if (!is.null(walrus_protection_area)) {
+      walrus_protection_area_layer <- sf::st_read(paste0(
+        map_dir, "/walrus_protection_area_",
         stringr::str_remove(crs, ":"), ".gpkg"
       ), quiet = TRUE)
     }
@@ -231,9 +296,6 @@ get_basemap_layers <- function(plot_limits_data,
   russia_land <- sf::st_intersection(sf::st_geometry(russia_land), sf::st_geometry(region_zoom_box))
   canada_land <- sf::st_intersection(sf::st_geometry(canada_land), sf::st_geometry(region_zoom_box))
 
-  # get the automatically-generated graticule for the biggest shapefile (ak_land)- we will use this to force more longitude ticks on the basemap if there are an insufficient (<3) number of ticks.
-  grats <- sf::st_graticule(ak_land)
-
   if (!is.null(management_regions)) {
     management_regions_layer <- sf::st_intersection(
       sf::st_make_valid(sf::st_geometry(management_regions_layer)),
@@ -244,6 +306,55 @@ get_basemap_layers <- function(plot_limits_data,
   if (!is.null(SSL_critical_habitat)) {
     SSL_critical_habitat_layer <- sf::st_intersection(
       sf::st_make_valid(sf::st_geometry(SSL_critical_habitat_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
+  if (!is.null(SSL_no_transit)) {
+    SSL_no_transit_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(SSL_no_transit_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
+  if (!is.null(humpback_critical_habitat)) {
+    humpback_critical_habitat_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(humpback_critical_habitat_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
+  if (!is.null(NPRW_critical_habitat)) {
+    NPRW_critical_habitat_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(NPRW_critical_habitat_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
+  if (!is.null(sea_otter_critical_habitat)) {
+    sea_otter_critical_habitat_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(sea_otter_critical_habitat_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
+  if (!is.null(CI_beluga_critical_habitat)) {
+    CI_beluga_critical_habitat_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(CI_beluga_critical_habitat_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
+  if (!is.null(walrus_protection_area)) {
+    walrus_protection_area_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(walrus_protection_area_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
+  if (!is.null(walrus_no_transit)) {
+    walrus_no_transit_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(walrus_no_transit_layer)),
       sf::st_geometry(region_zoom_box)
     )
   }
@@ -300,6 +411,9 @@ get_basemap_layers <- function(plot_limits_data,
     bathy_contours <- sf::st_crop(bathy_contours, region_zoom_box)
   }
 
+  # get the automatically-generated graticule for the biggest shapefile (ak_land)- we will use this to force more longitude ticks on the basemap if there are an insufficient (<3) number of ticks.
+  grats <- sf::st_graticule(ak_land)
+
   # define a color for the added layers (management regions, etc): white if bathy, black if contours
   layer_col <- ifelse(bathy == TRUE, "white", "black")
 
@@ -317,9 +431,32 @@ get_basemap_layers <- function(plot_limits_data,
     {
       if (!is.null(contours) & bathy != TRUE & contour_linescale == TRUE) ggplot2::geom_sf(data = bathy_contours, ggplot2::aes(linetype = factor(METERS)))
     } +
+    # add requested critical habitat/ no transit zone layers
     {
       if (!is.null(SSL_critical_habitat)) ggplot2::geom_sf(data = SSL_critical_habitat_layer, color = layer_col, fill = "transparent")
     } +
+    {
+    if (!is.null(SSL_no_transit)) ggplot2::geom_sf(data = SSL_no_transit_layer, color = layer_col, fill = "transparent")
+} +
+    {
+      if (!is.null(humpback_critical_habitat)) ggplot2::geom_sf(data = humpback_critical_habitat_layer, color = layer_col, fill = "transparent")
+    } +
+    {
+      if (!is.null(NPRW_critical_habitat)) ggplot2::geom_sf(data = NPRW_critical_habitat_layer, color = layer_col, fill = "transparent")
+    } +
+    {
+      if (!is.null(sea_otter_critical_habitat)) ggplot2::geom_sf(data = sea_otter_critical_habitat_layer, color = layer_col, fill = "transparent")
+    } +
+    {
+      if (!is.null(CI_beluga_critical_habitat)) ggplot2::geom_sf(data = CI_beluga_critical_habitat_layer, color = layer_col, fill = "transparent")
+    } +
+    {
+      if (!is.null(walrus_protection_area)) ggplot2::geom_sf(data = walrus_protection_area_layer, color = layer_col, fill = "transparent")
+    } +
+    {
+      if (!is.null(walrus_no_transit)) ggplot2::geom_sf(data = walrus_no_transit_layer, color = layer_col, fill = "transparent")
+    } +
+    # add requested management layers
     {
       if (!is.null(alaska_3nmi_buffer)) ggplot2::geom_sf(data = alaska_3nmi_buffer_layer, color = layer_col, fill = "transparent")
     } +

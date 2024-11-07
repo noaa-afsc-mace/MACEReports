@@ -96,180 +96,121 @@ get_basemap_layers <- function(plot_limits_data,
   }
 
   # if an sf dataframe with a valid CRS is present, get the crs
-  crs <- sf::st_crs(plot_limits_data)$input
+  input_crs <- sf::st_crs(plot_limits_data)$input
 
   # this is a temporary fix to deal with SF changes- it points the most common case (EPSG:3338) to its pre-existing folder
-  if (crs == "NAD83 / Alaska Albers"){
-    crs <- "EPSG:3338"
+  if (input_crs == "NAD83 / Alaska Albers"){
+    input_crs <- "EPSG:3338"
   }
 
-  ##TODO: just default to opening up EPSG 3338; if this differs from the input CRS, convert everything to the
-  # input CRS
-
-  # check if we've already got a collection of shapefiles/rasters for the requested CRS
-  # map_dir = paste0('inst/extdata/', stringr::str_remove(crs, ':'))
-  map_dir <- system.file("extdata", stringr::str_remove(crs, ":"), package = "MACEReports")
-
-  # if the directory exists- we just need to open up the requested files
-  if (dir.exists(map_dir)) {
-    # open up all the layers we need
-    ak_land <- sf::st_read(paste0(map_dir, "/alaska_land_", stringr::str_remove(crs, ":"), ".gpkg"), quiet = TRUE)
-    russia_land <- sf::st_read(paste0(map_dir, "/russia_land_", stringr::str_remove(crs, ":"), ".gpkg"), quiet = TRUE)
-    canada_land <- sf::st_read(paste0(map_dir, "/canada_land_", stringr::str_remove(crs, ":"), ".gpkg"), quiet = TRUE)
-
-    if (!is.null(management_regions)) {
-      management_regions_layer <- sf::st_read(paste0(
-        map_dir, "/alaska_NMFS_management_regions_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (!is.null(SSL_critical_habitat)) {
-      SSL_critical_habitat_layer <- sf::st_read(paste0(
-        map_dir, "/SSL_critical_habitat_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (!is.null(SSL_no_transit)) {
-      SSL_no_transit_layer <- sf::st_read(paste0(
-        map_dir, "/SSL_no_transit_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (!is.null(humpback_critical_habitat)) {
-      humpback_critical_habitat_layer <- sf::st_read(paste0(
-        map_dir, "/humpback_whale_dps_critical_habitat_2021_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (!is.null(NPRW_critical_habitat)) {
-      NPRW_critical_habitat_layer <- sf::st_read(paste0(
-        map_dir, "/NPRW_critical_habitat_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (!is.null(sea_otter_critical_habitat)) {
-      sea_otter_critical_habitat_layer <- sf::st_read(paste0(
-        map_dir, "/sea_otter_critical_habitat_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (!is.null(CI_beluga_critical_habitat)) {
-      CI_beluga_critical_habitat_layer <- sf::st_read(paste0(
-        map_dir, "/ci_beluga_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (!is.null(walrus_no_transit)) {
-      walrus_no_transit_layer <- sf::st_read(paste0(
-        map_dir, "/walrus_no_transit_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (!is.null(walrus_protection_area)) {
-      walrus_protection_area_layer <- sf::st_read(paste0(
-        map_dir, "/walrus_protection_area_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (!is.null(alaska_3nmi_buffer)) {
-      alaska_3nmi_buffer_layer <- sf::st_read(paste0(
-        map_dir, "/alaska_3nmi_buffer_",
-        stringr::str_remove(crs, ":"), ".gpkg"
-      ), quiet = TRUE)
-    }
-
-    if (bathy == TRUE) {
-      bathy_raster <- terra::rast(paste0(map_dir, "/alaska_bathy_raster_", stringr::str_remove(crs, ":"), ".tif"))
-    }
-
-    # if user requests contours instead of full bathy, produce these
-    if (!is.null(contours)) {
-       # check: make sure it is a numeric object
-       if (!is.numeric(contours)){
-         stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 400, 500, 600, 800, 1000.')
-       }
-
-       #if the contours are provided as negative values, set as positive
-       contours = ifelse(contours > 0, contours, -contours)
-
-       #open the contours file
-       bathy_contours = sf::st_read(paste0(map_dir, '/alaska_bathy_contours_',
-                                           stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
-
-       # limit to the requested contour values
-       bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
-
-    }
+  # strongly suggest that the user picks a projected coordinate system if they haven't
+  if (isTRUE(sf::st_is_longlat(input_crs))){
+    warning('You are working with Lat/Lon coordinates (using ', input_crs, '). This is likely to lead to some ugly maps! You should really consider using a projected coordinate system! Try EPSG:3338 for Alaska.')
   }
 
-  # if we don't have anything for the requested crs, build it
-  if (!dir.exists(map_dir)) {
-    message(paste0("Creating new basemap features for ", crs, "."))
+  # open up the EPSG:3338 collection of shapefiles (we'll reproject if needed below)
+  map_dir <- system.file("extdata/EPSG3338", package = "MACEReports")
 
-    # open the shapefiles (from 3338- since these are included to start with)
-    base_dir <- system.file("extdata/EPSG3338/", package = "MACEReports")
-    ak_land <- sf::st_read(paste0(base_dir, "/alaska_land_EPSG3338.gpkg"), quiet = TRUE)
-    russia_land <- sf::st_read(paste0(base_dir, "/russia_land_EPSG3338.gpkg"), quiet = TRUE)
-    canada_land <- sf::st_read(paste0(base_dir, "/canada_land_EPSG3338.gpkg"), quiet = TRUE)
-    management_regions_layer <- sf::st_read(paste0(base_dir, "/alaska_NMFS_management_regions_EPSG3338.gpkg"), quiet = TRUE)
-    SSL_critical_habitat_layer <- sf::st_read(paste0(base_dir, "/SSL_critical_habitat_EPSG3338.gpkg"), quiet = TRUE)
-    alaska_3nmi_buffer_layer <- sf::st_read(paste0(base_dir, "/alaska_3nmi_buffer_EPSG3338.gpkg"), quiet = TRUE)
-    bathy_contours <- sf::st_read(paste0(map_dir, '/alaska_bathy_contours_', stringr::str_remove(crs, ':'), '.gpkg'), quiet = TRUE)
+  # open up all the layers we need
+  ak_land <- sf::st_read(paste0(map_dir, "/alaska_land_EPSG3338.gpkg"), quiet = TRUE)
+  russia_land <- sf::st_read(paste0(map_dir, "/russia_land_EPSG3338.gpkg"), quiet = TRUE)
+  canada_land <- sf::st_read(paste0(map_dir, "/canada_land_EPSG3338.gpkg"), quiet = TRUE)
 
-    # convert to the requested projection
-    ak_land <- sf::st_transform(ak_land, crs = crs)
-    russia_land <- sf::st_transform(russia_land, crs = crs)
-    canada_land <- sf::st_transform(canada_land, crs = crs)
-    management_regions_layer <- sf::st_transform(management_regions_layer, crs = crs)
-    SSL_critical_habitat_layer <- sf::st_transform(SSL_critical_habitat_layer, crs = crs)
-    alaska_3nmi_buffer_layer <- sf::st_transform(alaska_3nmi_buffer_layer, crs = crs)
-    bathy_contours <- sf::st_transform(bathy_contours, crs = crs)
-
-    if (bathy == TRUE) {
-      # again, start with the 3338 layer
-      bathy_raster <- terra::rast(paste0(base_dir, "/alaska_bathy_raster_EPSG3338.tif"))
-
-      # convert it
-      bathy_raster <- terra::project(bathy_raster, crs, method = "bilinear")
-
-      # up the resolution
-      bathy_raster <- terra::disagg(bathy_raster, fact = c(5, 5), method = "near")
-    }
-
-    if (!is.null(contours)) {
-       #check: make sure it is a numeric object
-       if (!is.numeric(contours)){
-         stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 300, 500, 700, 1000.')
-       }
-
-       # if the contours are provided as negative values, set as positive
-       contours = ifelse(contours > 0, contours, -contours)
-
-       # open up the contours
-       bathy_contours = sf::st_read(paste0(base_dir, '/alaska_bathy_contours_EPSG3338.gpkg'), quiet = TRUE)
-
-       # limit to the requested contour values
-       bathy_contours = bathy_contours[bathy_contours$METERS %in% contours,]
-
-       # convert to the requested projection
-       bathy_contours = sf::st_transform(bathy_contours, crs = crs)
-
-    }
+  if (!is.null(management_regions)) {
+    management_regions_layer <- sf::st_read(paste0(
+      map_dir, "/alaska_NMFS_management_regions_EPSG3338.gpkg"
+    ), quiet = TRUE)
   }
 
-  # clip the exent of background layers for plotting
+  if (!is.null(SSL_critical_habitat)) {
+    SSL_critical_habitat_layer <- sf::st_read(paste0(
+      map_dir, "/SSL_critical_habitat_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
 
-  # limit the extent of the plot to be slightly greater than the plot area
-  region_zoom_box <- sf::st_as_sfc(sf::st_bbox(plot_limits_data))
+  if (!is.null(SSL_no_transit)) {
+    SSL_no_transit_layer <- sf::st_read(paste0(
+      map_dir, "/SSL_no_transit_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(humpback_critical_habitat)) {
+    humpback_critical_habitat_layer <- sf::st_read(paste0(
+      map_dir, "/humpback_whale_dps_critical_habitat_2021_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(NPRW_critical_habitat)) {
+    NPRW_critical_habitat_layer <- sf::st_read(paste0(
+      map_dir, "/NPRW_critical_habitat_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(sea_otter_critical_habitat)) {
+    sea_otter_critical_habitat_layer <- sf::st_read(paste0(
+      map_dir, "/sea_otter_critical_habitat_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(CI_beluga_critical_habitat)) {
+    CI_beluga_critical_habitat_layer <- sf::st_read(paste0(
+      map_dir, "/ci_beluga_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(walrus_no_transit)) {
+    walrus_no_transit_layer <- sf::st_read(paste0(
+      map_dir, "/walrus_no_transit_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(walrus_protection_area)) {
+    walrus_protection_area_layer <- sf::st_read(paste0(
+      map_dir, "/walrus_protection_area_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(alaska_3nmi_buffer)) {
+    alaska_3nmi_buffer_layer <- sf::st_read(paste0(
+      map_dir, "/alaska_3nmi_buffer_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (bathy == TRUE) {
+    bathy_raster <- terra::rast(paste0(map_dir, "/alaska_bathy_raster_EPSG3338.tif"))
+  }
+
+  # if user requests contours instead of full bathy, produce these
+  if (!is.null(contours)) {
+    # check: make sure it is a numeric object
+    if (!is.numeric(contours)){
+      stop('Enter the contours you want, as in c(200,300). Options are: 50, 100, 200, 400, 500, 600, 800, 1000.')
+    }
+
+    #if the contours are provided as negative values, set as positive
+    contours <- ifelse(contours > 0, contours, -contours)
+
+    #open the contours file
+    bathy_contours <- sf::st_read(paste0(map_dir, '/alaska_bathy_contours_EPSG3338.gpkg'), quiet = TRUE)
+
+    # limit to the requested contour values
+    bathy_contours <- bathy_contours[bathy_contours$METERS %in% contours,]
+
+  }
+
+  # limit the extent of the plot to be slightly greater than the plot area (do this in projected space!)
+  # this allows us to clip the exent of background layers for plotting
+  if (input_crs != "EPSG:3338"){
+
+    region_zoom_box <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(plot_limits_data, crs = 3338)))
+
+  }
+
+  if (input_crs == "EPSG:3338"){
+
+    region_zoom_box <- sf::st_as_sfc(sf::st_bbox(plot_limits_data))
+
+  }
 
   # create a small buffer, around 10% of the total x-axis extent
   p_min <- sf::st_point(c(min(sf::st_coordinates(region_zoom_box)[, 1]), min(sf::st_coordinates(region_zoom_box)[, 2])))
@@ -278,15 +219,7 @@ get_basemap_layers <- function(plot_limits_data,
   # compute the maximum distance across plot; add a buffer to the plot as n% of this distance
   dist_buffer <- sf::st_distance(p_min, p_max)[[1]] * plot_expansion
 
-  # if you are working in a geographic coordinate system, add this buffer directly to your coordinates
-  # (this is a workaround, as geographic buffers are problematic- not needed if you are in a projected system)
-  if (sf::st_is_longlat(region_zoom_box)) {
-    sf::sf_use_s2(FALSE)
-    region_zoom_box <- sf::st_buffer(region_zoom_box, dist = dist_buffer, joinStyle = "MITRE", mitreLimit = 2)
-    sf::sf_use_s2(TRUE)
-  }
-
-  # #in projected coordinate systems, simply apply the buffer
+  # apply the buffer
   if (!sf::st_is_longlat(region_zoom_box)) {
     region_zoom_box <- sf::st_buffer(region_zoom_box, dist = dist_buffer, joinStyle = "MITRE", mitreLimit = 2)
   }
@@ -411,16 +344,84 @@ get_basemap_layers <- function(plot_limits_data,
     bathy_contours <- sf::st_crop(bathy_contours, region_zoom_box)
   }
 
+  # if the input data (plot_limits_data parameter is not in EPSG:3338, reproject into the input projection)
+  if (input_crs != "EPSG:3338"){
+
+    # transform projections on all the layers we need
+    ak_land <- sf::st_transform(ak_land, crs = input_crs)
+    russia_land <- sf::st_transform(russia_land, crs = input_crs)
+    canada_land <- sf::st_transform(canada_land, crs = input_crs)
+
+    if (!is.null(management_regions)) {
+      management_regions_layer <- sf::st_transform(management_regions_layer, crs = input_crs)
+    }
+
+    if (!is.null(SSL_critical_habitat)) {
+      SSL_critical_habitat_layer <- sf::st_transform(SSL_critical_habitat_layer, crs = input_crs)
+    }
+
+    if (!is.null(SSL_no_transit)) {
+      SSL_no_transit_layer <-  sf::st_transform(SSL_no_transit_layer, crs = input_crs)
+    }
+
+    if (!is.null(humpback_critical_habitat)) {
+      humpback_critical_habitat_layer <- sf::st_transform(humpback_critical_habitat_layer, crs = input_crs)
+    }
+
+    if (!is.null(NPRW_critical_habitat)) {
+      NPRW_critical_habitat_layer <- sf::st_transform(NPRW_critical_habitat_layer, crs = input_crs)
+    }
+
+    if (!is.null(sea_otter_critical_habitat)) {
+      sea_otter_critical_habitat_layer <- sf::st_transform(sea_otter_critical_habitat_layer, crs = input_crs)
+    }
+
+    if (!is.null(CI_beluga_critical_habitat)) {
+      CI_beluga_critical_habitat_layer <- sf::st_transform(CI_beluga_critical_habitat_layer, crs = input_crs)
+    }
+
+    if (!is.null(walrus_no_transit)) {
+      walrus_no_transit_layer <- sf::st_transform(walrus_no_transit_layer, crs = input_crs)
+    }
+
+    if (!is.null(walrus_protection_area)) {
+      walrus_protection_area_layer <- sf::st_transform(walrus_protection_area_layer, crs = input_crs)
+    }
+
+    if (!is.null(alaska_3nmi_buffer)) {
+      alaska_3nmi_buffer_layer <- sf::st_transform(alaska_3nmi_buffer_layer, crs = input_crs)
+    }
+
+    if (bathy == TRUE) {
+
+      # for now, we're not allowing rasters in geographic space! warn:
+      warning(paste0('Because you are working with Lat/Lon coordinates (using ', input_crs, '), bathymetric rasters are not an option! Please use a projected coordinate system if you want that! Try EPSG:3338 for Alaska.' ))
+    }
+
+    if (!is.null(contours)) {
+      bathy_contours <- sf::st_transform(bathy_contours, crs = input_crs)
+    }
+
+  }
+
+  #############
+  # finally, plot it all
+
   # get the automatically-generated graticule for the biggest shapefile (ak_land)- we will use this to force more longitude ticks on the basemap if there are an insufficient (<3) number of ticks.
   grats <- sf::st_graticule(ak_land)
 
   # define a color for the added layers (management regions, etc): white if bathy, black if contours
   layer_col <- ifelse(bathy == TRUE, "white", "black")
 
+  # if a user picked lat/lon, set as black either way (there's no bathymetric option)
+  if (isTRUE(sf::st_is_longlat(input_crs))){
+    layer_col <- 'black'
+  }
+
   # define the basemap ggplot object
   basemap_layers <- ggplot2::ggplot() +
     {
-      if (bathy == TRUE) ggplot2::geom_raster(data = bathy_raster_df, ggplot2::aes(x = x, y = y, fill = z))
+      if (isTRUE(bathy) & !isTRUE(sf::st_is_longlat(input_crs))) ggplot2::geom_raster(data = bathy_raster_df, ggplot2::aes(x = x, y = y, fill = z))
     } +
     {
       if (bathy == TRUE) bathy_colors

@@ -363,8 +363,8 @@ basemap <- get_basemap_layers(plot_limits_data = sticks, bathy = FALSE)
 # now go add your sticks, and the custom bathymetry
 basemap +
   # add the bathy lines with different linetypes for each depth
-  geom_sf(data = bathy_lines, aes(linetype = factor(METERS))) +
-  labs(linetype = 'Depth (m)') +
+  geom_sf(data = bathy_lines, aes(color = factor(METERS))) +
+  labs(color = 'Depth (m)') +
   # add some data 
   geom_sf(data = sticks, color = 'red') +
   # use the easy_plot_limits function to handle the limits! 

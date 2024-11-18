@@ -184,13 +184,13 @@ get_basemap_layers <- function(plot_limits_data,
 
   if (!is.null(ringed_seal_critical_habitat)) {
     ringed_seal_critical_habitat_layer <- sf::st_read(paste0(
-      map_dir, "/ringed_seal_EPSG3338.gpkg"
+      map_dir, "/ringed_seal_critical_habitat_EPSG3338.gpkg"
     ), quiet = TRUE)
   }
 
   if (!is.null(bearded_seal_critical_habitat)) {
     bearded_seal_critical_habitat_layer <- sf::st_read(paste0(
-      map_dir, "/bearded_seal_EPSG3338.gpkg"
+      map_dir, "/bearded_seal_critical_habitat_EPSG3338.gpkg"
     ), quiet = TRUE)
   }
 

@@ -22,7 +22,10 @@ get_basemap_layers(
   sea_otter_critical_habitat = NULL,
   CI_beluga_critical_habitat = NULL,
   walrus_protection_area = NULL,
-  walrus_no_transit = NULL
+  walrus_no_transit = NULL,
+  NWR_Afognak_Semidi_boundaries = NULL,
+  ringed_seal_critical_habitat = NULL,
+  bearded_seal_critical_habitat = NULL
 )
 }
 \arguments{
@@ -64,6 +67,12 @@ i.e. \code{c(200,100,50)}}
 \item{walrus_protection_area}{If \code{TRUE}, will add Pacific Walrus protection area to basemap}
 
 \item{walrus_no_transit}{If \code{TRUE}, will add Round Island Pacific Walrus no transit area to basemap}
+
+\item{NWR_Afognak_Semidi_boundaries}{If \code{TRUE}, will add the National Wildlife Refuge Afognak and Semidi boundaries to no transit area to basemap}
+
+\item{ringed_seal_critical_habitat}{If \code{TRUE}, will add Ringed Seal critical habitat to basemap}
+
+\item{bearded_seal_critical_habitat}{If \code{TRUE}, will add Bearded Seal critical habitat to basemap}
 }
 \value{
 A list of class \code{ggplot} containing information required for plotting a basemap.

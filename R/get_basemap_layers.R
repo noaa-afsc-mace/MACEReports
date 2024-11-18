@@ -23,6 +23,9 @@
 #' @param CI_beluga_critical_habitat If \code{TRUE}, will add Cook Inlet Beluga critical habitat to basemap
 #' @param walrus_protection_area If \code{TRUE}, will add Pacific Walrus protection area to basemap
 #' @param walrus_no_transit If \code{TRUE}, will add Round Island Pacific Walrus no transit area to basemap
+#' @param NWR_Afognak_Semidi_boundaries If \code{TRUE}, will add the National Wildlife Refuge Afognak and Semidi boundaries to no transit area to basemap
+#' @param ringed_seal_critical_habitat If \code{TRUE}, will add Ringed Seal critical habitat to basemap
+#' @param bearded_seal_critical_habitat If \code{TRUE}, will add Bearded Seal critical habitat to basemap
 #' @return A list of class \code{ggplot} containing information required for plotting a basemap.
 #'
 #' @author Mike Levine
@@ -89,7 +92,10 @@ get_basemap_layers <- function(plot_limits_data,
                                sea_otter_critical_habitat = NULL,
                                CI_beluga_critical_habitat = NULL,
                                walrus_protection_area = NULL,
-                               walrus_no_transit = NULL) {
+                               walrus_no_transit = NULL,
+                               NWR_Afognak_Semidi_boundaries = NULL,
+                               ringed_seal_critical_habitat = NULL,
+                               bearded_seal_critical_habitat = NULL) {
   # checks: Make sure we have a sf dataframe WITH a defined CRS for the plot data; stop if not.
   if (!"sf" %in% class(plot_limits_data) | is.na(sf::st_crs(plot_limits_data)$input)) {
     stop("Your plot data must be an sf spatial dataframe with a coordinate reference system (CRS)!")
@@ -167,6 +173,24 @@ get_basemap_layers <- function(plot_limits_data,
   if (!is.null(walrus_protection_area)) {
     walrus_protection_area_layer <- sf::st_read(paste0(
       map_dir, "/walrus_protection_area_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(NWR_Afognak_Semidi_boundaries)) {
+    NWR_Afognak_Semidi_boundaries_layer <- sf::st_read(paste0(
+      map_dir, "/NWR_Afognak_Semidi_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(ringed_seal_critical_habitat)) {
+    ringed_seal_critical_habitat_layer <- sf::st_read(paste0(
+      map_dir, "/ringed_seal_EPSG3338.gpkg"
+    ), quiet = TRUE)
+  }
+
+  if (!is.null(bearded_seal_critical_habitat)) {
+    bearded_seal_critical_habitat_layer <- sf::st_read(paste0(
+      map_dir, "/bearded_seal_EPSG3338.gpkg"
     ), quiet = TRUE)
   }
 
@@ -292,10 +316,30 @@ get_basemap_layers <- function(plot_limits_data,
     )
   }
 
+  if (!is.null(NWR_Afognak_Semidi_boundaries)) {
+    NWR_Afognak_Semidi_boundaries_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(NWR_Afognak_Semidi_boundaries_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
+  if (!is.null(ringed_seal_critical_habitat)) {
+    ringed_seal_critical_habitat_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(ringed_seal_critical_habitat_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
+  if (!is.null(bearded_seal_critical_habitat)) {
+    bearded_seal_critical_habitat_layer <- sf::st_intersection(
+      sf::st_make_valid(sf::st_geometry(bearded_seal_critical_habitat_layer)),
+      sf::st_geometry(region_zoom_box)
+    )
+  }
+
   if (!is.null(alaska_3nmi_buffer)) {
     alaska_3nmi_buffer_layer <- sf::st_intersection(sf::st_geometry(alaska_3nmi_buffer_layer), sf::st_geometry(region_zoom_box))
   }
-
 
   # if we are using bathy raster, limit it to be sized for the plot too (much faster);
   # and return it as a dataframe to plot with ggplot
@@ -388,6 +432,18 @@ get_basemap_layers <- function(plot_limits_data,
       walrus_protection_area_layer <- sf::st_transform(walrus_protection_area_layer, crs = input_crs)
     }
 
+    if (!is.null(NWR_Afognak_Semidi_boundaries)) {
+      NWR_Afognak_Semidi_boundaries_layer <- sf::st_transform(NWR_Afognak_Semidi_boundaries_layer, crs = input_crs)
+    }
+
+    if (!is.null(ringed_seal_critical_habitat)) {
+      ringed_seal_critical_habitat_layer <- sf::st_transform(ringed_seal_critical_habitat_layer, crs = input_crs)
+    }
+
+    if (!is.null(bearded_seal_critical_habitat)) {
+      bearded_seal_critical_habitat_layer <- sf::st_transform(bearded_seal_critical_habitat_layer, crs = input_crs)
+    }
+
     if (!is.null(alaska_3nmi_buffer)) {
       alaska_3nmi_buffer_layer <- sf::st_transform(alaska_3nmi_buffer_layer, crs = input_crs)
     }
@@ -456,6 +512,15 @@ get_basemap_layers <- function(plot_limits_data,
     } +
     {
       if (!is.null(walrus_no_transit)) ggplot2::geom_sf(data = walrus_no_transit_layer, color = layer_col, fill = "transparent")
+    } +
+    {
+      if (!is.null(NWR_Afognak_Semidi_boundaries)) ggplot2::geom_sf(data = NWR_Afognak_Semidi_boundaries_layer, color = layer_col, fill = "transparent")
+    } +
+    {
+      if (!is.null(ringed_seal_critical_habitat)) ggplot2::geom_sf(data = ringed_seal_critical_habitat_layer, color = layer_col, fill = "transparent")
+    } +
+    {
+      if (!is.null(bearded_seal_critical_habitat)) ggplot2::geom_sf(data = bearded_seal_critical_habitat_layer, color = layer_col, fill = "transparent")
     } +
     # add requested management layers
     {

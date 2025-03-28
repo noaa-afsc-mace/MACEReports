@@ -11,6 +11,7 @@
 #' \code{build_biomass_at_length_table_winter_goa} function.
 #' @param region_name The name of the reporting region that you want to include in this table
 #' (generally "Shelikof Strait" in winter GOA reports)
+#' @param include_n_years (optional) number of recent years to include in this table. This is useful for long survey time series where you may not need to present all the available years in the table. If not used, all years in the biomass_nums_length_data will be included.
 #'
 #' @return A list with two items: item 1 is the Flextable table object, item 2 is the table caption.
 #'
@@ -29,7 +30,9 @@
 #' biomass_length_caption <- biomass_table_list[[2]]
 #' }
 #' @export
-build_biomass_at_length_table_winter_goa <- function(biomass_nums_length_data, region_name) {
+build_biomass_at_length_table_winter_goa <- function(biomass_nums_length_data,
+                                                     region_name,
+                                                     include_n_years = NULL) {
   # check input dataframe against the template dataframe: this will make sure the input
   # data can actually be used to create a table, and will return errors if not
   check_data <- MACEReports::template_df_numbers_biomass_at_length_tables_winter_goa
@@ -42,6 +45,22 @@ build_biomass_at_length_table_winter_goa <- function(biomass_nums_length_data, r
 
   ###########
   # 1. Collect the data for and biomass- at length table
+
+  # if the user has requested to only print n most recent years, limit the data
+  if (!is.null(include_n_years)){
+
+    # confirm that they have requested a number
+    if (!is.numeric(include_n_years)){
+      stop('Please request a number of years for the include_n_years parameter!')
+    }
+
+    # limit to the most recent n years for the table
+    min_year_for_table <- max(biomass_nums_length_data$year) - include_n_years
+
+    biomass_nums_length_data <- biomass_nums_length_data %>%
+      dplyr::filter(.data$year >= min_year_for_table)
+
+  }
 
   # use this to limit the table data to this reporting region;
   # sum everyting up by length bin and year for this region
@@ -167,14 +186,9 @@ build_biomass_at_length_table_winter_goa <- function(biomass_nums_length_data, r
   biomass_length_table <- flextable::set_formatter(biomass_length_table, values = formatter_func_list, part = "body")
 
   # build the caption:
-  # note it is hard-coded to say Shelikof Strait because that's the only region we currently make this table for
-
   cap_text <- paste0(
     "Biomass-at-length estimates (thousands of metric tons) from acoustic-trawl ",
-    "surveys of pollock in the ", region_name, " area. ",
-    "Biomass from ", min(unique(nums_and_biomass_by_length$year)), " to ",
-    max(unique(nums_and_biomass_by_length$year)),
-    " reflects selectivity corrections for escapement of juveniles."
+    "surveys of pollock in the ", region_name, " area from ", min(biomass_nums_length_data$year), "-", max(biomass_nums_length_data$year), "."
   )
 
   # return table and caption

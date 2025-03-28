@@ -4,7 +4,11 @@
 \alias{build_biomass_at_length_table_winter_goa}
 \title{Create biomass at length table for MACE winter GOA cruise reports}
 \usage{
-build_biomass_at_length_table_winter_goa(biomass_nums_length_data, region_name)
+build_biomass_at_length_table_winter_goa(
+  biomass_nums_length_data,
+  region_name,
+  include_n_years = NULL
+)
 }
 \arguments{
 \item{biomass_nums_length_data}{The name of the dataframe that contains all the abundance-at-length values;
@@ -15,6 +19,8 @@ dataframe named \code{shelikof_sel_corr_surveys_totals_by_length_and_region}. Th
 
 \item{region_name}{The name of the reporting region that you want to include in this table
 (generally "Shelikof Strait" in winter GOA reports)}
+
+\item{include_n_years}{(optional) number of recent years to include in this table. This is useful for long survey time series where you may not need to present all the available years in the table. If not used, all years in the biomass_nums_length_data will be included.}
 }
 \value{
 A list with two items: item 1 is the Flextable table object, item 2 is the table caption.

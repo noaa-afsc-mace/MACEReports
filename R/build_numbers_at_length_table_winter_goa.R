@@ -185,6 +185,13 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
     region_name, " area from ", min(biomass_nums_length_data$year), "-", max(biomass_nums_length_data$year), "."
   )
 
+  # if include_n_years parameter used, add a note about how many years left off the table
+  if (!is.null(include_n_years)){
+
+    cap_text <- paste0(cap_text, paste0(' Note that years prior to ', max(biomass_nums_length_data$year) - include_n_years, ' are excluded due to space constraints.' ))
+
+  }
+
   # return table and caption
   return(list(nums_length_table, cap_text))
 }

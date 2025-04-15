@@ -117,7 +117,7 @@ plot_biomass_nums_by_age <- function(age_vector,
       graphics::axis(side = 4, las = 2, cex.axis = cex_label_size, family = "Times", col.axis = "#cb181d")
 
       # set the line to put the captions on if cex >1, move them out a bit
-      text_pos_r <- ifelse(cex_label_size > 1, 2.5, 1.5)
+      text_pos_r <- ifelse(cex_label_size > 1, 2.5, 2.0)
       text_pos_l <- ifelse(cex_label_size > 1, 4.5, 3.5)
       text_pos_bot <- ifelse(cex_label_size > 1, 2.2, 1.2)
 

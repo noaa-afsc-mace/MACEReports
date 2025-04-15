@@ -84,32 +84,32 @@ plot_biomass_nums_by_length <- function(length_vector,
     # we need to deal with very small totals and very large areas differently for nice plotting- most
     # areas are best as millions of fish + 1000s of tons; for very small areas thousands of fish and tons are better
     # if there's less than an million tons total, use the smaller scale, if more, use the larger
-    units_scaler_numbers <- ifelse(sum(plot_data$num) > 1e9,
+    units_scaler_numbers <- ifelse(max(plot_data$num) > 1e9,
                                    1e9,
-                                   ifelse(sum(plot_data$wt) <= 1e9 & sum(plot_data$wt) > 10e6,
+                                   ifelse(max(plot_data$wt) <= 1e9 & max(plot_data$wt) > 10e6,
                                           1e6,
                                           1e3))
 
-    units_scaler_biomass <- ifelse(sum(plot_data$wt) > 1e9,
+    units_scaler_biomass <- ifelse(max(plot_data$wt) > 1e9,
                                    1e9,
-                                   ifelse(sum(plot_data$wt) <= 1e9 & sum(plot_data$wt) > 10e6,
+                                   ifelse(max(plot_data$wt) <= 1e9 & max(plot_data$wt) > 10e6,
                                           1e6,
                                           1e3))
 
-    units_number_id <- ifelse(sum(plot_data$num) > 1e9,
+    units_number_id <- ifelse(max(plot_data$num) > 1e9,
                                "(billions)",
-                               ifelse(sum(plot_data$wt) <= 1e9 & sum(plot_data$wt) > 10e6,
+                               ifelse(max(plot_data$wt) <= 1e9 & max(plot_data$wt) > 10e6,
                                       "(millions)",
                                       "(thousands)"))
 
-    units_biomass_id <- ifelse(sum(plot_data$wt) > 1e9,
+    units_biomass_id <- ifelse(max(plot_data$wt) > 1e9,
                                "(million t)",
-                                 ifelse(sum(plot_data$wt) <= 1e9 & sum(plot_data$wt) > 10e6,
+                                 ifelse(max(plot_data$wt) <= 1e9 & max(plot_data$wt) > 10e6,
                                         "(1000s t)",
                                         "(t)"))
 
     # specify left y-axis limit & define interval width for Numbers
-    y_axis_max <- round(max(plot_data$num / units_scaler_numbers) * 1.05, 0)
+    y_axis_max <- max(plot_data$num / units_scaler_numbers) * 1.05
     # y_axis_int <- ifelse(units_scaler_numbers == 1e3,
     #                      round(y_axis_max/5, digits = -2),
     #                      ifelse(y_axis_max <= 100,
@@ -119,7 +119,7 @@ plot_biomass_nums_by_length <- function(length_vector,
 
     y_axis_int <- ifelse(units_number_id ==  "(thousands)",
                           round(y_axis_max/5, digits = -1),
-                          ifelse(units_number_id == "(millions)" & y_axis_max >= 5 & y_axis_max <= 100,
+                          ifelse(units_number_id == "(millions)" & y_axis_max >= 5 & y_axis_max <= 500,
                                  round(y_axis_max / 5, digits = 0),
                                  round(y_axis_max / 5, digits = 1)))
 

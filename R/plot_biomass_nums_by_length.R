@@ -171,8 +171,8 @@ plot_biomass_nums_by_length <- function(length_vector,
     graphics::axis(side = 4, las = 2, at = seq(0, y2_axis_max, y2_axis_int), cex.axis = cex_label_size, family = "Times", col.axis = "#cb181d")
 
     # set the line to put the captions on if cex >1, move them out a bit
-    text_pos_r <- ifelse(cex_label_size > 1, 2.5, 1.5)
-    text_pos_l <- ifelse(cex_label_size > 1, 4.5, 3.5)
+    text_pos_r <- ifelse(cex_label_size > 1, 2.5, 2.0)
+    text_pos_l <- ifelse(cex_label_size > 1, 4.5, 4.0)
     text_pos_bot <- ifelse(cex_label_size > 1, 2.2, 1.2)
 
     graphics::mtext(side = 4, line = text_pos_r, paste0("Biomass ", units_biomass_id), cex = cex_label_size, padj = 1, family = "Times", col = "#cb181d")

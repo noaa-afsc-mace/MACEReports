@@ -87,8 +87,16 @@ build_haul_table <- function(haul_data) {
   haul_table <- flextable::flextable(haul_data) %>%
     # set the header
     flextable::set_header_df(mapping = header_keys, key = "col_keys") %>%
-    # align text: center justify everything
-    flextable::align(align = "center", part = "all") %>%
+    # merge the header cells for start pos/depth/temp/pollocl
+    flextable::merge_at(i = 1, j = 7:8, part = "header") %>%
+    flextable::merge_at(i = 1, j = 10:11, part = "header") %>%
+    flextable::merge_at(i = 1, j = 13:14, part = "header") %>%
+    flextable::merge_at(i = 1, j = 16:17, part = "header") %>%
+    # align text: center justify everything except first row of header in double rows
+    flextable::align(align = "right", part = "all") %>%
+    flextable::align(align = 'center', i = 1, j = 7:17, part = 'header') %>%
+    # and push first two columns to left
+    flextable::align(align = "left", j = 1:2, part = "all") %>%
     # add horizontal border on top and bottom of table
     flextable::hline_top(part = "all", border = table_border) %>%
     flextable::hline_bottom(part = "all", border = table_border) %>%
@@ -153,7 +161,7 @@ build_haul_table <- function(haul_data) {
     value = flextable::as_paragraph(c(
       gear_footnote,
       "Headrope depth obtained from SBE temperature logger. In hauls without SBE temperature logger records, depth was obtained from scientist notes when possible.",
-      "Average temperature measured from an SBE temperature logger"
+      "Average temperature measured from a temperature-depth probe (SBE 39, Sea-Bird Scientific) "
     )),
     ref_symbols = c("a", "b", "c"), part = "header"
   )

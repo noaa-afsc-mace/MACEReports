@@ -124,12 +124,16 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
   # get a summary row
   totals_footer_row <- nums_by_length_wide %>%
     # get the column sums and round for presentation
-    dplyr::summarize_all(list(~ format(round(sum(., na.rm = TRUE), digits = 1), nsmall = 1))) %>%
+    dplyr::summarize_all(list(~ formatC(round(sum(., na.rm = TRUE), digits = 1),
+                                        format = "f", digits = 1, big.mark = ",", big.interval = 3))) %>%
     # and set the Length column as a blank since the total # of lengths is meaningless here
     dplyr::mutate(Length = "Total")
 
   # define a border to add above and below caption and at bottom of table
   table_border <- officer::fp_border(color = "black", width = 1.0)
+
+  # add units to the header column for length
+  colnames(nums_by_length_wide)[1] <- "Length (cm)"
 
   # make it into a flextable
   nums_length_table <- flextable::flextable(nums_by_length_wide) %>%
@@ -137,8 +141,8 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
     flextable::add_footer_row(top = FALSE, values = totals_footer_row, colwidths = rep(1, length(totals_footer_row))) %>%
     # set the width of the table as 9" for landscape format
     flextable::width(width = 9 / ncol(nums_by_length_wide)) %>%
-    # align text: center justify everything
-    flextable::align(align = "center", part = "all") %>%
+    # align text: right justify everything
+    flextable::align(align = "right", part = "all") %>%
     # get rid of padding around the cells
     flextable::padding(padding = 0, part = "all") %>%
     # add horizontal border on top and bottom of table
@@ -157,7 +161,7 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
     if (is.na(x)) {
       x <- 0
     } else if (x >= 1) {
-      x <- format(round(x, digits = 1), nsmall = 1)
+      x <- formatC(x, format = "f", digits = 1, big.mark = ",", big.interval = 3)
     } else if (x < 1) {
       x <- "<1"
     } else {
@@ -181,8 +185,8 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
   # build the caption:
 
   cap_text <- paste0(
-    "Numbers-at-length estimates (millions of fish) from acoustic-trawl surveys of pollock in the ",
-    region_name, " area from ", min(biomass_nums_length_data$year), "-", max(biomass_nums_length_data$year), "."
+    "Numbers at length estimates (millions of fish) from acoustic-trawl surveys of pollock in the ",
+    region_name, " from ", min(biomass_nums_length_data$year), "-", max(biomass_nums_length_data$year), "."
   )
 
   # if include_n_years parameter used, add a note about how many years left off the table

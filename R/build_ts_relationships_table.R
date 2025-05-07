@@ -38,21 +38,21 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
   # define any footnotes first, to append to dataframe below
   krill_footnote <- flextable::as_paragraph("A = -930.429983; B = 3.21027896; C = 1.74003785; D = 1.36133896 x 10", flextable::as_sup("-8"), "; E = -2.26958555 x 10", flextable::as_sup("-6"), "\nF= 1.50291244 x 10", flextable::as_sup("-4"), "; G = -4.86306872 x 10", flextable::as_sup("-3"), "; H = 0.0738748423; I = -0.408004891; J = -73.9078690; and ", flextable::as_i("L"), flextable::as_sub("0"), " = 0.03835 \nIf L < 0.015 m, TS = -105 dB; and if L > 0.065 m, TS = -73 dB. \nk = 2\u03c0fc, where f = 38,000 (frequency in Hz) and c = 1470 (sound speed in m/s).")
 
-  herring_footnote <- flextable::as_paragraph(flextable::as_i("depth")," (m) is fixed at 75 m")
+  herring_footnote <- flextable::as_paragraph(flextable::as_i("depth")," (m) is fixed at 75 m.")
 
 
   # build the equations dataframe
   ts_df <- data.frame(
     c(
-      "Pollock",
+      "pollock",
       "Pacific capelin",
       "Pacific herring",
-      "Eulachon",
-      "Fish with swim bladders",
-      "Fish without swim bladders",
-      "Jellyfish",
-      "Squid",
-      "Pelagic crustaceans"
+      "eulachon",
+      "fish with swim bladders",
+      "fish without swim bladders",
+      "jellyfish",
+      "squid",
+      "pelagic crustaceans"
     ),
     c(
       "TS = 20 log$_{10}$ *L*-66",
@@ -176,7 +176,7 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
     )
   }
 
-  if ("Pelagic crustaceans" %in% ts_df$Group) {
+  if ("pelagic crustaceans" %in% ts_df$Group) {
 
     # if this is the only footnote, label as 1, if there's also a herring footnote, label as 2
     footnote_num <- ifelse("Pacific herring" %in% ts_df$Group,
@@ -185,7 +185,7 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
 
     ts_table <- flextable::footnote(
       x = ts_table,
-      i = which(ts_df$Group == "Pelagic crustaceans"),
+      i = which(ts_df$Group == "pelagic crustaceans"),
       j = 1,
       ref_symbols = c(footnote_num),
       value = krill_footnote,

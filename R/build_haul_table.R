@@ -155,13 +155,16 @@ build_haul_table <- function(haul_data) {
   # and combine them in a sentence
   gear_footnote <- paste(c(text_list), collapse = ", ")
 
+  # add a period to the end of the footnote
+  gear_footnote <- paste0(gear_footnote, ".")
+
   # add footnotes
   haul_table <- flextable::footnote(haul_table,
     i = 2, j = c("gear", "gear_depth", "surface_temp"),
     value = flextable::as_paragraph(c(
       gear_footnote,
-      "Headrope depth obtained from SBE temperature logger. In hauls without SBE temperature logger records, depth was obtained from scientist notes when possible.",
-      "Average temperature measured from a temperature-depth probe (SBE 39, Sea-Bird Scientific) "
+      "Headrope depth obtained from temperature-depth probe. In hauls without temperature-depth probe records, depth was obtained from scientist notes when possible.",
+      "Average temperature measured from a temperature-depth probe (SBE 39, Sea-Bird Scientific). "
     )),
     ref_symbols = c("a", "b", "c"), part = "header"
   )

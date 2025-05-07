@@ -100,7 +100,7 @@ plot_biomass_nums_by_age <- function(age_vector,
       )
 
       # major tick marks every 10 cm, center bars over ticks
-      graphics::axis(side = 1, at = seq(0, x_axis_max, 1) + .5, labels = seq(1, x_axis_max + 1, 1), cex.axis = cex_label_size, col = "grey50", col.ticks = "grey50", )
+      graphics::axis(side = 1, at = seq(0, x_axis_max, 1) + .5, labels = seq(1, x_axis_max + 1, 1), cex.axis = cex_label_size, col = "grey50", col.ticks = "grey50", family = "Times")
       graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = cex_label_size, family = "Times", col.axis = "#0072B2")
 
       # add lines

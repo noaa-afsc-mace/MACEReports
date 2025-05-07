@@ -143,7 +143,7 @@ plot_biomass_nums_by_length <- function(length_vector,
     # major tick marks every 10 cm, center bars over ticks
     graphics::axis(side = 1, at = seq(0, x_axis_max, 1) + .5, labels = F, col.ticks = "gray50", lwd = 1, tck = -0.02)
     graphics::axis(side = 1, at = seq(5, x_axis_max, 10) + .5, labels = F, col.ticks = "gray50", lwd = 0, lwd.ticks = 1, tck = -0.04)
-    graphics::axis(side = 1, at = seq(0, x_axis_max, 10) + .5, labels = seq(0, x_axis_max, 10), col.ticks = "gray50", lwd = 0, lwd.ticks = 1, tck = -0.04, cex.axis = cex_label_size)
+    graphics::axis(side = 1, at = seq(0, x_axis_max, 10) + .5, labels = seq(0, x_axis_max, 10), col.ticks = "gray50", lwd = 0, lwd.ticks = 1, tck = -0.04, cex.axis = cex_label_size, family = "Times")
     graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = cex_label_size, family = "Times", col.axis = "#0072B2")
 
     # specify right y-axis limit & define interval width for biomass

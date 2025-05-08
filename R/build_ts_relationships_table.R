@@ -55,13 +55,13 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
       "pelagic crustaceans"
     ),
     c(
-      "TS = 20 log$_{10}$ *L*-66",
-      "TS = 20 log$_{10}$ *L*-70.3",
-      "TS = 20 log$_10$ *L*-2.3 log$_10$(1 + *depth*/10) - 65.4",
+      "TS = 20 log$_{10}$ *L* - 66",
+      "TS = 20 log$_{10}$ *L* - 70.3",
+      "TS = 20 log$_10$ *L* - 2.3 log$_10$(1 + *depth*/10) - 65.4",
       "TS = 20 log$_10$ *L* - 84.5",
       "TS = 20 log$_10$ *L* - 67.4",
       "TS = 20 log$_10$ *L* - 83.2",
-      "TS = 10 log$_10$($\\pi$$r^2$) -86.8",
+      "TS = 10 log$_10$($\\pi$$r^2$) - 86.8",
       "TS = 20 log$_10$ *L* - 75.4",
       "TS = *A* * (log$_10 (BkL)/(BkL))^c + D ((kL)^6) + E ((kL)^5) + F ((kL)^4) + G ((kL)^3) + H ((kL)^2) + I (kL) + J + 20$ log$_10( L/L_0)$"
     ),

@@ -73,35 +73,33 @@ plot_historical_age_comps_bubbleplot <- function(survey_year_vector,
   # enable Times New Roman font to be used (for windows only!)
   grDevices::windowsFonts("Times" = grDevices::windowsFont("Times New Roman"))
 
-  graphics::par(mfrow = c(2, 1), mar = c(2, 2, 1, 1), oma = c(2, 2.5, 1, 0))
+  graphics::par(mfrow = c(2, 1), mar = c(2, 2, 1, 1), oma = c(2, 2.5, 1, 0), family = "Times")
   ylim <- c(0, max_age + 2)
 
   # Plot numbers age comps
   graphics::plot(x = biomass_and_nums$survey_year_vector, y = biomass_and_nums$age_class, pch = 1,
                  cex = sqrt(biomass_and_nums$number_million_fish / 100) / 2,
                  ann = F, ylim = ylim, xaxt = "n", yaxt = "n", yaxs = "i")
-  graphics::axis(side = 2, las = 2, at = c(1:max_age), labels = c(1:(max_age - 1), paste0(max_age, "+")), cex.axis = 0.8, family = "Times")
+  graphics::axis(side = 2, las = 2, at = c(1:max_age), labels = c(1:(max_age - 1), paste0(max_age, "+")), cex.axis = 0.8)
   graphics::axis(
     side = 1, at = seq(min(biomass_and_nums$survey_year_vector), max(biomass_and_nums$survey_year_vector), 1),
-    labels = F, lwd = 1, lwd.ticks = 0.75, tck = -0.02, family = "Times"
-  )
-  graphics::axis(side = 1, at = unique(biomass_and_nums$survey_year_vector), lwd = 0, lwd.ticks = 1, tck = -0.04, cex.axis = 0.8, family = "Times")
-  graphics::text(x = stats::median(biomass_and_nums$survey_year_vector), y = max_age + 1.25, "Age composition by numbers of fish (millions)", family = "Times")
-  graphics::mtext(side = 2, las = 2, outer = F, line = 1, font = 2, at = max_age + 2, "A)", family = "Times")
+    labels = F, lwd = 1, lwd.ticks = 0.75, tck = -0.02)
+  graphics::axis(side = 1, at = unique(biomass_and_nums$survey_year_vector), lwd = 0, lwd.ticks = 1, tck = -0.04, cex.axis = 0.8)
+  graphics::text(x = stats::median(biomass_and_nums$survey_year_vector), y = max_age + 1.25, "Age composition by numbers of fish (millions)")
+  graphics::mtext(side = 2, las = 2, outer = F, line = 1, font = 2, at = max_age + 2, "a)")
 
   # Plot biomass age comps
   graphics::plot(x = biomass_and_nums$survey_year_vector, y = biomass_and_nums$age_class, pch = 1,
                  cex = sqrt(biomass_and_nums$biomass_thousand_tons) / 10,
                  ann = F, ylim = ylim, xaxt = "n", yaxt = "n", yaxs = "i")
-  graphics::axis(side = 2, las = 2, at = c(1:max_age), labels = c(1:(max_age - 1), paste0(max_age, "+")), cex.axis = 0.8, family = "Times")
+  graphics::axis(side = 2, las = 2, at = c(1:max_age), labels = c(1:(max_age - 1), paste0(max_age, "+")), cex.axis = 0.8)
   graphics::axis(
     side = 1, at = seq(min(biomass_and_nums$survey_year_vector), max(biomass_and_nums$survey_year_vector), 1),
-    labels = F, lwd = 1, lwd.ticks = 0.75, tck = -0.02, family = "Times"
-  )
-  graphics::axis(side = 1, at = unique(biomass_and_nums$survey_year_vector), lwd = 0, lwd.ticks = 1, tck = -0.04, cex.axis = 0.8, family = "Times")
-  graphics::text(x = stats::median(biomass_and_nums$survey_year_vector), y = max_age + 1.25, "Age composition by biomass (1000s t)", family = "Times")
-  graphics::mtext(side = 1, outer = F, line = 2.5, "Year", family = "Times")
-  graphics::mtext(side = 2, outer = T, line = 1, "Age", family = "Times")
-  graphics::mtext(side = 2, las = 2, outer = F, line = 1, font = 2, at = max_age + 2, "B)", family = "Times")
+    labels = F, lwd = 1, lwd.ticks = 0.75, tck = -0.02)
+  graphics::axis(side = 1, at = unique(biomass_and_nums$survey_year_vector), lwd = 0, lwd.ticks = 1, tck = -0.04, cex.axis = 0.8)
+  graphics::text(x = stats::median(biomass_and_nums$survey_year_vector), y = max_age + 1.25, "Age composition by biomass (1000s t)")
+  graphics::mtext(side = 1, outer = F, line = 2.5, "Year")
+  graphics::mtext(side = 2, outer = T, line = 1, "Age")
+  graphics::mtext(side = 2, las = 2, outer = F, line = 1, font = 2, at = max_age + 2, "b)")
 
 }

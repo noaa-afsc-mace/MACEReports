@@ -55,7 +55,6 @@ plot_biomass_nums_by_age <- function(age_vector,
 
       # get a common maximum for x axis for all plots in survey
       x_axis_max <- max(biomass_nums_age_summary$age_vector[biomass_nums_age_summary$num > 0])
-      # for each region, make the plot
 
       # plot from 1-max age; first, get a age vector for x axis from 1-max age
       age_bins <- as.data.frame(seq(1, max(biomass_nums_age_summary$age_vector), 1))
@@ -70,78 +69,112 @@ plot_biomass_nums_by_age <- function(age_vector,
       # for the lineplot (numbers); this allows for the lines to be centered properly over the bars
 
       # bigger margins to allow room for text
-      # par(mar = c(3, 5, 3, 5))
-      graphics::par(mar = c(5, 5, 3, 5))
+      graphics::par(mar = c(3, 5, 1, 5))
       # and smaller outer margins to shrink spaces between plots
       graphics::par(oma = c(1, 1, 1, 2))
 
       # enable Times New Roman font to be used (for windows only!)
-      grDevices::windowsFonts("Times" = grDevices::windowsFont("Times New Roman"))
+      grDevices::windowsFonts(Times = grDevices::windowsFont("Times New Roman"))
 
-      # specify left y-axis limit & define interval width
-      y_axis_max <- round(max(biomass_nums_age_summary$num / 1e6) * 1.05, 0)
-      y_axis_int <- ifelse(y_axis_max <= 275, 50, 500)
+      # Scale y-axis for numbers and biomass
+      units_scaler_numbers <- ifelse(max(biomass_nums_age_summary$num) > 1e+09,
+                                     1e+09,
+                                     ifelse(max(biomass_nums_age_summary$num) <= 1e+09 & max(biomass_nums_age_summary$num) > 1e+06,
+                                            1e+06,
+                                            1e3))
 
-      # add the numbers bars
-      plot_bars <- graphics::barplot(
-        height = biomass_nums_age_summary$num / 1e6, xlab = NA, ylab = NA,
-        # up font sizes, rotate labels to perpendicular
-        col = "#6baed6", cex.axis = 0.75, cex.names = 0.75, border = "white",
-        # make bars fill age bins
-        xpd = FALSE, space = 0.0,
-        # set xlims as the entire age vector
-        xlim = c(0, x_axis_max),
-        # add a buffer above max value
-        ylim = c(0, y_axis_max),
-        # turn off y-axis labels
-        yaxt = "n",
-        # use times font
-        family = "Times"
-      )
+      units_scaler_biomass <- ifelse(max(biomass_nums_age_summary$wt) > 1e+09,
+                                     1e+09,
+                                     ifelse(max(biomass_nums_age_summary$wt) <= 1e+09 & max(biomass_nums_age_summary$wt) > 1e+06,
+                                            1e+06,
+                                            1e9))
 
-      # major tick marks every 10 cm, center bars over ticks
-      graphics::axis(side = 1, at = seq(0, x_axis_max, 1) + .5, labels = seq(1, x_axis_max + 1, 1), cex.axis = cex_label_size, col = "grey50", col.ticks = "grey50", family = "Times")
-      graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = cex_label_size, family = "Times", col.axis = "#0072B2")
+      units_number_id <- ifelse(max(biomass_nums_age_summary$num) > 1e+09,
+                                "(billions)",
+                                ifelse(max(biomass_nums_age_summary$num) <= 1e+09 &  max(biomass_nums_age_summary$num) > 1e+06,
+                                       "(millions)",
+                                       "(1000s)"))
 
-      # add lines
+      units_biomass_id <- ifelse(max(biomass_nums_age_summary$wt) > 1e+09,
+                                 "(million t)",
+                                 ifelse(max(biomass_nums_age_summary$wt) <= 1e+09 &  max(biomass_nums_age_summary$wt) > 1e+06,
+                                        "(1000s t)",
+                                        "(t)"))
+
+      # add a small buffer to y-axis
+      y_axis_max <- max(biomass_nums_age_summary$num/units_scaler_numbers) * 1.05
+
+      #Round intervals one level below max
+      y_axis_int <- ifelse(y_axis_max > 1e05,
+                           round(y_axis_max/5, digits = -4),
+                           ifelse(y_axis_max > 1e04,
+                                  round(y_axis_max/5, digits = -3),
+                                  ifelse(y_axis_max > 1e03,
+                                         round(y_axis_max/5, digits = -2),
+                                         ifelse(y_axis_max > 1e02,
+                                                round(y_axis_max/5, digits = -1),
+                                                ifelse(y_axis_max > 10,
+                                                       round(y_axis_max/5, digits = 0),
+                                                       ifelse(y_axis_max > 1,
+                                                              round(y_axis_max/5, digits = 1)))))))
+
+      # Plot numbers barplot
+      plot_bars <- graphics::barplot(height = biomass_nums_age_summary$num/units_scaler_numbers,
+                                     xlab = NA, ylab = NA, col = "#6baed6", cex.axis = 0.75,
+                                     cex.names = 0.75, border = "white", xpd = FALSE,
+                                     space = 0, xlim = c(0, x_axis_max), ylim = c(0,y_axis_max), yaxt = "n", family = "Times")
+
+      # label axes
+      graphics::axis(side = 1, at = c(-3, x_axis_max+3) + 0.5, labels = F, col.ticks = "gray50", lwd = 1, lwd.ticks = 0)
+      graphics::axis(side = 1, at = seq(0, x_axis_max, 1) + 0.5, labels = seq(1, x_axis_max+1, 1), lwd = 0, lwd.ticks = 1, cex.axis = cex_label_size, col = "grey50", col.ticks = "grey50", family = "Times")
+      graphics::axis(side = 2, las = 2, at = c(0, y_axis_max), labels=F, cex.axis = cex_label_size, family = "Times", lwd=1, lwd.ticks=0, col.axis = "#0072B2")
+      graphics::axis(side = 2, las = 2, at = seq(0, y_axis_max, y_axis_int), cex.axis = cex_label_size, lwd=0, lwd.ticks=1, family = "Times", col.axis = "#0072B2")
+
+      # Scale right y-axis
+      y2_axis_max <- max(biomass_nums_age_summary$wt/units_scaler_biomass) *  1.05
+
+      #Round intervals one level below max
+      y2_axis_int <- ifelse(y2_axis_max > 1e05,
+                            round(y2_axis_max/5, digits = -4),
+                            ifelse(y2_axis_max > 1e04,
+                                   round(y2_axis_max/5, digits = -3),
+                                   ifelse(y2_axis_max > 1e03,
+                                          round(y2_axis_max/5, digits = -2),
+                                          ifelse(y2_axis_max > 1e02,
+                                                 round(y2_axis_max/5, digits = -1),
+                                                 ifelse(y2_axis_max > 10,
+                                                        round(y2_axis_max/5, digits = 0),
+                                                        ifelse(y2_axis_max > 1,
+                                                               round(y2_axis_max/5, digits = 1)))))))
+
+      # Add biomass barplot
       graphics::par(new = T)
-      plot_lines <- graphics::plot(plot_bars, biomass_nums_age_summary$wt / 1e6,
-                         col = "#cb181d",
-                         type = "l", axes = F, xlab = NA, ylab = NA, yaxs = "i",
-                         ylim = c(0, max(biomass_nums_age_summary$wt / 1e6) * 1.05), lwd = 3,
-                         xlim = c(0, x_axis_max),
-                         family = "Times"
-      )
+      plot_lines <- graphics::plot(plot_bars, biomass_nums_age_summary$wt/units_scaler_biomass,
+                                   col = "#cb181d", type = "l", axes = F, xlab = NA,
+                                   ylab = NA, yaxs = "i", ylim = c(0, y2_axis_max), lwd = 3, xlim = c(0, x_axis_max), family = "Times")
 
-      # add second axis, format the initial axis correctly too
-      graphics::axis(side = 4, las = 2, cex.axis = cex_label_size, family = "Times", col.axis = "#cb181d")
+      # add second axis
+      graphics::axis(side = 4, las = 2, at = c(0, y2_axis_max), labels=F, cex.axis = cex_label_size, lwd=1, lwd.ticks=0, family = "Times", col.axis = "#cb181d")
+      graphics::axis(side = 4, las = 2, at = seq(0, y2_axis_max, y2_axis_int), cex.axis = cex_label_size, lwd=0, lwd.ticks=1, family = "Times", col.axis = "#cb181d")
 
       # set the line to put the captions on if cex >1, move them out a bit
-      text_pos_r <- ifelse(cex_label_size > 1, 2.5, 2.0)
-      text_pos_l <- ifelse(cex_label_size > 1, 4.5, 3.5)
-      text_pos_bot <- ifelse(cex_label_size > 1, 2.2, 1.2)
+      text_pos_r <- ifelse(cex_label_size > 1, 3.5, 3)
+      text_pos_l <- ifelse(cex_label_size > 1, 5.5, 5)
+      text_pos_bot <- ifelse(cex_label_size > 1, 3, 2)
 
-      graphics::mtext(side = 4, line = text_pos_r, "Biomass (1000s t)", cex = cex_label_size, padj = 1, family = "Times", col = "#cb181d")
-      graphics::mtext(side = 2, line = text_pos_l, "Numbers of fish (millions)", cex = cex_label_size, padj = 1, family = "Times", col = "#0072B2")
+      # label plots
+      graphics::mtext(side = 4, line = text_pos_r, paste0("Biomass ", units_biomass_id), cex = cex_label_size, padj = 1, family = "Times", col = "#cb181d")
+      graphics::mtext(side = 2, line = text_pos_l, paste0("Numbers of fish ", units_number_id), cex = cex_label_size, padj = 1, family = "Times", col = "#0072B2")
       graphics::mtext(side = 1, line = text_pos_bot, "Age", cex = cex_label_size, padj = 1, family = "Times")
 
       # add a box around plot
       graphics::box(lty = "solid", col = "black")
 
-      # add title
       # add title - either with or without the summed values
       if (add_totals == TRUE) {
-        graphics::title(main = paste0(
-          "Total abundance: \n", formatC(round(sum(biomass_nums_age_summary$num) / 1e6, digits = 1),
-                                         big.mark = ",", format = "f", digits = 1
-          ),
-          " million fish and ", formatC(round(sum(biomass_nums_age_summary$wt) / 1e6, digits = 1),
-                                        big.mark = ",",
-                                        format = "f", digits = 1
-          ),
-          " thousand metric tons"
-        ), cex.main = 1.5, family = "Times")
+        graphics::title(main = paste0("Total abundance: \n", formatC(round(sum(biomass_nums_age_summary$num)/1e+06, digits = 1), big.mark = ",", format = "f", digits = 1), " million fish and ", formatC(round(sum(biomass_nums_age_summary$wt)/1e+06, digits = 1), big.mark = ",", format = "f", digits = 1), " thousand metric tons"), cex.main = 1.5, family = "Times")
       }
+
     }
 
     # draw plot to a ggplot object

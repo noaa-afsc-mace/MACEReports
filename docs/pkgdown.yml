@@ -1,7 +1,6 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: '3.4'
+pkgdown: 2.1.2
 pkgdown_sha: ~
 articles:
   MACEReports-mapping: MACEReports-mapping.html
-last_built: 2025-05-07T00:29Z
-
+last_built: 2025-05-21T22:08Z

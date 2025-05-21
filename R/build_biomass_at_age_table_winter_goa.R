@@ -86,7 +86,7 @@ build_biomass_at_age_table_winter_goa <- function(biomass_nums_age_data, region_
     by = c("AGE", "year")
   ) %>%
     # rename LENGTH as Length to be nicer looking on tables
-    dplyr::rename(Age = .data$AGE) %>%
+    dplyr::rename(Age = "AGE") %>%
     dplyr::arrange(.data$year, .data$Age)
 
   #############
@@ -95,9 +95,9 @@ build_biomass_at_age_table_winter_goa <- function(biomass_nums_age_data, region_
   # get the numbers data, and make the data 'wide' for the table, with each year as a column
   biomass_by_age_selectivity_corrected <- summary_nums_biomass_by_age %>%
     # keep only the columns we care about
-    dplyr::select(.data$year, .data$Age, .data$biomass_thousand_tons) %>%
+    dplyr::select("year", "Age", "biomass_thousand_tons") %>%
     # make data wide format for table
-    tidyr::pivot_wider(id_cols = .data$Age, names_from = .data$year, values_from = .data$biomass_thousand_tons)
+    tidyr::pivot_wider(id_cols = "Age", names_from = "year", values_from = "biomass_thousand_tons")
 
   # get a summary row
   totals_footer_row <- biomass_by_age_selectivity_corrected %>%

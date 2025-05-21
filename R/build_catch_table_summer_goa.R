@@ -48,10 +48,10 @@
 build_catch_table_summer_goa <- function(catch_data, specimen_data, scaling_hauls_list = NULL) {
   # check input dataframes against the template dataframes: this will make sure the input
   # data can actually be used to create a table, and will return errors if not
-  check_catch_data <- template_df_catch_data_summer_goa
+  check_catch_data <- MACEReports::template_df_catch_data_summer_goa
   MACEReports::check_input_df(template_df = check_catch_data, input_df = catch_data)
 
-  check_specimen_data <- template_df_specimen_data_summer_goa
+  check_specimen_data <- MACEReports::template_df_specimen_data_summer_goa
   MACEReports::check_input_df(template_df = check_specimen_data, input_df = specimen_data)
 
   # summarize the catch data for the table: by species, for all the requested hauls
@@ -132,9 +132,9 @@ build_catch_table_summer_goa <- function(catch_data, specimen_data, scaling_haul
       # drop the gear column- we don't need that in the table as a column;
       # also reorder columns for making the table
       dplyr::select(
-        .data$COMMON_NAME, .data$SCIENTIFIC_NAME, .data$TOT_WEIGHT,
-        .data$percent_wt, .data$TOT_NUMBER, .data$percent_num,
-        .data$L, .data$W
+        "COMMON_NAME", "SCIENTIFIC_NAME", "TOT_WEIGHT",
+        "percent_wt", "TOT_NUMBER", "percent_num",
+        "L", "W"
       )
 
     # add a few separators in for table formatting

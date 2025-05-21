@@ -108,9 +108,9 @@ build_numbers_at_length_table_summer_goa <- function(biomass_nums_data) {
   # for presentation, we just want numbers (millions) for each length bin (10-70 cm and geographic area)
   nums_for_presentation <- biomass_nums_summary %>%
     # remove the REPORT_NUMBER column- it was only needed to order things by report number
-    dplyr::select(.data$LENGTH, .data$region, .data$num_million) %>%
+    dplyr::select("LENGTH", "region", "num_million") %>%
     # also, go from 'long' format (where every region lives in it's own)
-    tidyr::pivot_wider(id_cols = .data$LENGTH, names_from = .data$region, values_from = .data$num_million)
+    tidyr::pivot_wider(id_cols = "LENGTH", names_from = "region", values_from = "num_million")
 
   # join totals to the 'wide' dataframe
   nums_for_presentation <- dplyr::left_join(nums_for_presentation, table_totals, by = c("LENGTH"))

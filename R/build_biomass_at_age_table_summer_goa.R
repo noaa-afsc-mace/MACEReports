@@ -95,9 +95,9 @@ build_biomass_at_age_table_summer_goa <- function(biomass_nums_age_data) {
   # for presentation, we just want biomass (t) for each age (1- max age in survey within each geographic area)
   biomass_for_presentation <- biomass_summary %>%
     # remove the report_number column- it was only needed to order things by report number
-    dplyr::select(.data$AGE, .data$region, .data$biomass_t) %>%
+    dplyr::select("AGE", "region", "biomass_t") %>%
     # also, go from 'long' format (where every region lives in it's own)
-    tidyr::pivot_wider(id_cols = .data$AGE, names_from = .data$region, values_from = .data$biomass_t)
+    tidyr::pivot_wider(id_cols = "AGE", names_from = "region", values_from = "biomass_t")
 
   # join totals to the 'wide' dataframe
   biomass_for_presentation <- dplyr::left_join(biomass_for_presentation, table_totals, by = c("AGE"))

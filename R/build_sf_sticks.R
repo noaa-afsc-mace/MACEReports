@@ -159,20 +159,20 @@ build_sf_sticks <- function(x,
     ) %>%
     # organize by starting position, ending position
     tidyr::pivot_longer(
-      cols = c(.data$start_pos, .data$end_pos),
+      cols = c("start_pos", "end_pos"),
       names_to = "type", values_to = "loc"
     ) %>%
     # convert text coordinates back to individual numeric columns
     dplyr::group_by(.data$pos_num) %>%
     tidyr::separate(.data$loc, c("LONG", "LAT"), sep = " ") %>%
-    dplyr::mutate(dplyr::across(c(.data$LONG, .data$LAT), as.numeric)) %>%
+    dplyr::mutate(dplyr::across(c("LONG", "LAT"), as.numeric)) %>%
     # convert to sf points
     sf::st_as_sf(coords = c("LONG", "LAT")) %>%
     # connect the points as linestrings for each datapoint- in this case, each position
     dplyr::group_by(.data$pos_num, z) %>%
     dplyr::summarize() %>%
     sf::st_cast("LINESTRING") %>%
-    dplyr::select(-.data$pos_num)
+    dplyr::select(-"pos_num")
 
   # assign crs as needed
   if (!is.null(crs)) {

@@ -91,7 +91,7 @@ build_nmfs_area_totals_table <- function(biomass_nums_length_data) {
     # turn manaement area to a character so 'Total' can also be used to id management areas
     dplyr::mutate(management_area = as.character(.data$management_area)) %>%
     dplyr::ungroup() %>%
-    dplyr::select(-.data$REPORT_NUMBER)
+    dplyr::select(-"REPORT_NUMBER")
 
   # build a totals row at the bottom too
   survey_totals <- data.frame(
@@ -127,8 +127,8 @@ build_nmfs_area_totals_table <- function(biomass_nums_length_data) {
     flextable::hline_top(part = "all", border = table_border) %>%
     flextable::hline_bottom(part = "all", border = table_border) %>%
     # apply function to the reporting regions to add spaces below each management area
-    flextable::hline(i = ~ break_position(management_area), border = table_border) %>%
-    flextable::padding(i = ~ break_position(management_area), padding.bottom = 10) %>%
+    flextable::hline(i = ~ MACEReports::break_position(management_area), border = table_border) %>%
+    flextable::padding(i = ~ MACEReports::break_position(management_area), padding.bottom = 10) %>%
     # manually fix column widths to end up w/a reasonable table width (6.5")
     flextable::width(j = c("management_area", "biomass_t", "num_million"), width = 1.5) %>%
     flextable::width(j = c("region"), width = 2) %>%

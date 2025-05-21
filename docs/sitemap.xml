@@ -1,186 +1,64 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/MACEReports-mapping.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/reference/add_area_labels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/available_labels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/available_shapefiles.html</loc>
-  </url>
-  <url>
-    <loc>/reference/break_position.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_biomass_at_age_table_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_biomass_at_age_table_winter_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_biomass_at_length_table_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_biomass_at_length_table_winter_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_catch_table_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_haul_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_nmfs_area_totals_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_numbers_at_age_table_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_numbers_at_age_table_winter_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_numbers_at_length_table_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_numbers_at_length_table_winter_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_sf_sticks.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_shelikof_pre_selectivity_corrected_biomass_age_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_shelikof_pre_selectivity_corrected_biomass_length_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_shelikof_pre_selectivity_corrected_num_age_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_shelikof_pre_selectivity_corrected_num_length_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_specimen_table_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_stick_legend.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build_ts_relationships_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check_input_df.html</loc>
-  </url>
-  <url>
-    <loc>/reference/easy_plot_limits.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_area_labels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_basemap_layers.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_interpolated_color_bins.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_interpolated_plot_vals.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_shapefile.html</loc>
-  </url>
-  <url>
-    <loc>/reference/globals.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_biomass_nums_by_age.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_biomass_nums_by_length.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_historical_age_comps_bubbleplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_historical_biomass_nums_length_ridges.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_length_and_weight_at_age.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_weight_at_length.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pollock_length_weight_age_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/shelikof_biomass.html</loc>
-  </url>
-  <url>
-    <loc>/reference/shelikof_historic_biomass_by_age_1981_to_2007.html</loc>
-  </url>
-  <url>
-    <loc>/reference/shelikof_historic_biomass_by_length_1981_to_2007.html</loc>
-  </url>
-  <url>
-    <loc>/reference/shelikof_historic_numbers_by_age_1981_to_2007.html</loc>
-  </url>
-  <url>
-    <loc>/reference/shelikof_historic_numbers_by_length_1981_to_2007.html</loc>
-  </url>
-  <url>
-    <loc>/reference/shelikof_sst.html</loc>
-  </url>
-  <url>
-    <loc>/reference/stick_inputs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/table_nums_format.html</loc>
-  </url>
-  <url>
-    <loc>/reference/template_df_catch_data_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/template_df_haul_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/template_df_numbers_biomass_at_age_tables_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/template_df_numbers_biomass_at_age_tables_winter_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/template_df_numbers_biomass_at_length_tables_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/template_df_numbers_biomass_at_length_tables_winter_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/template_df_specimen_data_summer_goa.html</loc>
-  </url>
-  <url>
-    <loc>/reference/template_df_specimen_table_summer_goa.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/MACEReports-mapping.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/reference/add_area_labels.html</loc></url>
+<url><loc>/reference/available_labels.html</loc></url>
+<url><loc>/reference/available_shapefiles.html</loc></url>
+<url><loc>/reference/break_position.html</loc></url>
+<url><loc>/reference/build_biomass_at_age_table_summer_goa.html</loc></url>
+<url><loc>/reference/build_biomass_at_age_table_winter_goa.html</loc></url>
+<url><loc>/reference/build_biomass_at_length_table_summer_goa.html</loc></url>
+<url><loc>/reference/build_biomass_at_length_table_winter_goa.html</loc></url>
+<url><loc>/reference/build_catch_table_summer_goa.html</loc></url>
+<url><loc>/reference/build_haul_table.html</loc></url>
+<url><loc>/reference/build_nmfs_area_totals_table.html</loc></url>
+<url><loc>/reference/build_numbers_at_age_table_summer_goa.html</loc></url>
+<url><loc>/reference/build_numbers_at_age_table_winter_goa.html</loc></url>
+<url><loc>/reference/build_numbers_at_length_table_summer_goa.html</loc></url>
+<url><loc>/reference/build_numbers_at_length_table_winter_goa.html</loc></url>
+<url><loc>/reference/build_sf_sticks.html</loc></url>
+<url><loc>/reference/build_shelikof_pre_selectivity_corrected_biomass_age_table.html</loc></url>
+<url><loc>/reference/build_shelikof_pre_selectivity_corrected_biomass_length_table.html</loc></url>
+<url><loc>/reference/build_shelikof_pre_selectivity_corrected_num_age_table.html</loc></url>
+<url><loc>/reference/build_shelikof_pre_selectivity_corrected_num_length_table.html</loc></url>
+<url><loc>/reference/build_specimen_table_summer_goa.html</loc></url>
+<url><loc>/reference/build_stick_legend.html</loc></url>
+<url><loc>/reference/build_ts_relationships_table.html</loc></url>
+<url><loc>/reference/check_input_df.html</loc></url>
+<url><loc>/reference/easy_plot_limits.html</loc></url>
+<url><loc>/reference/get_area_labels.html</loc></url>
+<url><loc>/reference/get_basemap_layers.html</loc></url>
+<url><loc>/reference/get_interpolated_color_bins.html</loc></url>
+<url><loc>/reference/get_interpolated_plot_vals.html</loc></url>
+<url><loc>/reference/get_shapefile.html</loc></url>
+<url><loc>/reference/globals.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/plot_biomass_nums_by_age.html</loc></url>
+<url><loc>/reference/plot_biomass_nums_by_length.html</loc></url>
+<url><loc>/reference/plot_historical_age_comps_bubbleplot.html</loc></url>
+<url><loc>/reference/plot_historical_biomass_nums_length_ridges.html</loc></url>
+<url><loc>/reference/plot_length_and_weight_at_age.html</loc></url>
+<url><loc>/reference/plot_weight_at_length.html</loc></url>
+<url><loc>/reference/pollock_length_weight_age_data.html</loc></url>
+<url><loc>/reference/shelikof_biomass.html</loc></url>
+<url><loc>/reference/shelikof_historic_biomass_by_age_1981_to_2007.html</loc></url>
+<url><loc>/reference/shelikof_historic_biomass_by_length_1981_to_2007.html</loc></url>
+<url><loc>/reference/shelikof_historic_numbers_by_age_1981_to_2007.html</loc></url>
+<url><loc>/reference/shelikof_historic_numbers_by_length_1981_to_2007.html</loc></url>
+<url><loc>/reference/shelikof_sst.html</loc></url>
+<url><loc>/reference/stick_inputs.html</loc></url>
+<url><loc>/reference/table_nums_format.html</loc></url>
+<url><loc>/reference/template_df_catch_data_summer_goa.html</loc></url>
+<url><loc>/reference/template_df_haul_data.html</loc></url>
+<url><loc>/reference/template_df_numbers_biomass_at_age_tables_summer_goa.html</loc></url>
+<url><loc>/reference/template_df_numbers_biomass_at_age_tables_winter_goa.html</loc></url>
+<url><loc>/reference/template_df_numbers_biomass_at_length_tables_summer_goa.html</loc></url>
+<url><loc>/reference/template_df_numbers_biomass_at_length_tables_winter_goa.html</loc></url>
+<url><loc>/reference/template_df_specimen_data_summer_goa.html</loc></url>
+<url><loc>/reference/template_df_specimen_table_summer_goa.html</loc></url>
 </urlset>
+

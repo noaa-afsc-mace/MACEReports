@@ -95,9 +95,9 @@ build_numbers_at_age_table_summer_goa <- function(biomass_nums_age_data) {
   # for presentation, we just want numbers (millions) for each length bin (10-70 cm and geographic area)
   nums_for_presentation <- nums_summary %>%
     # remove the report_number column- it was only needed to order things by report number
-    dplyr::select(.data$AGE, .data$region, .data$num_million) %>%
+    dplyr::select("AGE", "region", "num_million") %>%
     # also, go from 'long' format (where every region lives in it's own)
-    tidyr::pivot_wider(id_cols = .data$AGE, names_from = .data$region, values_from = .data$num_million)
+    tidyr::pivot_wider(id_cols = "AGE", names_from = "region", values_from = "num_million")
 
   # join totals to the 'wide' dataframe
   nums_for_presentation <- dplyr::left_join(nums_for_presentation, table_totals, by = c("AGE"))

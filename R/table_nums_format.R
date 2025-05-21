@@ -19,7 +19,7 @@
 # otherwise, format the value as having a decimal points for display;
 table_nums_format <- function(x) {
   # check: make sure each value is numeric
-  if (class(x) != "numeric" & class(x) != "logical") {
+  if (!is(x, "numeric")& !is(x, "logical")) {
     stop(paste0("table_nums_format function requires numeric or logical values, not ", class(x), " values."))
   }
 

@@ -108,7 +108,7 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
     by = c("LENGTH", "year")
   ) %>%
     # rename LENGTH as Length to be nicer looking on tables
-    dplyr::rename(Length = .data$LENGTH) %>%
+    dplyr::rename(Length = "LENGTH") %>%
     dplyr::arrange(.data$year, .data$Length)
 
   ############
@@ -117,9 +117,9 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
   # get the numbers data, and make the data 'wide' for the table, with each year as a column
   nums_by_length_wide <- nums_and_biomass_by_length %>%
     # keep only the columns we care about
-    dplyr::select(.data$year, .data$Length, .data$number_millions) %>%
+    dplyr::select("year", "Length", "number_millions") %>%
     # make data wide format for table
-    tidyr::pivot_wider(id_cols = .data$Length, names_from = .data$year, values_from = .data$number_millions)
+    tidyr::pivot_wider(id_cols = "Length", names_from = "year", values_from = "number_millions")
 
   # get a summary row
   totals_footer_row <- nums_by_length_wide %>%

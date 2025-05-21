@@ -18,6 +18,7 @@ build_shelikof_pre_selectivity_corrected_num_length_table <- function() {
 
   # the table data is stored in /data as as pre-formatted/canned object named:
   # shelikof_historic_numbers_by_length_1981_to_2007.rda
+  shelikof_historic_numbers_by_length_1981_to_2007 <- MACEReports::shelikof_historic_numbers_by_length_1981_to_2007
 
   # define a border to use above and below caption and at bottom of table
   table_border <- officer::fp_border(color = "black", width = 1.0)

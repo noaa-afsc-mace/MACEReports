@@ -109,16 +109,16 @@ build_biomass_at_length_table_winter_goa <- function(biomass_nums_length_data,
     by = c("LENGTH", "year")
   ) %>%
     # rename LENGTH as Length to be nicer looking on tables
-    dplyr::rename(Length = .data$LENGTH) %>%
+    dplyr::rename(Length = "LENGTH") %>%
     dplyr::arrange(.data$year, .data$Length)
 
   # 4. Make the table for biomass by length
   # get the numbers data, and make the data 'wide' for the table, with each year as a column
   biomass_by_length_selectivity_corrected <- nums_and_biomass_by_length %>%
     # keep only the columns we care about
-    dplyr::select(.data$year, .data$Length, .data$biomass_thousand_tons) %>%
+    dplyr::select("year", "Length", "biomass_thousand_tons") %>%
     # make data wide format for table
-    tidyr::pivot_wider(id_cols = .data$Length, names_from = .data$year, values_from = .data$biomass_thousand_tons)
+    tidyr::pivot_wider(id_cols = "Length", names_from = "year", values_from = "biomass_thousand_tons")
 
   # get a summary row
   totals_footer_row <- biomass_by_length_selectivity_corrected %>%

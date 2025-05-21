@@ -123,7 +123,7 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
     # and not miss small changes in TS naming conventions
     check_match <- function(ts_relationship) {
       # check data types: must be a character vector!
-      if (class(ts_relationships_used) != "character") {
+      if (!is(ts_relationships_used, "character")) {
         stop("ts_relationships_used is not a character vector. Specify a character vector!")
       }
 
@@ -140,14 +140,14 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
     ts_df <- ts_df %>%
       dplyr::filter(!is.na(.data$ts_applied)) %>%
       # and get rid of the ts_relationship column now for presentation
-      dplyr::select(-c(.data$ts_relationship, .data$ts_applied))
+      dplyr::select(-c("ts_relationship", "ts_applied"))
   }
 
 
   if (is.null(ts_relationships_used)) {
     # get rid of the ts_relationship column now for presentation
     ts_df <- ts_df %>%
-      dplyr::select(-c(.data$ts_relationship))
+      dplyr::select(-c("ts_relationship"))
   }
 
 

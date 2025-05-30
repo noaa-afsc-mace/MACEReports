@@ -44,6 +44,10 @@ build_haul_table <- function(haul_data) {
   # chop the last three characters off (i.e. ':ss'  part) to get hh:mm
   haul_data$time_hhmm <- substr(haul_data$time_hhmm, 1, nchar(haul_data$time_hhmm) - 3)
 
+  # sort by EQ time
+  haul_data <- haul_data %>%
+    dplyr::arrange(.data$EQ_TIME)
+
   # format decimal degrees to 4 decimals
   haul_data$lat <- round(haul_data$EQ_LATITUDE, digits = 4)
   haul_data$lon <- round(haul_data$EQ_LONGITUDE, digits = 4)
@@ -51,7 +55,7 @@ build_haul_table <- function(haul_data) {
   # format table with columns where they should be and small separator rows between haul duration/start lat,
   # start long/gear depth; bottom depth/gear temp; surface temp/pollock kg'; pollock #/other kg'
   haul_data <- cbind.data.frame(
-    haul_data$EVENT_ID, haul_data$region, haul_data$GEAR, haul_data$date,
+    haul_data$EVENT_ID, haul_data$REPORT_REGION, haul_data$GEAR, haul_data$date,
     haul_data$time_hhmm, haul_data$DURATION_MINS, haul_data$lat,
     haul_data$lon, "", haul_data$HEAD_ROPE_DEPTH, haul_data$BOTTOM_DEPTH,
     "", haul_data$HEAD_ROPE_TEMP, haul_data$SURFACE_TEMP, "",
@@ -175,7 +179,7 @@ build_haul_table <- function(haul_data) {
     flextable::fontsize(size = 8, part = "header") %>%
     flextable::fontsize(size = 8, part = "body")
 
-  # get some caption text; use 'combine_words' to print the regions in the survey as 'a, b, and c'
+  # get some caption text; use 'combine_words' to print the REPORT_REGIONs in the survey as 'a, b, and c'
   cap_text <- paste0(
     "Trawl stations and catch data summary from the ", survey_year,
     " acoustic-trawl survey of pollock in the ",

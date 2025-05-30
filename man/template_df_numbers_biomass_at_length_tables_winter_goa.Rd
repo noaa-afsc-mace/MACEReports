@@ -6,19 +6,20 @@
 \alias{template_df_numbers_biomass_at_length_tables_winter_goa}
 \title{template_df_numbers_biomass_at_length_tables_winter_goa}
 \format{
-A data frame with 5 rows and 7 columns:
+A data frame with 5 rows and 8 columns:
 \describe{
   \item{SURVEY}{Survey number (numeric)}
-  \item{REPORT_NUMBER}{Report number (numeric)}
-  \item{LENGTH}{Length (cm; numeric)}
+  \item{SURVEY_YEAR}{Survey year (numeric)}
+  \item{SPECIES_CODE}{RACE species code (numeric)}
+  \item{TIMESERIES}{Timeseries associated with report region (character)}
+  \item{REPORT_REGION}{Report region associated with REPORT_NUMBER (character)}
+  \item{LENGTH}{fork length(cm; numeric)}
   \item{BIOMASS}{Biomass (kg; numeric)}
   \item{NUMBERS}{Numbers of individuals (numeric)}
-  \item{region}{Report region associated with REPORT_NUMBER (character)}
-  \item{year}{Survey year (numeric)}
 }
 }
 \source{
-Template dateset was gathered using get_total_biomass_by_length.R function in winter 2022 GOA Cruise Report
+Template dataset was gathered using winter 2025 GOA Cruise Report
 }
 \usage{
 template_df_numbers_biomass_at_length_tables_winter_goa

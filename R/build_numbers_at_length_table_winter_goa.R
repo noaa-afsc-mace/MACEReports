@@ -39,7 +39,7 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
   MACEReports::check_input_df(template_df = check_data, input_df = biomass_nums_length_data)
 
   # check that the region name is present
-  if (!region_name %in% unique(biomass_nums_length_data$region)) {
+  if (!region_name %in% unique(biomass_nums_length_data$REPORT_REGION)) {
     stop(paste("The region_name", region_name, "is not present in biomass_nums_length_data"))
   }
 
@@ -55,29 +55,29 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
     }
 
     # limit to the most recent n years for the table
-    min_year_for_table <- max(biomass_nums_length_data$year) - include_n_years
+    min_year_for_table <- max(biomass_nums_length_data$SURVEY_YEAR) - include_n_years
 
     biomass_nums_length_data <- biomass_nums_length_data %>%
-      dplyr::filter(.data$year >= min_year_for_table)
+      dplyr::filter(.data$SURVEY_YEAR >= min_year_for_table)
 
   }
 
-  # use this to limit the table data to the requested reporting region;
-  # sum everyting up by length bin and year for this region
+  # use this to limit the table data to the requested reporting REPORT_REGION;
+  # sum everyting up by length bin and year for this REPORT_REGION
   nums_and_biomass_by_length <- biomass_nums_length_data %>%
-    dplyr::filter(.data$region == region_name) %>%
-    dplyr::group_by(.data$year, .data$LENGTH) %>%
+    dplyr::filter(.data$REPORT_REGION == region_name) %>%
+    dplyr::group_by(.data$SURVEY_YEAR, .data$LENGTH) %>%
     # report values as millions of fish, thousands of tons
     dplyr::summarize(
       number_millions = sum(.data$NUMBERS) / 1e6,
       biomass_thousand_tons = sum(.data$BIOMASS) / 1e6
     ) %>%
-    dplyr::arrange(.data$year, .data$LENGTH)
+    dplyr::arrange(.data$SURVEY_YEAR, .data$LENGTH)
 
   # we report all lengths from 5-76 cm; it's unlikely that any given survey contains all these,
   # but we want to report a blank in these cases
 
-  # build a dataframe that's simply each possible length per region
+  # build a dataframe that's simply each possible length per REPORT_REGION
   get_all_possible_lengths <- function(year) {
     # set the minimum length at 10 cm UNLESS there are smaller fish in the survey
     min_report_length <- ifelse(min(biomass_nums_length_data$LENGTH) < 5,
@@ -94,22 +94,22 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
     # build a dataframe that has the length vector and report name
     report_lengths <- data.frame(seq(min_report_length, max_report_length, 1))
     colnames(report_lengths) <- c("LENGTH")
-    report_lengths$year <- year
+    report_lengths$SURVEY_YEAR <- year
 
     # and return this dataframe
     return(report_lengths)
   }
 
   # apply function to get dataframe of lengths
-  all_reporting_lengths <- purrr::map_dfr(unique(nums_and_biomass_by_length$year), get_all_possible_lengths)
+  all_reporting_lengths <- purrr::map_dfr(unique(nums_and_biomass_by_length$SURVEY_YEAR), get_all_possible_lengths)
 
   # and add all these lengths back to the dataframe; use a right join so that all values are represented
   nums_and_biomass_by_length <- dplyr::right_join(nums_and_biomass_by_length, all_reporting_lengths,
-    by = c("LENGTH", "year")
+    by = c("LENGTH", "SURVEY_YEAR")
   ) %>%
     # rename LENGTH as Length to be nicer looking on tables
     dplyr::rename(Length = "LENGTH") %>%
-    dplyr::arrange(.data$year, .data$Length)
+    dplyr::arrange(.data$SURVEY_YEAR, .data$Length)
 
   ############
   # 2. Make the table for numbers by length
@@ -117,9 +117,9 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
   # get the numbers data, and make the data 'wide' for the table, with each year as a column
   nums_by_length_wide <- nums_and_biomass_by_length %>%
     # keep only the columns we care about
-    dplyr::select("year", "Length", "number_millions") %>%
+    dplyr::select("SURVEY_YEAR", "Length", "number_millions") %>%
     # make data wide format for table
-    tidyr::pivot_wider(id_cols = "Length", names_from = "year", values_from = "number_millions")
+    tidyr::pivot_wider(id_cols = "Length", names_from = "SURVEY_YEAR", values_from = "number_millions")
 
   # get a summary row
   totals_footer_row <- nums_by_length_wide %>%
@@ -186,13 +186,13 @@ build_numbers_at_length_table_winter_goa <- function(biomass_nums_length_data,
 
   cap_text <- paste0(
     "Numbers-at-length estimates (millions of fish) from acoustic-trawl surveys of pollock in the ",
-    region_name, " from ", min(biomass_nums_length_data$year), "-", max(biomass_nums_length_data$year), "."
+    region_name, " from ", min(biomass_nums_length_data$SURVEY_YEAR), "-", max(biomass_nums_length_data$SURVEY_YEAR), "."
   )
 
   # if include_n_years parameter used, add a note about how many years left off the table
   if (!is.null(include_n_years)){
 
-    cap_text <- paste0(cap_text, paste0(' Note that years prior to ', max(biomass_nums_length_data$year) - include_n_years, ' are excluded due to space constraints.' ))
+    cap_text <- paste0(cap_text, paste0(' Note that years prior to ', max(biomass_nums_length_data$SURVEY_YEAR) - include_n_years, ' are excluded due to space constraints.' ))
 
   }
 

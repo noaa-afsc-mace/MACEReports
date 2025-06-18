@@ -145,7 +145,7 @@ build_haul_table <- function(haul_data) {
     } else if (gear_type == "Marinovich") {
       gear_name <- "Marinovich small midwater trawl"
     } else if (gear_type == "StereoDropCam") {
-      gear_name <- "camera drop on untrawlable areas."
+      gear_name <- "camera drop on untrawlable areas"
     } else {
       gear_name <- ""
     }

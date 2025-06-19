@@ -21,7 +21,8 @@ A data frame with 5 rows and 15 columns:
   \item{POLLOCK_WEIGHT}{Walleye pollock catch weight (kg; numeric)}
   \item{POLLOCK_NUMBERS}{Walleye pollock catch numbers (individuals; numeric)}
   \item{NON_POLLOCK_WEIGHT}{All other species catch weight (kg; numeric)}
-  \item{region}{Survey region name (character)}
+  \item{REPORT_REGION}{Survey region name (character)}
+  \item{TIMESERIES}{Survey timeseries name (character)}
 }
 }
 \source{

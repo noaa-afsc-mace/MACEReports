@@ -106,7 +106,7 @@ build_sf_sticks <- function(x,
 
   # if any z- values are zero, these can't be plotted (can't divide by zero); add a meaninglessly small
   # constant so the zero position is plotted, by the bar height is visually zero
-  plot_pos$z <- ifelse(plot_pos$z > 0, plot_pos$z, 0.1e-5)
+  plot_pos$z <- ifelse(plot_pos$z > 0.1e-5, plot_pos$z, 0.1e-5)
 
   # report any removed rows
   # removed_rows = plot_pos_df[!(stats::complete.cases(plot_pos_df)) | plot_pos_df$z == 0,]

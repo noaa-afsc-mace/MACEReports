@@ -16,3 +16,4 @@ R/testing.R
 inst/doc
 R/testing.R
 math-rendered-by-lua-filter.html
+..Rcheck/

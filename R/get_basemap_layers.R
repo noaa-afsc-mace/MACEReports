@@ -561,5 +561,15 @@ get_basemap_layers <- function(plot_limits_data,
       axis.title.y = ggplot2::element_blank()
     )
 
+  # catch for occasional cases where there are no x-axis labels automatically generated:
+  # add labels if there aren't any
+  if (!length(ggplot2::ggplot_build(basemap_layers)$layout$panel_params[[1]]$x$get_labels())){
+
+    basemap_layers <- basemap_layers +
+      ggplot2::scale_x_continuous(breaks = grats$degree, expand = c(0,0))
+
+  }
+
+
   return(basemap_layers)
 }

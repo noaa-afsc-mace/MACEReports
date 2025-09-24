@@ -222,6 +222,14 @@ get_basemap_layers <- function(plot_limits_data,
 
   }
 
+  # if the user requests neither the bathymetric layer or the contours, still open the contours
+  # to keep plot extent logic working
+  if (!isTRUE(bathy) & is.null(contours)){
+
+    #open the contours file
+    bathy_contours <- sf::st_read(paste0(map_dir, '/alaska_bathy_contours_EPSG3338.gpkg'), quiet = TRUE)
+  }
+
   # limit the extent of the plot to be slightly greater than the plot area (do this in projected space!)
   # this allows us to clip the exent of background layers for plotting
   if (input_crs != "EPSG:3338"){
@@ -343,7 +351,7 @@ get_basemap_layers <- function(plot_limits_data,
 
   # if we are using bathy raster, limit it to be sized for the plot too (much faster);
   # and return it as a dataframe to plot with ggplot
-  if (bathy == TRUE) {
+  if (isTRUE(bathy)) {
     # set a box that can be used to clip raster to plot extent (much faster plotting!)
     clip <- terra::ext(
       sf::st_bbox(region_zoom_box)[[1]], sf::st_bbox(region_zoom_box)[[3]],
@@ -378,7 +386,7 @@ get_basemap_layers <- function(plot_limits_data,
     )
   }
 
-  if (!is.null(contours)) {
+  if (!is.null(contours) | !isTRUE(bathy) & is.null(contours)) {
     # crop the contour layer
     # bathy_contours <- sf::st_intersection(
     #   sf::st_make_valid(sf::st_geometry(bathy_contours)),
@@ -480,7 +488,7 @@ get_basemap_layers <- function(plot_limits_data,
       if (isTRUE(bathy) & !isTRUE(sf::st_is_longlat(input_crs))) ggplot2::geom_raster(data = bathy_raster_df, ggplot2::aes(x = x, y = y, fill = z))
     } +
     {
-      if (bathy == TRUE) bathy_colors
+      if (isTRUE(bathy) & !isTRUE(sf::st_is_longlat(input_crs))) bathy_colors
     } +
     {
       if (!is.null(contours) & bathy != TRUE & contour_linescale == FALSE) ggplot2::geom_sf(data = bathy_contours, color = "gray60")
@@ -488,6 +496,9 @@ get_basemap_layers <- function(plot_limits_data,
     {
       if (!is.null(contours) & bathy != TRUE & contour_linescale == TRUE) ggplot2::geom_sf(data = bathy_contours, ggplot2::aes(linetype = factor(METERS)))
     } +
+    {
+    if (!isTRUE(bathy) & is.null(contours)) ggplot2::geom_sf(data = bathy_contours, color = 'transparent')
+} +
     # add requested critical habitat/ no transit zone layers
     {
       if (!is.null(SSL_critical_habitat)) ggplot2::geom_sf(data = SSL_critical_habitat_layer, color = layer_col, fill = "transparent")
@@ -533,7 +544,7 @@ get_basemap_layers <- function(plot_limits_data,
     ggplot2::geom_sf(data = russia_land, fill = land_fill_color, color = land_outline_color) +
     ggplot2::geom_sf(data = canada_land, fill = land_fill_color, color = land_outline_color) +
     {
-      if (bathy == TRUE) ggplot2::guides(fill = "none")
+      if (isTRUE(bathy) & !isTRUE(sf::st_is_longlat(input_crs))) ggplot2::guides(fill = "none")
     } +
     {
       if (!is.null(contours) & bathy != TRUE) ggplot2::guides(linetype = 'none')
@@ -569,7 +580,6 @@ get_basemap_layers <- function(plot_limits_data,
       ggplot2::scale_x_continuous(breaks = grats$degree, expand = c(0,0))
 
   }
-
 
   return(basemap_layers)
 }

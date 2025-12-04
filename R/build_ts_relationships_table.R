@@ -36,7 +36,7 @@ build_ts_relationships_table <- function(ts_relationships_used = NULL) {
   # format is: 'Group'/'TS (dB re 1 m$^2$)'/ 'Length type'/ 'TS derived for which species'/  'Reference'/ 'ts_relationship'
 
   # define any footnotes first, to append to dataframe below
-  krill_footnote <- flextable::as_paragraph("A = -930.429983; B = 3.21027896; C = 1.74003785; D = 1.36133896 x 10", flextable::as_sup("-8"), "; E = -2.26958555 x 10", flextable::as_sup("-6"), "\nF= 1.50291244 x 10", flextable::as_sup("-4"), "; G = -4.86306872 x 10", flextable::as_sup("-3"), "; H = 0.0738748423; I = -0.408004891; J = -73.9078690; and ", flextable::as_i("L"), flextable::as_sub("0"), " = 0.03835 \nIf L < 0.015 m, TS = -105 dB; and if L > 0.065 m, TS = -73 dB. \nk = 2\u03c0fc, where f = 38,000 (frequency in Hz) and c = 1470 (sound speed in m/s).")
+  krill_footnote <- flextable::as_paragraph("A = -930.429983; B = 3.21027896; C = 1.74003785; D = 1.36133896 x 10", flextable::as_sup("-8"), "; E = -2.26958555 x 10", flextable::as_sup("-6"), "\nF= 1.50291244 x 10", flextable::as_sup("-4"), "; G = -4.86306872 x 10", flextable::as_sup("-3"), "; H = 0.0738748423; I = -0.408004891; J = -73.9078690; and ", flextable::as_i("L"), flextable::as_sub("0"), " = 0.03835 \nIf L < 0.015 m, TS = -105 dB; and if L > 0.065 m, TS = -73 dB. \nk = 2\u03c0fc, where f = 38,000 (frequency in Hz) and c = 1470 (sound speed in m s",flextable::as_sup("-1") ,").")
 
   herring_footnote <- flextable::as_paragraph(flextable::as_i("depth")," (m) is fixed at 75 m.")
 

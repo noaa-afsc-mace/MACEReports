@@ -9,22 +9,25 @@ plot_biomass_nums_by_length(
   biomass_vector,
   numbers_vector,
   add_totals = FALSE,
-  cex_label_size = 1
+  label_report_region = NULL,
+  label_size = 12
 )
 }
 \arguments{
 \item{length_vector}{A vector of fish lengths (units are assumed to be cm in 1 cm increments). This vector must be equal in length to \code{biomass_vector} and \code{numbers_vector}.}
 
-\item{biomass_vector}{A vector of fish weights (units should be KG. Be sure to provide weights in KG!). This must should be equal in length to \code{length_vector} and \code{numbers_vector}.}
+\item{biomass_vector}{A vector of fish weights (units should be KG. Be sure to provide weights in KG!). This must be equal in length to \code{length_vector} and \code{numbers_vector}.}
 
-\item{numbers_vector}{A vector of fish numbers (units should be individual fish. Be sure to provide weights in individual fish!). This must should be equal in length to \code{length_vector} and \code{biomass_vector}.}
+\item{numbers_vector}{A vector of fish numbers (units should be individual fish. Be sure to provide weights in individual fish!). This must be equal in length to \code{length_vector} and \code{biomass_vector}.}
 
 \item{add_totals}{Option to add the totals as the title of the plot. Default is to not add a title. Set to TRUE if you'd like a title with the total biomass and number values.}
 
-\item{cex_label_size}{the font size of the axis labels (default 1.0). These are specified as scaling factors from the default of 1.0 (i.e. 2 is twice as large).}
+\item{label_report_region}{Option to add the report region the title of your plot. Default is not to add the report region. If you'd like the report region in your title, provide a vector of report regions. This must be equal in length to \code{length_vector} and \code{biomass_vector}.}
+
+\item{label_size}{the font size of the axis labels (default 12 point font).}
 }
 \value{
-A ggplot plot object. Note that the actual plot is a R baseplot; it is returned as a ggplot object so that it can be more easily integrated into Rmarkdown documents.
+A ggplot plot object.
 }
 \description{
 Returns a dual-axis plot with numbers as bars and biomass as lines; each abundance measure is plotted on independent y-axis scales. Plot units are automatically scaled to billions of fish, millions of fish OR thousands of fish/ millions of tons, 1000s of tons OR tons based on the magnitude of the biomass or numbers.

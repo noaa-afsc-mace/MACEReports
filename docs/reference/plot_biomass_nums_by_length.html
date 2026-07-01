@@ -46,7 +46,8 @@
 <span>  <span class="va">biomass_vector</span>,</span>
 <span>  <span class="va">numbers_vector</span>,</span>
 <span>  add_totals <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  cex_label_size <span class="op">=</span> <span class="fl">1</span></span>
+<span>  label_report_region <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label_size <span class="op">=</span> <span class="fl">12</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -59,24 +60,28 @@
 
 
 <dt id="arg-biomass-vector">biomass_vector<a class="anchor" aria-label="anchor" href="#arg-biomass-vector"></a></dt>
-<dd><p>A vector of fish weights (units should be KG. Be sure to provide weights in KG!). This must should be equal in length to <code>length_vector</code> and <code>numbers_vector</code>.</p></dd>
+<dd><p>A vector of fish weights (units should be KG. Be sure to provide weights in KG!). This must be equal in length to <code>length_vector</code> and <code>numbers_vector</code>.</p></dd>
 
 
 <dt id="arg-numbers-vector">numbers_vector<a class="anchor" aria-label="anchor" href="#arg-numbers-vector"></a></dt>
-<dd><p>A vector of fish numbers (units should be individual fish. Be sure to provide weights in individual fish!). This must should be equal in length to <code>length_vector</code> and <code>biomass_vector</code>.</p></dd>
+<dd><p>A vector of fish numbers (units should be individual fish. Be sure to provide weights in individual fish!). This must be equal in length to <code>length_vector</code> and <code>biomass_vector</code>.</p></dd>
 
 
 <dt id="arg-add-totals">add_totals<a class="anchor" aria-label="anchor" href="#arg-add-totals"></a></dt>
 <dd><p>Option to add the totals as the title of the plot. Default is to not add a title. Set to TRUE if you'd like a title with the total biomass and number values.</p></dd>
 
 
-<dt id="arg-cex-label-size">cex_label_size<a class="anchor" aria-label="anchor" href="#arg-cex-label-size"></a></dt>
-<dd><p>the font size of the axis labels (default 1.0). These are specified as scaling factors from the default of 1.0 (i.e. 2 is twice as large).</p></dd>
+<dt id="arg-label-report-region">label_report_region<a class="anchor" aria-label="anchor" href="#arg-label-report-region"></a></dt>
+<dd><p>Option to add the report region the title of your plot. Default is not to add the report region. If you'd like the report region in your title, provide a vector of report regions. This must be equal in length to <code>length_vector</code> and <code>biomass_vector</code>.</p></dd>
+
+
+<dt id="arg-label-size">label_size<a class="anchor" aria-label="anchor" href="#arg-label-size"></a></dt>
+<dd><p>the font size of the axis labels (default 12 point font).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A ggplot plot object. Note that the actual plot is a R baseplot; it is returned as a ggplot object so that it can be more easily integrated into Rmarkdown documents.</p>
+    <p>A ggplot plot object.</p>
     </div>
 
     <div class="section level2">
@@ -110,7 +115,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

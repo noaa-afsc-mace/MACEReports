@@ -192,7 +192,7 @@ build_biomass_at_length_table_winter_goa <- function(biomass_nums_length_data,
   # build the caption:
   cap_text <- paste0(
     "Biomass-at-length estimates (thousands of metric tons) from acoustic-trawl ",
-    "surveys of pollock in the ", region_name, " from ", min(biomass_nums_length_data$SURVEY_YEAR), "-", max(biomass_nums_length_data$SURVEY_YEAR), "."
+    "surveys of pollock in ", region_name, " from ", min(biomass_nums_length_data$SURVEY_YEAR), "-", max(biomass_nums_length_data$SURVEY_YEAR), "."
   )
 
   # if include_n_years parameter used, add a note about how many years left off the table

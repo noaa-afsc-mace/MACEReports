@@ -164,13 +164,14 @@ build_haul_table <- function(haul_data) {
 
   # add footnotes
   haul_table <- flextable::footnote(haul_table,
-    i = 2, j = c("gear", "gear_depth", "surface_temp"),
+    i = 2, j = c("gear", "gear_depth", "gear_temp", "surface_temp"),
     value = flextable::as_paragraph(c(
       gear_footnote,
-      "Headrope depth obtained from temperature-depth probe. In hauls without temperature-depth probe records, depth was obtained from scientist notes when possible.",
-      "Average temperature measured from a temperature-depth probe (SBE 39, Sea-Bird Scientific). "
+      "Headrope depth obtained from temperature-depth probe.",
+      "Average temperature obtained from temperature-depth probe.",
+      "Average temperature measured from the ship’s flow-through system. "
     )),
-    ref_symbols = c("a", "b", "c"), part = "header"
+    ref_symbols = c("a", "b", "c", "d"), part = "header"
   )
 
 

@@ -4,6 +4,7 @@
 #' @param legend_pos One of 'right' or 'left'; legend bar will be placed at the corresponding corner.
 #' @param legend_color Default is white for standard MACE basemaps; specify alternates in standard \code{ggplot}-compatible formats
 #' @param legend_label Defaults to a label in standard MACE units (t/nmi^2); specify alternate if needed to reflect your units
+#' @param plot_expansion This controls the amount that a legend gets 'pushed' by (default is 0, which works well with for most uses). Set from 0-1. If you are working with the MACEReports::get_basemap_layers to get a basemap and you specify a large plot expansion (> .1) It works well to set this argument to the basemap plot expansion/2.
 #' @param fontsize The font size for the stickplot legend. Defaults to a reasonable size for reports; make larger for presentations. ~18 works.
 #' @param barwidth The width of the legend bar. Defaults to a reasonable size for reports; make larger for presentations. ~ 3 works.
 #'
@@ -30,6 +31,7 @@ build_stick_legend <- function(stick_data,
                                legend_pos = "right",
                                legend_color = "white",
                                legend_label = NULL,
+                               plot_expansion = NULL,
                                fontsize = 11,
                                barwidth = 0.75) {
   # checks: Make sure we have a sf dataframe WITH a defined CRS for the plot data; stop if not.
@@ -40,15 +42,44 @@ build_stick_legend <- function(stick_data,
   # if an sf dataframe with a valid CRS is present, get the crs
   crs <- sf::st_crs(stick_data)$input
 
+  # apply any plot expansion if user requests it (so that the legend bar can be put in the corner of
+  # the plot as opposed to reflecting the extent of the data)
+  if (!is.null(plot_expansion)){
+
+    # find the extent of the data
+    legend_location_data <- sf::st_as_sfc(sf::st_bbox(stick_data))
+
+    # create a  buffer, n% of the total x-axis extent
+    p_min <- sf::st_point(c(min(sf::st_coordinates(legend_location_data)[, 1]),
+                            min(sf::st_coordinates(legend_location_data)[, 2])))
+    p_max <- sf::st_point(c(max(sf::st_coordinates(legend_location_data)[, 1]),
+                            max(sf::st_coordinates(legend_location_data)[, 2])))
+
+    # compute the maximum distance across plot; add a buffer to the plot as n% of this distance
+    dist_buffer <- sf::st_distance(p_min, p_max)[[1]] * plot_expansion
+
+    # apply the buffer
+    if (!sf::st_is_longlat(legend_location_data)) {
+      legend_location_data <- sf::st_buffer(legend_location_data, dist = dist_buffer, joinStyle = "MITRE", mitreLimit = 2)
+    }
+
+  }
+
+  if (is.null(plot_expansion)){
+
+    legend_location_data <- stick_data
+
+  }
+
   # get x/y positions as the min/max from the data extent
   if (legend_pos == "right") {
-    legend_x <- max(sf::st_coordinates(stick_data)[, 1])
-    legend_y <- min(sf::st_coordinates(stick_data)[, 2])
+    legend_x <- max(sf::st_coordinates(legend_location_data)[, 1])
+    legend_y <- min(sf::st_coordinates(legend_location_data)[, 2])
   }
 
   if (legend_pos == "left") {
-    legend_x <- min(sf::st_coordinates(stick_data)[, 1])
-    legend_y <- min(sf::st_coordinates(stick_data)[, 2])
+    legend_x <- min(sf::st_coordinates(legend_location_data)[, 1])
+    legend_y <- min(sf::st_coordinates(legend_location_data)[, 2])
   }
 
   # check: make sure we have a valid legend position

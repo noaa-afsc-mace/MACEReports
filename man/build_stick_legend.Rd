@@ -9,6 +9,7 @@ build_stick_legend(
   legend_pos = "right",
   legend_color = "white",
   legend_label = NULL,
+  plot_expansion = NULL,
   fontsize = 11,
   barwidth = 0.75
 )
@@ -21,6 +22,8 @@ build_stick_legend(
 \item{legend_color}{Default is white for standard MACE basemaps; specify alternates in standard \code{ggplot}-compatible formats}
 
 \item{legend_label}{Defaults to a label in standard MACE units (t/nmi^2); specify alternate if needed to reflect your units}
+
+\item{plot_expansion}{This controls the amount that a legend gets 'pushed' by (default is 0, which works well with for most uses). Set from 0-1. If you are working with the MACEReports::get_basemap_layers to get a basemap and you specify a large plot expansion (> .1) It works well to set this argument to the basemap plot expansion/2.}
 
 \item{fontsize}{The font size for the stickplot legend. Defaults to a reasonable size for reports; make larger for presentations. ~18 works.}
 

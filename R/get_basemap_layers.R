@@ -362,7 +362,7 @@ get_basemap_layers <- function(plot_limits_data,
     bathy_raster_df <- terra::crop(bathy_raster, clip, snap = "near")
 
     bathy_raster_df <- terra::as.data.frame(bathy_raster_df, xy = TRUE) %>%
-      dplyr::rename("z" = "lyr.1")
+      dplyr::rename("z" = "mean")
 
     # define a color scale- you can tweak this to give the right amount of weight to the deep vs shallow areas (right now),
     # theres more weight given to 250 m and up

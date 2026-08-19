@@ -55,7 +55,7 @@ get_shapefile <- function(shapefile_name,
 
     # return as an xyz object for plotting
     shapefile_object <- terra::as.data.frame(shapefile_object, xy = TRUE) %>%
-      dplyr::rename("z" = "lyr.1")
+      dplyr::rename("z" = "mean")
   }
 
   # otherwise, open with sf package

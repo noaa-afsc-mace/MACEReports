@@ -349,9 +349,29 @@ get_basemap_layers <- function(plot_limits_data,
     alaska_3nmi_buffer_layer <- sf::st_intersection(sf::st_geometry(alaska_3nmi_buffer_layer), sf::st_geometry(region_zoom_box))
   }
 
-  # if we are using bathy raster, limit it to be sized for the plot too (much faster);
-  # and return it as a dataframe to plot with ggplot
-  if (isTRUE(bathy)) {
+  # if we are using bathy raster, limit it to be sized for the plot and set a color scale;
+   if (isTRUE(bathy)) {
+
+     # to maximize visibility only display negative (i.e. depth) values from -1000 m - 0 m
+     # modify in place to set all values below 1000 m to 1000 m and all values above 0 m to 1 m
+     bathy_raster[bathy_raster < -1000] <- -1000
+     bathy_raster[bathy_raster > 0] <- 1
+
+     # define a color scale- you can tweak this to give the right amount of weight to the deep vs shallow areas (right now), theres more weight given to 250 m and up
+     bathy_colors <- ggplot2::scale_fill_gradientn(
+       values = scales::rescale(c(
+         terra::minmax(bathy_raster)[1],
+         -250, -50, .99,
+         terra::minmax(bathy_raster)[2]
+       )),
+       colors = c("#737373", "#969696", "#d9d9d9", "#d9d9d9"),
+       # if user wants a legend, present units as positive (depth)
+       # instead of negative (altitude)
+       labels = function(x) {
+         abs(x)
+       }
+     )
+
     # set a box that can be used to clip raster to plot extent (much faster plotting!)
     clip <- terra::ext(
       sf::st_bbox(region_zoom_box)[[1]], sf::st_bbox(region_zoom_box)[[3]],
@@ -359,31 +379,8 @@ get_basemap_layers <- function(plot_limits_data,
     )
 
     # crop to these dimensions
-    bathy_raster_df <- terra::crop(bathy_raster, clip, snap = "near")
+    bathy_raster_clip <- terra::crop(bathy_raster, clip, snap = "near")
 
-    bathy_raster_df <- terra::as.data.frame(bathy_raster_df, xy = TRUE) %>%
-      dplyr::rename("z" = "mean")
-
-    # define a color scale- you can tweak this to give the right amount of weight to the deep vs shallow areas (right now),
-    # theres more weight given to 250 m and up
-
-    # to maximize visibility only display negative (i.e. depth) values from -1000 m - 0 m
-    bathy_raster_df$z <- ifelse(bathy_raster_df$z < -bathy_max_plot_depth, -bathy_max_plot_depth, bathy_raster_df$z)
-    bathy_raster_df$z <- ifelse(bathy_raster_df$z > 0, 1, bathy_raster_df$z)
-
-    bathy_colors <- ggplot2::scale_fill_gradientn(
-      values = scales::rescale(c(
-        min(bathy_raster_df$z, na.rm = TRUE),
-        -250, -50, .99,
-        max(bathy_raster_df$z, na.rm = TRUE)
-      )),
-      colors = c("#737373", "#969696", "#d9d9d9", "#d9d9d9"),
-      # if user wants a legend, present units as positive (depth)
-      # instead of negative (altitude)
-      labels = function(x) {
-        abs(x)
-      }
-    )
   }
 
   if (!is.null(contours) | !isTRUE(bathy) & is.null(contours)) {
@@ -485,7 +482,7 @@ get_basemap_layers <- function(plot_limits_data,
   # define the basemap ggplot object
   basemap_layers <- ggplot2::ggplot() +
     {
-      if (isTRUE(bathy) & !isTRUE(sf::st_is_longlat(input_crs))) ggplot2::geom_raster(data = bathy_raster_df, ggplot2::aes(x = x, y = y, fill = z))
+      if (isTRUE(bathy) & !isTRUE(sf::st_is_longlat(input_crs))) tidyterra::geom_spatraster(data = bathy_raster_clip, ggplot2::aes(fill = mean), interpolate = TRUE)
     } +
     {
       if (isTRUE(bathy) & !isTRUE(sf::st_is_longlat(input_crs))) bathy_colors

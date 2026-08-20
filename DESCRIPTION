@@ -11,6 +11,7 @@ Imports:
     magrittr,
     dplyr,
     ggplot2,
+    tidyterra,
     scales,
     sf,
     tidyr,

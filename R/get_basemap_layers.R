@@ -82,7 +82,7 @@ get_basemap_layers <- function(plot_limits_data,
                                contour_linescale = TRUE,
                                management_regions = NULL,
                                alaska_3nmi_buffer = NULL,
-                               land_fill_color = "#616161",
+                               land_fill_color = "gray45",
                                land_outline_color = "black",
                                plot_expansion = 0.05,
                                SSL_critical_habitat = NULL,
@@ -364,7 +364,7 @@ get_basemap_layers <- function(plot_limits_data,
          -250, -50, .99,
          terra::minmax(bathy_raster)[2]
        )),
-       colors = c("#737373", "#969696", "#d9d9d9", "#d9d9d9"),
+       colors = c("#737373", "#969696", "#d9d9d9", "#f0f0f0"),
        # if user wants a legend, present units as positive (depth)
        # instead of negative (altitude)
        labels = function(x) {
